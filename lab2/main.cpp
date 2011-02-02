@@ -18,6 +18,10 @@ int main(int argc, char** argv) {
 
     //test
     Disk disk1("disk1",100,Disk::DEFAULT_BLOCK_SIZE);
+    
+    //this is a test
+    printf("test");
+    
     disk1.Test();
     
     return 0;
