@@ -1,8 +1,8 @@
 /* 
  * File:   main.cpp
- * Author: kaleb
+ * Author: james
  *
- * Created on February 4, 2011, 4:16 PM
+ * Created on February 4, 2011, 4:24 PM
  */
 
 #include <cstdlib>
