@@ -8,7 +8,11 @@
 #ifndef BLOCKLINKEDLIST_H
 #define	BLOCKLINKEDLIST_H
 
-class BlockLinkedList {
+#include "Disk.h"
+#include "Block.h"
+
+class BlockLinkedList
+{
 public:
     
     /**
