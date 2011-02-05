@@ -88,7 +88,7 @@ public:
      * Return the starting block number for the BlockLinkedList. 
      * @return 
      */
-    int GetStartBlockNumber 	( 		 );
+    int GetStartBlockNumber();
     
     /**
      * Generates a one block BlockLinkedList. Modifies the disk. Assumes the disk 
@@ -98,10 +98,42 @@ public:
      * of this block before writing to disk. 
      * @return 
      */
-    bool Initialize 	( 	int  	blockNumber 	 );
+    bool Initialize 	(int blockNumber);
+
+    /**
+     * Outputs to the console the sequence of block numbers comprising this
+     * BlockLinkedList. Rewind state is changed by this call.
+     */
+    void Output();
+
+    /**
+     * Replaces the m_buffer of the GetCurrentBlock() Block on Disk of this
+     * BlockLinkedList with the m_buffer of the block given as a parameter. The
+     * first four bytes of the m_buffer of the blk parameter are modified and
+     * replaced with the Disk block's next pointer. The block number of the blk
+     * parameter is also modified.
+     * @param blk A pointer to the Block to replace the current block.
+     * @return
+     */
+    bool Replace(Block* blk);
+
+    /**
+     * After this call, GetCurrentBlock will return the first block in the
+     * BlockLinkedList. After this call, a call to GetNextBlock will seek to the
+     * second Block (if any) in the BlockLinkedList. No changes are made to disk.
+     */
+    void Rewind();
+
+    /**
+     * Unlinks the block that is the starting block of this BlockLinkedList.
+     * Does not make changes on disk.
+     * @return the Block representing the unlinked block. This Block isn't linked
+     * into any BlockLinkedList. The next pointer of the Block will still reference
+     * the Block to which it was previously linked. It is the responsibility of
+     * the caller to deallocate the returned Block.
+     */
+    Block* UnlinkBlock();
 };
-
-
 
 #endif	/* BLOCKLINKEDLIST_H */
 
