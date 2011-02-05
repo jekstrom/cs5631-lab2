@@ -37,7 +37,7 @@ public:
      * You need to make sure the Free List has blocks left in it before calling this method.
      * @return true iff Block could be added.
      */
-    bool AddBlock();
+    bool addBlock();
 };
 
 #endif	/* BLOCKGROUP_H */

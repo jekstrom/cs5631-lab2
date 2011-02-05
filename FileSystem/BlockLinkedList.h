@@ -43,7 +43,7 @@ public:
      * Resets the data in the m_buffer of this block before writing to disk. 
      * @return 
      */
-    bool AddBlock(Block* newBlock);
+    bool addBlock(Block* newBlock);
     
     /**
      * Count the number of blocks in a BlockLinkedList by traversing the Blocks 
@@ -51,7 +51,7 @@ public:
      * Changes the Rewind state of the BlockLinkedList. 
      * @return 
      */
-    int CountBlocks();
+    int countBlocks();
     
     /**
      * Returns the amount of "usable" data within each block on disk.
@@ -60,19 +60,19 @@ public:
      * with this BlockLinkedList because the first four bytes of each block's m_buffer are 
      * reserved for the "next pointer". 
      */
-    int GetBlockSize();
+    int getBlockSize();
     
     /**
      * Returns a reference to the current Block in the Rewind/GetNextBlock sequence. 
      * @return 
      */
-    Block* GetCurrentBlock();
+    Block* getCurrentBlock();
     
     /**
      * Return the ending block number for the BlockLinkedList. 
      * @return 
      */
-    int GetEndBlockNumber();
+    int getEndBlockNumber();
     
     /**
      * Seeks the BlockLinkedList to the next block, unless GetCurrentBlock() returns null. 
@@ -80,19 +80,19 @@ public:
      * unless no more Blocks exist. In this case, GetCurrentBlock() will now return null. 
      * No changes are made to disk. 
      */
-    void GetNextBlock();
+    void getNextBlock();
     
     /**
      * Return the number of blocks currently in this BlockLinkedList.
      * @return 
      */
-    int GetNumberOfBlocks();
+    int getNumberOfBlocks();
     
     /**
      * Return the starting block number for the BlockLinkedList. 
      * @return 
      */
-    int GetStartBlockNumber();
+    int getStartBlockNumber();
     
     /**
      * Generates a one block BlockLinkedList. Modifies the disk. Assumes the disk 
@@ -102,13 +102,13 @@ public:
      * of this block before writing to disk. 
      * @return 
      */
-    bool Initialize 	(int blockNumber);
+    bool initialize(int blockNumber);
 
     /**
      * Outputs to the console the sequence of block numbers comprising this
      * BlockLinkedList. Rewind state is changed by this call.
      */
-    void Output();
+    void output();
 
     /**
      * Replaces the m_buffer of the GetCurrentBlock() Block on Disk of this
@@ -119,14 +119,14 @@ public:
      * @param blk A pointer to the Block to replace the current block.
      * @return
      */
-    bool Replace(Block* blk);
+    bool replace(Block* blk);
 
     /**
      * After this call, GetCurrentBlock will return the first block in the
      * BlockLinkedList. After this call, a call to GetNextBlock will seek to the
      * second Block (if any) in the BlockLinkedList. No changes are made to disk.
      */
-    void Rewind();
+    void rewind();
 
     /**
      * Unlinks the block that is the starting block of this BlockLinkedList.
@@ -136,7 +136,7 @@ public:
      * the Block to which it was previously linked. It is the responsibility of
      * the caller to deallocate the returned Block.
      */
-    Block* UnlinkBlock();
+    Block* unlinkBlock();
 };
 
 #endif	/* BLOCKLINKEDLIST_H */
