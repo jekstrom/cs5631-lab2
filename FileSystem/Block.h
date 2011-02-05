@@ -14,7 +14,7 @@ class Block {
 private:
     int blockNumber;
     int length;
-    char* m_buffer;
+    unsigned char* m_buffer;
     int next;
 public:
 

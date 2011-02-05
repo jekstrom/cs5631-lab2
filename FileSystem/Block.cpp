@@ -48,7 +48,7 @@ Block::Block(int length) {
 Block::Block(int blockNumber, Disk* disk) {
     unsigned char* block;
     this->blockNumber = blockNumber;
-    if(disk.ReadBlock(blockNumber,block)) 
+    if(disk->ReadBlock(blockNumber,block))
         m_buffer = block;
     else
         throw new CannotReadException();

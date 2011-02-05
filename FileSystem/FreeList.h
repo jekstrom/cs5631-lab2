@@ -7,6 +7,7 @@
 
 #ifndef FREELIST_H
 #define	FREELIST_H
+#include "BlockGroupException.h"
 
 class FreeList : public BlockLinkedList
 {
