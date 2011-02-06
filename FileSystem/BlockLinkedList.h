@@ -60,7 +60,10 @@ public:
      * with this BlockLinkedList because the first four bytes of each block's m_buffer are 
      * reserved for the "next pointer". 
      */
-    int getBlockSize();
+    int inline getBlockSize()
+    {
+        return blockSize - 4;
+    }
     
     /**
      * Returns a reference to the current Block in the Rewind/GetNextBlock sequence. 
@@ -70,9 +73,12 @@ public:
     
     /**
      * Return the ending block number for the BlockLinkedList. 
-     * @return 
+     * @return the block number of the last block in the list.
      */
-    int getEndBlockNumber();
+    int inline getEndBlockNumber()
+    {
+        return endBlockNum;
+    }
     
     /**
      * Seeks the BlockLinkedList to the next block, unless GetCurrentBlock() returns null. 
@@ -84,15 +90,27 @@ public:
     
     /**
      * Return the number of blocks currently in this BlockLinkedList.
-     * @return 
+     * @return The current length of the list in blocks.
      */
-    int getNumberOfBlocks();
+    int inline getNumberOfBlocks()
+    {
+        return numBlocks;
+    }
     
     /**
      * Return the starting block number for the BlockLinkedList. 
-     * @return 
+     * @return The block number of the first block in the list.
      */
-    int getStartBlockNumber();
+    int inline getStartBlockNumber()
+    {
+        return startBlockNum;
+    }
+
+    /**
+     * Retrieve a reference to the Disk that this list reads from and writes to.
+     * @return a pointer to the Disk for this list.
+     */
+    Disk* getDisk();
     
     /**
      * Generates a one block BlockLinkedList. Modifies the disk. Assumes the disk 
@@ -126,7 +144,10 @@ public:
      * BlockLinkedList. After this call, a call to GetNextBlock will seek to the
      * second Block (if any) in the BlockLinkedList. No changes are made to disk.
      */
-    void rewind();
+    void inline rewind()
+    {
+        currentBlockNum = startBlockNum;
+    }
 
     /**
      * Unlinks the block that is the starting block of this BlockLinkedList.
@@ -161,7 +182,17 @@ private:
     int endBlockNum;
 
     /**
-     * A pointer to the disk that the list will read from and write to.
+     * The block number of the current block.
+     */
+    int currentBlockNum;
+
+    /**
+     * The current block.
+     */
+    Block currentBlock;
+
+    /**
+     * A pointer to the Disk that the list will read from and write to.
      */
     Disk* disk;
 };
