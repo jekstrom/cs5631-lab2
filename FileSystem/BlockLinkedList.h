@@ -15,10 +15,10 @@ class BlockLinkedList
 {
 public:
     
-    /**
-     * Default initialization for all data members. Does not modify the Disk. 
-     */
-    BlockLinkedList();
+//    /**
+//     * Default initialization for all data members. Does not modify the Disk.
+//     */
+//    BlockLinkedList();
     
     /**
      * Uses the disk and block size given to initialize those data members of the object. 
@@ -41,7 +41,7 @@ public:
      * @param newBlock	is the new Block. This block should have already been 
      * removed from the BlockLinkedList upon which it was previously. 
      * Resets the data in the m_buffer of this block before writing to disk. 
-     * @return 
+     * @return true iff the new block was successfully added to the list.
      */
     bool addBlock(Block* newBlock);
     
@@ -137,6 +137,33 @@ public:
      * the caller to deallocate the returned Block.
      */
     Block* unlinkBlock();
+
+private:
+
+    /**
+     * The number of blocks currently in the linked list.
+     */
+    int numBlocks;
+
+    /**
+     * The number of usable bytes in each block of the list.
+     */
+    int blockSize;
+
+    /**
+     * Block number of the first block in the linked list.
+     */
+    int startBlockNum;
+
+    /**
+     * Block number of the last block in the linked list.
+     */
+    int endBlockNum;
+
+    /**
+     * A pointer to the disk that the list will read from and write to.
+     */
+    Disk* disk;
 };
 
 #endif	/* BLOCKLINKEDLIST_H */

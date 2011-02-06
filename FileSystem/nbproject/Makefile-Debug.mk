@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/BlockLinkedList.o \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o
 
@@ -60,6 +61,11 @@ LDLIBSOPTIONS=
 dist/Debug/GNU-Linux-x86/filesystem: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/GNU-Linux-x86
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/filesystem ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/BlockLinkedList.o: BlockLinkedList.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp
 
 ${OBJECTDIR}/Block.o: Block.cpp 
 	${MKDIR} -p ${OBJECTDIR}
