@@ -7,14 +7,14 @@
 
 #include <cstdlib>
 
+#include "Block.h"
+
 using namespace std;
 
 /*
  * 
  */
-int main(int argc, char** argv) {
-
-    //this is a test  
+int main() {
 
     return 0;
 }

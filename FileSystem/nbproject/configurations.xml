@@ -8,6 +8,7 @@
       <itemPath>BadNumberOfBlocksException.h</itemPath>
       <itemPath>Block.h</itemPath>
       <itemPath>BlockGroup.h</itemPath>
+      <itemPath>BlockGroupException.h</itemPath>
       <itemPath>BlockLinkedList.h</itemPath>
       <itemPath>CannotReadException.h</itemPath>
       <itemPath>Disk.h</itemPath>

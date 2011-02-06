@@ -62,7 +62,8 @@ Block::~Block() {}
  * Does not alter the Disk
  */
 void Block::clearBuffer() {
-    
+    for(int i = 0; i < this->length; i++)
+        m_buffer[i] = 0;
 }
 
 /**Changes the reference of the m_buffer. No copy is made!
@@ -71,14 +72,15 @@ void Block::clearBuffer() {
  * @param buffer is used by reference
  */
 void Block::setBuffer(unsigned char* buffer) {
-    
+    delete[] m_buffer;
+    m_buffer = buffer;
 }
 
 /**Obtain a reference to the m_buffer data member for this Block. 
  * @return a reference to the byte buffer for this Block
  */
 unsigned char* Block::getBuffer() {
-
+    return &m_buffer;
 }
 
 /**Changes the block number for this Block. Doesn't write the change to disk.
@@ -89,7 +91,7 @@ unsigned char* Block::getBuffer() {
  * @param newBlockNumber the new block number
  */
 void Block::setBlockNumber(int newBlockNumber) {
-
+    this->blockNumber = newBlockNumber;
 }
 
 /**Returns the block number for this Block, returns value of a data member.
@@ -97,7 +99,7 @@ void Block::setBlockNumber(int newBlockNumber) {
  * @return the block number of the Block
  */
 int Block::getBlockNumber() {
-
+    return this->blockNumber;
 }
 
 /**Changes one of the pointers in the m_buffer. If location=0,
