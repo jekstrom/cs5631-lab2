@@ -80,7 +80,7 @@ void Block::setBuffer(unsigned char* buffer) {
  * @return a reference to the byte buffer for this Block
  */
 unsigned char* Block::getBuffer() {
-    return &m_buffer;
+    return m_buffer;
 }
 
 /**Changes the block number for this Block. Doesn't write the change to disk.
@@ -110,16 +110,33 @@ int Block::getBlockNumber() {
  * @param location gives the location (in terms of 4 byte ints) in the
  * m_buffer to change
  */
-void Block::setNext(int pointer, int location) {
-
+void Block::setPointer(int pointer, int location) {
+    m_buffer[location] = pointer;
 }
 
-/**Retrieves one of the pointers in the m_buffer
- * @param location gives the relative 4 byte location to access. See SetPointer.
- * @return the next pointer
- */
-int Block::getNext(int location) {
+ /**
+  * Retrieves one of the pointers in the m_buffer.
+  * @param location gives the relative 4 byte location to access. See SetPointer.
+  * @return the indicated pointer
+  */
+int Block::getPointer(int location) {
+    return (int)m_buffer[location];
+}
 
+ /**
+  * Changes the first 4 bytes in the m_buffer to point to the given value
+  * @param pointer the next block
+  */
+void Block::setNext(int pointer) {
+    m_buffer[0] = pointer;
+}
+
+ /**
+  * Retrieves the pointer to the next Block in the m_buffer
+  * @return the pointer to the next block
+  */
+int Block::getNext() {
+    return (int)m_buffer[0];
 }
 
 /**Print out the contents of the Block. Prints the m_buffer bytes in hex and
@@ -127,7 +144,21 @@ int Block::getNext(int location) {
  * For debugging.
  */
 void Block::print() {
-
+    printf("--------------------------------\n");
+    printf("m_buffer contents in hex:\n");
+    for(int i = 0; i < this->length; i++) {
+        printf("%x ",m_buffer[i]);
+        if ((i % 8) == 0) //every 8 digits, newline
+            printf("\n");
+    }
+    printf("--------------------------------\n");
+    printf("m_buffer contents in decimal:\n");
+    for(int i = 0; i < this->length; i++) {
+        printf("%d ",m_buffer[i]);
+         if ((i % 8) == 0)
+            printf("\n");
+    }
+    printf("--------------------------------\n");
 }
 
 /**Writes the data from the Block to its block number on the Disk. The Block 
@@ -137,5 +168,8 @@ void Block::print() {
  * @return true iff the call succeeded in writing the Block to the Disk.
  */
 bool Block::write(Disk* disk) {
-
+    if(disk->WriteBlock(blockNumber, m_buffer))
+        return true;
+    else
+        return false;
 }

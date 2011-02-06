@@ -10,6 +10,7 @@
       <itemPath>BlockGroup.h</itemPath>
       <itemPath>BlockGroupException.h</itemPath>
       <itemPath>BlockLinkedList.h</itemPath>
+      <itemPath>BlockTester.h</itemPath>
       <itemPath>CannotReadException.h</itemPath>
       <itemPath>Disk.h</itemPath>
       <itemPath>FreeList.h</itemPath>

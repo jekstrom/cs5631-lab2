@@ -92,14 +92,26 @@ public:
      * @param pointer gives the pointer value
      * @param location gives the location (in terms of 4 byte ints) in the m_buffer to change
      */
-    void setNext(int pointer, int location);
+    void setPointer(int pointer, int location);
 
     /**
      * Retrieves one of the pointers in the m_buffer.
      * @param location gives the relative 4 byte location to access. See SetPointer.
      * @return the indicated pointer
      */
-    int getNext(int location);
+    int getPointer(int location);
+
+    /**
+     * Changes the pointer in the m_buffer to point to the given value
+     * @param pointer the next block
+     */
+    void setNext(int pointer);
+
+    /**
+     * Retrieves the pointer to the next Block in the m_buffer
+     * @return the pointer to the next block
+     */
+    int getNext();
 
     /**
      * Print out the contents of the Block. Prints the m_buffer bytes in hex and
