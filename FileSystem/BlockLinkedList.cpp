@@ -6,6 +6,7 @@
  */
 
 #include "BlockLinkedList.h"
+#include <iostream>
 
 using namespace std;
 
@@ -85,4 +86,37 @@ Block* BlockLinkedList::unlinkBlock()
     Block* blockPtr = new Block(startBlockNum, diskPtr);
     startBlockNum = blockPtr->getNext();
     return blockPtr;
+}
+
+int BlockLinkedList::countBlocks()
+{
+    index = 1;
+    currentBlockNum = startBlockNum;
+    int count = 0;
+
+    Block* curBlkPtr = this->getCurrentBlock();
+    while(curBlkPtr != NULL)
+    {
+        count++;
+        this->getNextBlock();
+        delete curBlkPtr;
+        curBlkPtr = this->getCurrentBlock();
+    }
+
+    return count;
+}
+
+void BlockLinkedList::output()
+{
+    index = 1;
+    currentBlockNum = startBlockNum;
+
+    Block* curBlkPtr = this->getCurrentBlock();
+    while(curBlkPtr != NULL)
+    {
+        cout << curBlkPtr->getBlockNumber() << "\n";
+        this->getNextBlock();
+        delete curBlkPtr;
+        curBlkPtr = this->getCurrentBlock();
+    }
 }

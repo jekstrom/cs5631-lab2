@@ -24,7 +24,7 @@ public:
      * Uses the disk and block size given to initialize those data members of the object. 
      * Other data members get default initialization. Does not modify the Disk.
      * @param disk to use in operations on the BlockLinkedList thus constructed. 
-     * @param blockSize size of the blocks in this BlockLinkedList.
+     * @param blockSize Total size of the blocks on this disk.
      */
     BlockLinkedList(Disk* disk, int blkSize);
 		
@@ -48,8 +48,8 @@ public:
     /**
      * Count the number of blocks in a BlockLinkedList by traversing the Blocks 
      * from the start Block to the end Block. This may be useful for debugging. 
-     * Changes the Rewind state of the BlockLinkedList. 
-     * @return 
+     * The rewind state is advanced to the end of the list.
+     * @return The number of blocks found by the traversal
      */
     int countBlocks();
     
@@ -125,7 +125,8 @@ public:
 
     /**
      * Outputs to the console the sequence of block numbers comprising this
-     * BlockLinkedList. Rewind state is changed by this call.
+     * BlockLinkedList. Block numbers are separated by "\n". Rewind state is
+     * advanced to the end of the list by this call.
      */
     void output();
 
