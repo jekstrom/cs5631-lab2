@@ -26,7 +26,7 @@ public:
      * @param disk to use in operations on the BlockLinkedList thus constructed. 
      * @param blockSize size of the blocks in this BlockLinkedList.
      */
-    BlockLinkedList(Disk* disk, int blockSize);
+    BlockLinkedList(Disk* disk, int blkSize);
 		
     /**
      * Create a new BlockLinkedList using the disk, and block size of
@@ -62,12 +62,13 @@ public:
      */
     int inline getBlockSize()
     {
-        return blockSize - 4;
+        return blockSize;
     }
     
     /**
-     * Returns a reference to the current Block in the Rewind/GetNextBlock sequence. 
-     * @return 
+     * Returns a reference to the current Block in the Rewind/GetNextBlock sequence.
+     * The caller is responsible for deallocating this reference once it is no longer needed.
+     * @return A pointer to the current block
      */
     Block* getCurrentBlock();
     
@@ -84,7 +85,7 @@ public:
      * Seeks the BlockLinkedList to the next block, unless GetCurrentBlock() returns null. 
      * Changes the value returned by GetCurrentBlock() to the next Block in the file, 
      * unless no more Blocks exist. In this case, GetCurrentBlock() will now return null. 
-     * No changes are made to disk. 
+     * No changes are made to the disk.
      */
     void getNextBlock();
     
@@ -115,8 +116,8 @@ public:
     /**
      * Generates a one block BlockLinkedList. Modifies the disk. Assumes the disk 
      * and block size data members of this BlockLinkedList have been properly initialized.
-     * @param blockNumber blockNumber 	is the block number on disk of the first 
-     * (and only) block of this BlockLinkedList. Resets the data in the m_buffer 
+     * @param blockNumber is the block number on disk of the first (and only)
+     * block of this BlockLinkedList. Resets the data in the m_buffer
      * of this block before writing to disk. 
      * @return 
      */
@@ -146,7 +147,7 @@ public:
      */
     void inline rewind()
     {
-        currentBlockNum = startBlockNum;
+        index = 1;
     }
 
     /**
@@ -160,6 +161,11 @@ public:
     Block* unlinkBlock();
 
 private:
+
+    /**
+     * A block with this as its pointer is the last block in the list.
+     */
+    const static int END_OF_LIST;
 
     /**
      * The number of blocks currently in the linked list.
@@ -187,14 +193,14 @@ private:
     int currentBlockNum;
 
     /**
-     * The current block.
+     * The index of the current block in the list.
      */
-    Block currentBlock;
+    int index;
 
     /**
      * A pointer to the Disk that the list will read from and write to.
      */
-    Disk* disk;
+    Disk* diskPtr;
 };
 
 #endif	/* BLOCKLINKEDLIST_H */
