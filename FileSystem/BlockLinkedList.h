@@ -34,6 +34,11 @@ public:
      * @param b Data member values are copied over from this other BlockLinkedList. 
      */
     BlockLinkedList(BlockLinkedList* b);
+
+    ~BlockLinkedList()
+    {
+        delete currentBlockPtr;
+    }
     
     /**
      * Add another block to the end of this BlockLinkedList. Makes changes on disk. 
@@ -67,7 +72,7 @@ public:
     
     /**
      * Returns a reference to the current Block in the Rewind/GetNextBlock sequence.
-     * The caller is responsible for deallocating this reference once it is no longer needed.
+     * The caller is responsible for deallocating the block once it is no longer needed.
      * @return A pointer to the current block
      */
     Block* getCurrentBlock();
@@ -148,7 +153,8 @@ public:
      */
     void inline rewind()
     {
-        index = 1;
+        currentBlockNum = startBlockNum;
+        currentCalled = false;
     }
 
     /**
@@ -194,9 +200,15 @@ private:
     int currentBlockNum;
 
     /**
-     * The index of the current block in the list.
+     * A pointer to the current block in the list.
      */
-    int index;
+    Block* currentBlockPtr;
+
+    /**
+     * Keeps track of whether or not getCurrentBlock has been called since the
+     * last change of the current block pointer.
+     */
+    bool currentCalled;
 
     /**
      * A pointer to the Disk that the list will read from and write to.

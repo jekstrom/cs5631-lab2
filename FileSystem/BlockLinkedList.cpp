@@ -39,19 +39,30 @@ bool BlockLinkedList::addBlock(Block* newBlock)
 
 Block* BlockLinkedList::getCurrentBlock()
 {
-    // Return NULL if the current block is beyond the end of the list
-    if(index <= numBlocks)
-        return new Block(currentBlockNum, diskPtr);
-    else
-        return NULL;
+    // Update current block pointer if needed
+    if(!currentCalled)
+    {
+        if(END_OF_LIST == currentBlockNum)
+            currentBlockPtr = NULL;
+        else
+            currentBlockPtr = new Block(currentBlockNum, diskPtr);
+
+        currentCalled = true;
+    }
+
+    return currentBlockPtr;
 }
 
 void BlockLinkedList::getNextBlock()
 {
-    // Increment index, follow pointer in current block
-    index++;
-    Block curBlk(currentBlockNum, diskPtr);
-    currentBlockNum = curBlk.getNext();
+    // Follow pointer to next block number
+    if(END_OF_LIST != currentBlockNum)
+    {
+        Block curBlk(currentBlockNum, diskPtr);
+        currentBlockNum = curBlk.getNext();
+        currentCalled = false;
+    }
+    // If end of list has been reached, do nothing
 }
 
 Disk* BlockLinkedList::getDisk()
@@ -67,6 +78,7 @@ bool BlockLinkedList::initialize(int blockNumber)
     startBlockNum = blockNumber;
     endBlockNum = blockNumber;
     currentBlockNum = blockNumber;
+    currentCalled = false;
 
     // Clear and write the new first block on the disk
     Block firstBlk(blockNumber, diskPtr);
@@ -84,7 +96,16 @@ Block* BlockLinkedList::unlinkBlock()
 {
     // Change starting block number to the block number of the 2nd block
     Block* blockPtr = new Block(startBlockNum, diskPtr);
+    if(currentBlockNum == startBlockNum) // change current block if needed
+    {
+        currentBlockNum = blockPtr->getNext();
+        currentCalled = false;
+    }
     startBlockNum = blockPtr->getNext();
+    
+    //Decrement list length
+    numBlocks--;
+
     return blockPtr;
 }
 
@@ -103,6 +124,7 @@ int BlockLinkedList::countBlocks()
         curBlkPtr = this->getCurrentBlock();
     }
 
+    currentCalled = false;
     return count;
 }
 
@@ -119,4 +141,6 @@ void BlockLinkedList::output()
         delete curBlkPtr;
         curBlkPtr = this->getCurrentBlock();
     }
+
+    currentCalled = false;
 }
