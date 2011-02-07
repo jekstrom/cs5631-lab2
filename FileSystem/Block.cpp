@@ -19,7 +19,7 @@
 Block::Block(int blockNumber, int length) {
     this->blockNumber = blockNumber;
     this->length = length;
-
+    m_buffer = new unsigned char[length];
     for (int i = 0; i < this->length; i++)
         m_buffer[i] = 0;
 }
@@ -31,7 +31,7 @@ Block::Block(int blockNumber, int length) {
  */
 Block::Block(int length) {
     this->length = length;
-
+    m_buffer = new unsigned char[length];
     for (int i = 0; i < this->length; i++)
         m_buffer[i] = 0;
 }
@@ -136,7 +136,7 @@ void Block::setNext(int pointer) {
   * @return the pointer to the next block
   */
 int Block::getNext() {
-    return (int)m_buffer[0];
+    return m_buffer[0];
 }
 
 /**Print out the contents of the Block. Prints the m_buffer bytes in hex and
@@ -144,21 +144,21 @@ int Block::getNext() {
  * For debugging.
  */
 void Block::print() {
-    printf("--------------------------------\n");
+    printf("\n--------------------------------\n");
     printf("m_buffer contents in hex:\n");
     for(int i = 0; i < this->length; i++) {
         printf("%x ",m_buffer[i]);
-        if ((i % 8) == 0) //every 8 digits, newline
+        if ((i+1 % 32) == 0) //every 32 digits, newline
             printf("\n");
     }
-    printf("--------------------------------\n");
+    printf("\n--------------------------------\n");
     printf("m_buffer contents in decimal:\n");
     for(int i = 0; i < this->length; i++) {
         printf("%d ",m_buffer[i]);
-         if ((i % 8) == 0)
+         if ((i+1 % 32) == 0)
             printf("\n");
     }
-    printf("--------------------------------\n");
+    printf("\n--------------------------------\n");
 }
 
 /**Writes the data from the Block to its block number on the Disk. The Block 

@@ -8,6 +8,7 @@
 #include <cstdlib>
 
 #include "Block.h"
+#include "BlockTester.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ using namespace std;
  */
 int main() {
 
+    BlockTester test1;
     return 0;
 }
 
