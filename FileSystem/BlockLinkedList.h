@@ -70,7 +70,7 @@ public:
      * with this BlockLinkedList because the first four bytes of each block's m_buffer are 
      * reserved for the "next pointer". 
      */
-    int inline getBlockSize()
+    int getBlockSize()
     {
         return blockSize;
     }
@@ -86,7 +86,7 @@ public:
      * Return the ending block number for the BlockLinkedList. 
      * @return the block number of the last block in the list.
      */
-    int inline getEndBlockNumber()
+    int getEndBlockNumber()
     {
         return endBlockNum;
     }
@@ -103,7 +103,7 @@ public:
      * Return the number of blocks currently in this BlockLinkedList.
      * @return The current length of the list in blocks.
      */
-    int inline getNumberOfBlocks()
+    int getNumberOfBlocks()
     {
         return numBlocks;
     }
@@ -112,7 +112,7 @@ public:
      * Return the starting block number for the BlockLinkedList. 
      * @return The block number of the first block in the list.
      */
-    int inline getStartBlockNumber()
+    int getStartBlockNumber()
     {
         return startBlockNum;
     }
@@ -147,7 +147,7 @@ public:
      * replaced with the Disk block's next pointer. The block number of the blk
      * parameter is also modified.
      * @param blk A pointer to the Block to replace the current block.
-     * @return
+     * @return true iff the replacement is successful
      */
     bool replace(Block* blk);
 
@@ -156,7 +156,7 @@ public:
      * BlockLinkedList. After this call, a call to GetNextBlock will seek to the
      * second Block (if any) in the BlockLinkedList. No changes are made to disk.
      */
-    void inline rewind()
+    void rewind()
     {
         currentBlockNum = startBlockNum;
         currentCalled = false;

@@ -31,9 +31,9 @@ bool BlockLinkedList::addBlock(Block* newBlock)
     endBlockNum = newBlock->getBlockNumber();
     endBlk.setNext(endBlockNum);
 
-    // Clear and write the new block
-    newBlock->setNext(END_OF_LIST);
+    // Clear and write the new block    
     newBlock->clearBuffer();
+    newBlock->setNext(END_OF_LIST);
     newBlock->write(diskPtr);
 }
 
@@ -81,8 +81,8 @@ bool BlockLinkedList::initialize(int blockNumber)
 
     // Clear and write the new first block on the disk
     Block firstBlk(blockNumber, diskPtr);
-    firstBlk.setNext(END_OF_LIST);
     firstBlk.clearBuffer();
+    firstBlk.setNext(END_OF_LIST);
     firstBlk.write(diskPtr);
 }
 
