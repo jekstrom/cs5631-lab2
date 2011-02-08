@@ -19,7 +19,12 @@ public:
 //     * Default initialization for all data members. Does not modify the Disk.
 //     */
 //    BlockLinkedList();
-    
+
+    /**
+     * A block with this as its pointer is the last block in the list.
+     */
+    const static int END_OF_LIST = 0;
+
     /**
      * Uses the disk and block size given to initialize those data members of the object. 
      * Other data members get default initialization. Does not modify the Disk.
@@ -168,11 +173,6 @@ public:
     Block* unlinkBlock();
 
 private:
-
-    /**
-     * A block with this as its pointer is the last block in the list.
-     */
-    const static int END_OF_LIST;
 
     /**
      * The number of blocks currently in the linked list.

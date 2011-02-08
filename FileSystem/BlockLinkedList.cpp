@@ -74,7 +74,6 @@ bool BlockLinkedList::initialize(int blockNumber)
 {
     // Initialize data members of the list
     numBlocks = 1;
-    index = 1;
     startBlockNum = blockNumber;
     endBlockNum = blockNumber;
     currentBlockNum = blockNumber;
@@ -111,7 +110,6 @@ Block* BlockLinkedList::unlinkBlock()
 
 int BlockLinkedList::countBlocks()
 {
-    index = 1;
     currentBlockNum = startBlockNum;
     int count = 0;
 
@@ -130,7 +128,6 @@ int BlockLinkedList::countBlocks()
 
 void BlockLinkedList::output()
 {
-    index = 1;
     currentBlockNum = startBlockNum;
 
     Block* curBlkPtr = this->getCurrentBlock();
