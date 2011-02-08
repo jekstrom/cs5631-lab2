@@ -84,6 +84,8 @@ bool BlockLinkedList::initialize(int blockNumber)
     firstBlk.clearBuffer();
     firstBlk.setNext(END_OF_LIST);
     firstBlk.write(diskPtr);
+
+    return true;
 }
 
 bool BlockLinkedList::replace(Block* blk)
