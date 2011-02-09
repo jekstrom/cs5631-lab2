@@ -38,6 +38,10 @@ public:
      * @return true iff Block could be added.
      */
     bool addBlock();
+
+protected:
+    friend class FreeList;
+
 };
 
 #endif	/* BLOCKGROUP_H */

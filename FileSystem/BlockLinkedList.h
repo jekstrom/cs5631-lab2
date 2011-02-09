@@ -178,7 +178,7 @@ public:
      */
     Block* unlinkBlock();
 
-private:
+protected:
 
     /**
      * The number of blocks currently in the linked list.

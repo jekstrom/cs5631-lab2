@@ -49,6 +49,11 @@ public:
      * @param bll After this call, this BlockLinkedList has been deallocated.
      */
     void returnBlocks(BlockLinkedList* bll);
+
+    /**
+     * Tests the functionality of this class
+     */
+    static void test();
 };
 
 #endif	/* FREELIST_H */
