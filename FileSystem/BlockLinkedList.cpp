@@ -24,17 +24,25 @@ BlockLinkedList::BlockLinkedList(BlockLinkedList* b)
     numBlocks = 0;
 }
 
-bool BlockLinkedList::addBlock(Block* newBlock)
+bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
 {    
     // Update pointer in previous last node
-    Block endBlk(endBlockNum, diskPtr);
-    endBlockNum = newBlock->getBlockNumber();
-    endBlk.setNext(endBlockNum);
+    try
+    {
+        Block endBlk(endBlockNum, diskPtr);
+        endBlockNum = newBlock->getBlockNumber();
+        endBlk.setNext(endBlockNum);
+    }
+    catch(CannotReadException e)
+    {
+        throw e;
+        return false;
+    }
 
     // Clear and write the new block    
     newBlock->clearBuffer();
     newBlock->setNext(END_OF_LIST);
-    newBlock->write(diskPtr);
+    return newBlock->write(diskPtr);
 }
 
 Block* BlockLinkedList::getCurrentBlock()
@@ -45,7 +53,16 @@ Block* BlockLinkedList::getCurrentBlock()
         if(END_OF_LIST == currentBlockNum)
             currentBlockPtr = NULL;
         else
-            currentBlockPtr = new Block(currentBlockNum, diskPtr);
+        {
+            try
+            {
+                currentBlockPtr = new Block(currentBlockNum, diskPtr);
+            }
+            catch(CannotReadException e)
+            {
+                return NULL;
+            }
+        }
 
         currentCalled = true;
     }
@@ -58,16 +75,15 @@ void BlockLinkedList::getNextBlock()
     // Follow pointer to next block number
     if(END_OF_LIST != currentBlockNum)
     {
-        Block curBlk(currentBlockNum, diskPtr);
-        currentBlockNum = curBlk.getNext();
-        currentCalled = false;
+        Block* curBlkPtr = getCurrentBlock();
+        if(curBlkPtr != NULL)
+        {
+            currentBlockNum = curBlkPtr->getNext();
+            currentCalled = false;
+            delete curBlkPtr;
+        }
     }
     // If end of list has been reached, do nothing
-}
-
-Disk* BlockLinkedList::getDisk()
-{
-    return diskPtr;
 }
 
 bool BlockLinkedList::initialize(int blockNumber)
@@ -79,13 +95,11 @@ bool BlockLinkedList::initialize(int blockNumber)
     currentBlockNum = blockNumber;
     currentCalled = false;
 
-    // Clear and write the new first block on the disk
-    Block firstBlk(blockNumber, diskPtr);
-    firstBlk.clearBuffer();
-    firstBlk.setNext(END_OF_LIST);
-    firstBlk.write(diskPtr);
-
-    return true;
+    // Create and write the new first block on the disk
+        Block firstBlk(blockNumber, Disk::DEFAULT_BLOCK_SIZE);
+        firstBlk.clearBuffer();
+        firstBlk.setNext(END_OF_LIST);
+        return firstBlk.write(diskPtr);
 }
 
 bool BlockLinkedList::replace(Block* blk)
@@ -96,13 +110,21 @@ bool BlockLinkedList::replace(Block* blk)
 Block* BlockLinkedList::unlinkBlock()
 {
     // Change starting block number to the block number of the 2nd block
-    Block* blockPtr = new Block(startBlockNum, diskPtr);
-    if(currentBlockNum == startBlockNum) // change current block if needed
+    Block* blockPtr;
+    try
     {
-        currentBlockNum = blockPtr->getNext();
-        currentCalled = false;
+        blockPtr = new Block(startBlockNum, diskPtr);
+        if(currentBlockNum == startBlockNum) // change current block if needed
+        {
+            currentBlockNum = blockPtr->getNext();
+            currentCalled = false;
+        }
+        startBlockNum = blockPtr->getNext();
     }
-    startBlockNum = blockPtr->getNext();
+    catch(CannotReadException e)
+    {
+        return NULL;
+    }
     
     //Decrement list length
     numBlocks--;

@@ -45,7 +45,7 @@ Block::Block(int length) {
  * object.
  * @param disk the Disk to read from
  */
-Block::Block(int blockNumber, Disk* disk) {
+Block::Block(int blockNumber, Disk* disk) throw(CannotReadException) {
     unsigned char block[Disk::DEFAULT_BLOCK_SIZE];
     this->blockNumber = blockNumber;
     if(disk->ReadBlock(blockNumber,block))

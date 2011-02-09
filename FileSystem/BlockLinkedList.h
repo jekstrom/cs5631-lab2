@@ -10,6 +10,7 @@
 
 #include "Disk.h"
 #include "Block.h"
+#include "CannotReadException.h"
 
 class BlockLinkedList
 {
@@ -53,7 +54,7 @@ public:
      * Resets the data in the m_buffer of this block before writing to disk. 
      * @return true iff the new block was successfully added to the list.
      */
-    bool addBlock(Block* newBlock);
+    bool addBlock(Block* newBlock) throw(CannotReadException);
     
     /**
      * Count the number of blocks in a BlockLinkedList by traversing the Blocks 
@@ -121,7 +122,10 @@ public:
      * Retrieve a reference to the Disk that this list reads from and writes to.
      * @return a pointer to the Disk for this list.
      */
-    Disk* getDisk();
+    Disk* getDisk()
+    {
+        return diskPtr;
+    }
     
     /**
      * Generates a one block BlockLinkedList. Modifies the disk. Assumes the disk 
@@ -164,7 +168,9 @@ public:
 
     /**
      * Unlinks the block that is the starting block of this BlockLinkedList.
-     * Does not make changes on disk.
+     * Does not make changes on disk If the starting block could not be read,
+     * NULL will be returned. Will also return NULL if the current block
+     * could not be read from.
      * @return the Block representing the unlinked block. This Block isn't linked
      * into any BlockLinkedList. The next pointer of the Block will still reference
      * the Block to which it was previously linked. It is the responsibility of

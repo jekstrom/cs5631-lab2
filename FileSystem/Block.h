@@ -43,8 +43,9 @@ public:
      * @param blockNumber The block number of the Block to read. This can
      * range between 0 and GetNumberOfBlocks()-1 (inclusive) for this Disk object.
      * @param disk is the Disk to read from.
+     * @throw CannotReadException if the disk could not be read from.
      */
-    Block(int blockNumber, Disk* disk);
+    Block(int blockNumber, Disk* disk) throw(CannotReadException);
 
     /**
      * Deallocates the m_buffer for the Block.
