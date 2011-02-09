@@ -79,6 +79,7 @@ public:
     /**
      * Returns a reference to the current Block in the Rewind/GetNextBlock sequence.
      * The caller is responsible for deallocating the block once it is no longer needed.
+     * Each call will return a pointer to a different Block object.
      * @return A pointer to the current block
      */
     Block* getCurrentBlock();
@@ -145,11 +146,15 @@ public:
     void output();
 
     /**
-     * Replaces the m_buffer of the GetCurrentBlock() Block on Disk of this
-     * BlockLinkedList with the m_buffer of the block given as a parameter. The
-     * first four bytes of the m_buffer of the blk parameter are modified and
-     * replaced with the Disk block's next pointer. The block number of the blk
-     * parameter is also modified.
+     * The idea in this method is to replace the data of the m_seek Block
+     * (i.e., the GetCurrentBlock() Block) but to leave the link structure of the
+     * BlockLinkedList alone and unchanged. Replaces the last blk.GetBlockSize()-4
+     * bytes of the GetCurrentBlock() Block on Disk of this BlockLinkedList with
+     * the last blk.GetBlockSize()-4 bytes of the m_buffer of the block given as
+     * a parameter. The first four bytes of the m_seek Block (i.e., the GetCurrentBlock() Block)
+     * are retained. This modifies the first four bytes of the m_buffer of the blk
+     * parameter, and the block number of the blk parameter is also modified.
+     * Modifies the Disk.
      * @param blk A pointer to the Block to replace the current block.
      * @return true iff the replacement is successful
      */
@@ -205,16 +210,16 @@ protected:
      */
     int currentBlockNum;
 
-    /**
-     * A pointer to the current block in the list.
-     */
-    Block* currentBlockPtr;
-
-    /**
-     * Keeps track of whether or not getCurrentBlock has been called since the
-     * last change of the current block pointer.
-     */
-    bool currentCalled;
+//    /**
+//     * A pointer to the current block in the list.
+//     */
+//    Block* currentBlockPtr;
+//
+//    /**
+//     * Keeps track of whether or not getCurrentBlock has been called since the
+//     * last change of the current block pointer.
+//     */
+//    bool currentCalled;
 
     /**
      * A pointer to the Disk that the list will read from and write to.

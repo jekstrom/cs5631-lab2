@@ -54,24 +54,15 @@ bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
 
 Block* BlockLinkedList::getCurrentBlock()
 {
-    // Update current block pointer if needed
-    if(!currentCalled | currentBlockPtr == NULL)
+    // Attempt to read block from disk
+//    Block* currentBlockPtr;
+    try
     {
-        if(END_OF_LIST == currentBlockNum)
-            currentBlockPtr = NULL;
-        else
-        {
-            try
-            {
-                currentBlockPtr = new Block(currentBlockNum, diskPtr);
-            }
-            catch(CannotReadException e)
-            {
-                return NULL;
-            }
-        }
-
-        currentCalled = true;
+        currentBlockPtr = new Block(currentBlockNum, diskPtr);
+    }
+    catch(CannotReadException e)
+    {
+        return NULL;
     }
 
     return currentBlockPtr;
@@ -86,7 +77,7 @@ void BlockLinkedList::getNextBlock()
         if(curBlkPtr != NULL)
         {
             currentBlockNum = curBlkPtr->getNext();
-            currentCalled = false;
+//            currentCalled = false;
             delete curBlkPtr;
         }
     }
@@ -100,7 +91,7 @@ bool BlockLinkedList::initialize(int blockNumber)
     startBlockNum = blockNumber;
     endBlockNum = blockNumber;
     currentBlockNum = blockNumber;
-    currentCalled = false;
+//    currentCalled = false;
 
     // Create and write the new first block on the disk
         Block firstBlk(blockNumber, Disk::DEFAULT_BLOCK_SIZE);
@@ -124,7 +115,7 @@ Block* BlockLinkedList::unlinkBlock()
         if(currentBlockNum == startBlockNum) // change current block if needed
         {
             currentBlockNum = blockPtr->getNext();
-            currentCalled = false;
+//            currentCalled = false;
         }
         startBlockNum = blockPtr->getNext();
     }
@@ -153,7 +144,7 @@ int BlockLinkedList::countBlocks()
         curBlkPtr = this->getCurrentBlock();
     }
 
-    currentCalled = false;
+//    currentCalled = false;
     return count;
 }
 
@@ -170,5 +161,5 @@ void BlockLinkedList::output()
         curBlkPtr = this->getCurrentBlock();
     }
 
-    currentCalled = false;
+//    currentCalled = false;
 }
