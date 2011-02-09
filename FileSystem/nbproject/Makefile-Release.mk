@@ -36,6 +36,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/BlockLinkedList.o \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/BlockGroup.o \
 	${OBJECTDIR}/FreeList.o
 
 # Test Directory
@@ -84,6 +85,11 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
+${OBJECTDIR}/BlockGroup.o: BlockGroup.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
+
 ${OBJECTDIR}/FreeList.o: FreeList.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -102,7 +108,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/BlockLinkedListTest.o ${OBJECTFILES:%.
 ${TESTDIR}/tests/BlockLinkedListTest.o: tests/BlockLinkedListTest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
+	$(COMPILE.cc) -O2 -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
 
 
 ${OBJECTDIR}/BlockLinkedList_nomain.o: ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp 
@@ -142,6 +148,19 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
+	fi
+
+${OBJECTDIR}/BlockGroup_nomain.o: ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/BlockGroup.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup_nomain.o BlockGroup.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/BlockGroup.o ${OBJECTDIR}/BlockGroup_nomain.o;\
 	fi
 
 ${OBJECTDIR}/FreeList_nomain.o: ${OBJECTDIR}/FreeList.o FreeList.cpp 

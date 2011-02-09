@@ -7,6 +7,9 @@
 
 #ifndef FREELIST_H
 #define	FREELIST_H
+
+#include "BlockLinkedList.h"
+#include "BlockGroup.h"
 #include "BlockGroupException.h"
 
 class FreeList : public BlockLinkedList
@@ -29,7 +32,7 @@ public:
      * from block 0. That is, set this parameter to true to initialize the free
      * list and loose all existing data, and to false to use the existing free list.
      */
-    FreeList(char* fileName, bool createFreeList) throw (BlockGroupException);
+    FreeList(char* fileName, bool createFreeList);
 
     /**
      * Writes out the current start block of the free list to block 0, and closes the Disk.
@@ -54,6 +57,13 @@ public:
      * Tests the functionality of this class
      */
     static void test();
+
+private:
+
+    /**
+     * Block number used for the master block.
+     */
+    const static int MASTER_BLOCK_NUM = 0;
 };
 
 #endif	/* FREELIST_H */

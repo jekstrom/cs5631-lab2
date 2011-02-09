@@ -32,6 +32,8 @@ bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
         Block endBlk(endBlockNum, diskPtr);
         endBlockNum = newBlock->getBlockNumber();
         endBlk.setNext(endBlockNum);
+        if(!endBlk.write(diskPtr))
+            return false;
     }
     catch(CannotReadException e)
     {

@@ -109,10 +109,7 @@ int main(int argc, char** argv) {
     cout << "%SUITE_STARTED% \n\n";
 
     Disk testDisk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    testDisk.Close();
-
-    FreeList* freePtr = new FreeList("testDisk", true);
-    testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE)
+    testDisk.Format();
     BlockLinkedList listOne(&testDisk, Disk::DEFAULT_BLOCK_SIZE);
 
     cout << "%TEST_STARTED% test1 (BlockLinkedListTest)\n";
