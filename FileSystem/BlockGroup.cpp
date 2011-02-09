@@ -16,7 +16,7 @@ BlockGroup::BlockGroup(BlockLinkedList bll) {
         endBlock = 0;
         numberOfBlocks = 1;
     }
-//    blockLinkedList = *bll;
+    blockLinkedList = *bll;
 }
 
     /**
@@ -46,7 +46,7 @@ bool BlockGroup::addBlock() {
     if(motherFreeList->getNumberOfBlocks() != 0) {
         blockLinkedList->addBlock(motherFreeList->getNextBlock());
         numberOfBlocks++;
-        endBlock++;
+        endBlock = motherFreeList->getNextBlock();
         return true;
     }
     else {
