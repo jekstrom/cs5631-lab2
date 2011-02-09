@@ -109,6 +109,10 @@ int main(int argc, char** argv) {
     cout << "%SUITE_STARTED% \n\n";
 
     Disk testDisk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    testDisk.Close();
+
+    FreeList* freePtr = new FreeList("testDisk", true);
+    testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE)
     BlockLinkedList listOne(&testDisk, Disk::DEFAULT_BLOCK_SIZE);
 
     cout << "%TEST_STARTED% test1 (BlockLinkedListTest)\n";
@@ -128,6 +132,10 @@ int main(int argc, char** argv) {
     cout << "%TEST_FINISHED% time=0 test4 (BlockLinkedListTest)" << "\n\n";
 
     cout << "%SUITE_FINISHED% time=0" << "\n";
+
+    freePtr->close();
+    delete freePtr;
+    testDisk.Close();
 
     return (EXIT_SUCCESS);
 }
