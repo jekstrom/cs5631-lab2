@@ -114,8 +114,11 @@ void Block::setPointer(int pointer, int location) {
     int *p;
     p = &pointer;
     char *p2 = (char*)p;
-    for(int i = 0; i < sizeof(int); i++)
-        m_buffer[i] = p2[i];
+    int counter = 0;
+    for(int i = location*sizeof(int); i < sizeof(int); i++) {
+        m_buffer[i] = p2[counter];
+        counter++;
+    }
 }
 
  /**
@@ -124,7 +127,11 @@ void Block::setPointer(int pointer, int location) {
   * @return the indicated pointer
   */
 int Block::getPointer(int location) {
-    return (int)m_buffer[location];
+    int *p = &location;
+    char integer[4] = {0};
+    for (int i = 0; i < sizeof(int); i++)
+        integer[i] = location[i];
+    return (int)integer;
 }
 
  /**
@@ -132,7 +139,7 @@ int Block::getPointer(int location) {
   * @param pointer the next block
   */
 void Block::setNext(int pointer) {
-    m_buffer[0] = pointer;
+    setPointer(pointer,0);
 }
 
  /**
