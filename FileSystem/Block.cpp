@@ -127,11 +127,15 @@ void Block::setPointer(int pointer, int location) {
   * @return the indicated pointer
   */
 int Block::getPointer(int location) {
-    int *p = &location;
-    char integer[4] = {0};
+    char integer[sizeof(int)] = {0};
+    int bufferIndex = location * 4;
     for (int i = 0; i < sizeof(int); i++)
-        integer[i] = p[i];
-    return (int)integer;
+    {
+        integer[i] = m_buffer[bufferIndex];
+        bufferIndex++;
+    }
+    int pointer = (int) integer;
+    return pointer;
 }
 
  /**
@@ -147,7 +151,7 @@ void Block::setNext(int pointer) {
   * @return the pointer to the next block
   */
 int Block::getNext() {
-    return m_buffer[0];
+    return this->getPointer(0);
 }
 
 /**Print out the contents of the Block. Prints the m_buffer bytes in hex and

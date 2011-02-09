@@ -10,6 +10,11 @@
 
 using namespace std;
 
+BlockLinkedList::BlockLinkedList()
+{
+    // Not actually used, but having it here makes the compiler happy
+}
+
 BlockLinkedList::BlockLinkedList(Disk* disk, int blkSize)
 {
     diskPtr = disk;
@@ -50,7 +55,7 @@ bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
 Block* BlockLinkedList::getCurrentBlock()
 {
     // Update current block pointer if needed
-    if(!currentCalled)
+    if(!currentCalled | currentBlockPtr == NULL)
     {
         if(END_OF_LIST == currentBlockNum)
             currentBlockPtr = NULL;

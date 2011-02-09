@@ -16,10 +16,10 @@ class BlockLinkedList
 {
 public:
     
-//    /**
-//     * Default initialization for all data members. Does not modify the Disk.
-//     */
-//    BlockLinkedList();
+    /**
+     * Default initialization for all data members. Does not modify the Disk.
+     */
+    BlockLinkedList();
 
     /**
      * A block with this as its pointer is the last block in the list.

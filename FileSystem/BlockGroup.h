@@ -9,6 +9,7 @@
 #define	BLOCKGROUP_H
 
 #include "BlockLinkedList.h"
+#include "FreeList.h"
 
 
 class BlockGroup : public BlockLinkedList
@@ -16,10 +17,10 @@ class BlockGroup : public BlockLinkedList
 public:
 
     /**
-     * Initializes a new BlockGroup.
+     * Creates a new BlockGroup.
      * @param bll BlockLinkedList to use to initialize.
      */
-    BlockGroup(BlockLinkedList bll);
+    BlockGroup(BlockLinkedList* bll);
 
     /**
      * Enables you to re-open a BlockGroup. Assumes that the BlockGroup is not
@@ -31,7 +32,7 @@ public:
      * @param numberOfBlocks is the number of blocks in this BlockGroup.
      * @param motherFreeList is the BlockGroup's originating Free List.
      */
-    BlockGroup(int startBlock, int endBlock, int numberOfBlocks, BlockLinkedList* motherFreeList);
+    BlockGroup(int startBlock, int endBlock, int numberOfBlocks, FreeList* motherFreeList);
 
     /**
      * Add another (empty) block to the end of this BlockGroup, from the Free List.

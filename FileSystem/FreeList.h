@@ -9,8 +9,9 @@
 #define	FREELIST_H
 
 #include "BlockLinkedList.h"
-#include "BlockGroup.h"
 #include "BlockGroupException.h"
+
+class BlockGroup;
 
 class FreeList : public BlockLinkedList
 {

@@ -5,18 +5,16 @@
  * Created on February 8, 2011, 8:05 PM
  */
 #include "BlockGroup.h"
+#include "BlockLinkedList.h"
 
      /**
-     * Initializes a new BlockGroup.
+     * Creates a new BlockGroup.
      * @param bll BlockLinkedList to use to initialize.
      */
-BlockGroup::BlockGroup(BlockLinkedList bll) {
-    if(bll->initialize(0)) {
-        startBlock = 0;
-        endBlock = 0;
-        numberOfBlocks = 1;
-    }
-    blockLinkedList = *bll;
+BlockGroup::BlockGroup(BlockLinkedList* bll) {
+    diskPtr = bll->getDisk();
+    numBlocks = 0;
+    blockSize = bll->getBlockSize();
 }
 
     /**
@@ -30,11 +28,11 @@ BlockGroup::BlockGroup(BlockLinkedList bll) {
      * @param motherFreeList is the BlockGroup's originating Free List.
      */
 BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
-        BlockLinkedList* motherFreeList) {
+        FreeList* motherFreeList) {
     this->startBlock = startBlock;
     this->endBlock = endBlock;
     this->numberOfBlocks = numberOfBlocks;
-    this->motherFreeList = *motherFreeList;
+    this->motherFreeList = motherFreeList;
 }
 
     /**
@@ -43,10 +41,13 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
      * @return true iff Block could be added.
      */
 bool BlockGroup::addBlock() {
-    if(motherFreeList->getNumberOfBlocks() != 0) {
-        blockLinkedList->addBlock(motherFreeList->getNextBlock());
+    if(this->motherFreeList->getNumberOfBlocks() != 0) {
+        motherFreeList->getNextBlock();
+        Block* curBlk = motherFreeList->getCurrentBlock();
+        blockLinkedList->addBlock(curBlk);
         numberOfBlocks++;
-        endBlock = motherFreeList->getNextBlock();
+        endBlock = curBlk->getBlockNumber();
+        delete curBlk;
         return true;
     }
     else {

@@ -36,6 +36,8 @@ void test2(BlockLinkedList* listOne) {
     cout << "List length = " << listOne->getNumberOfBlocks() << "\n";
     cout << "Start Block = " << listOne->getStartBlockNumber() << "\n";
     cout << "End Block = " << listOne->getEndBlockNumber() << "\n";
+    Block* curBlkPtr1 = listOne->getCurrentBlock();
+    cout << "Current Block = " << curBlkPtr1->getBlockNumber() << "\n";
 
     Block newBlock(42, Disk::DEFAULT_BLOCK_SIZE);
     cout << "Block newBlock(42, Disk::DEFAULT_BLOCK_SIZE)\n";
@@ -46,6 +48,11 @@ void test2(BlockLinkedList* listOne) {
     cout << "List length = " << listOne->getNumberOfBlocks() << "\n";
     cout << "Start Block = " << listOne->getStartBlockNumber() << "\n";
     cout << "End Block = " << listOne->getEndBlockNumber() << "\n";
+    Block* curBlkPtr2 = listOne->getCurrentBlock();
+    cout << "Current Block = " << curBlkPtr2->getBlockNumber() << "\n";
+
+    delete curBlkPtr1;
+    delete curBlkPtr2;
 
 //    cout << "%TEST_FAILED% time=0 testname=test2 (BlockLinkedListTest) message=error message sample" << "\n";
 }
@@ -130,8 +137,6 @@ int main(int argc, char** argv) {
 
     cout << "%SUITE_FINISHED% time=0" << "\n";
 
-    freePtr->close();
-    delete freePtr;
     testDisk.Close();
 
     return (EXIT_SUCCESS);

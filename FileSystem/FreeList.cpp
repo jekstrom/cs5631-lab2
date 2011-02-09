@@ -84,7 +84,7 @@ BlockGroup* FreeList::createNew() {
     int bNumber = 0;
 
     b = NULL;
-    bGroup = new BlockGroup();
+    bGroup = new BlockGroup(this);
 
     //gets first block off freelist
     b = unlinkBlock();
@@ -94,29 +94,12 @@ BlockGroup* FreeList::createNew() {
     }
     startBlockNum = b->getNext();
 
-    //init block
-    bNumber = b->getBlockNumber();
-    b->clearBuffer();
-    b->setNext(END_OF_LIST);
-
     //init block group
-    bGroup->startBlockNum = bNumber;
-    bGroup->endBlockNum = bNumber;
-    bGroup->blockSize = blockSize;
-    bGroup->diskPtr = diskPtr;
-    bGroup->numBlocks = 1;
-
-
-    //attempts to write the block to disk
-    if (!b->write(diskPtr)) {
-        delete b;
-        delete bGroup;
-        cout << "Error: FreeList::createNew() - write\n" << endl;
-        return NULL;
-    } else {
-        delete b;
-        return bGroup;
-    }
+    bNumber = b->getBlockNumber();
+    bGroup->initialize(bNumber);
+    
+    delete b;
+    return bGroup;
 }
 
 void FreeList::test() {
