@@ -1,24 +1,21 @@
-/* 
- * File:   BlockGroup.h
- * Author: james
+/*
+ * File:   Block.cpp
+ * Author: James Ekstrom
  *
- * Created on February 2, 2011, 4:34 PM
+ * Created on February 8, 2011, 8:05 PM
  */
+#include "BlockGroup.h"
 
-#ifndef BLOCKGROUP_H
-#define	BLOCKGROUP_H
-
-#include "BlockLinkedList.h"
-
-class BlockGroup : public BlockLinkedList
-{
-public:
-
-    /**
+     /**
      * Initializes a new BlockGroup.
      * @param bll BlockLinkedList to use to initialize.
      */
-    BlockGroup(BlockLinkedList bll);
+BlockGroup::BlockGroup(BlockLinkedList bll) {
+    startBlock = 0;
+    endBlock = 0;
+    numberOfBlocks = 1;
+    motherFreeList = bll->initialize(0);
+}
 
     /**
      * Enables you to re-open a BlockGroup. Assumes that the BlockGroup is not
@@ -30,25 +27,22 @@ public:
      * @param numberOfBlocks is the number of blocks in this BlockGroup.
      * @param motherFreeList is the BlockGroup's originating Free List.
      */
-    BlockGroup(int startBlock, int endBlock, int numberOfBlocks, BlockLinkedList* motherFreeList);
+BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
+        BlockLinkedList* motherFreeList) {
+    this->startBlock = startBlock;
+    this->endBlock = endBlock;
+    this->numberOfBlocks = numberOfBlocks;
+    this->motherFreeList = *motherFreeList;
+}
 
     /**
      * Add another (empty) block to the end of this BlockGroup, from the Free List.
      * You need to make sure the Free List has blocks left in it before calling this method.
      * @return true iff Block could be added.
      */
-    bool addBlock();
-
-private:
-    int startBlock;
-    int endBlock;
-    int numberOfBlocks;
-    FreeList* motherFreeList;
-
-protected:
-    friend class FreeList;
-
-};
-
-#endif	/* BLOCKGROUP_H */
-
+bool BlockGroup::addBlock() {
+    if(motherFreeList->getNumberOfBlocks()) {
+        
+    }
+    return false;
+}
