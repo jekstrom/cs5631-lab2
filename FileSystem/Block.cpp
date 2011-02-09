@@ -130,7 +130,7 @@ int Block::getPointer(int location) {
     int *p = &location;
     char integer[4] = {0};
     for (int i = 0; i < sizeof(int); i++)
-        integer[i] = location[i];
+        integer[i] = p[i];
     return (int)integer;
 }
 

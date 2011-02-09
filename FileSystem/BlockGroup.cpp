@@ -11,10 +11,12 @@
      * @param bll BlockLinkedList to use to initialize.
      */
 BlockGroup::BlockGroup(BlockLinkedList bll) {
-    startBlock = 0;
-    endBlock = 0;
-    numberOfBlocks = 1;
-    motherFreeList = bll->initialize(0);
+    if(bll->initialize(0)) {
+        startBlock = 0;
+        endBlock = 0;
+        numberOfBlocks = 1;
+    }
+//    blockLinkedList = *bll;
 }
 
     /**
@@ -41,8 +43,14 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
      * @return true iff Block could be added.
      */
 bool BlockGroup::addBlock() {
-    if(motherFreeList->getNumberOfBlocks()) {
-        
+    if(motherFreeList->getNumberOfBlocks() != 0) {
+        blockLinkedList->addBlock(motherFreeList->getNextBlock());
+        numberOfBlocks++;
+        endBlock++;
+        return true;
     }
-    return false;
+    else {
+        printf("BlockGroup::addBlock Failed, FreeList empty.");
+        return false;
+    }
 }

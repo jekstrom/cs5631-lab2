@@ -44,6 +44,7 @@ private:
     int startBlock;
     int endBlock;
     int numberOfBlocks;
+    BlockLinkedList* blockLinkedList;
     FreeList* motherFreeList;
 
 protected:
