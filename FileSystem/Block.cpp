@@ -111,7 +111,11 @@ int Block::getBlockNumber() {
  * m_buffer to change
  */
 void Block::setPointer(int pointer, int location) {
-    m_buffer[location] = pointer;
+    int *p;
+    p = &pointer;
+    char *p2 = (char*)p;
+    for(int i = 0; i < sizeof(int); i++)
+        m_buffer[i] = p2[i];
 }
 
  /**
