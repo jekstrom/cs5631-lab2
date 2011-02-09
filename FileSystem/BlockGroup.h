@@ -9,6 +9,7 @@
 #define	BLOCKGROUP_H
 
 #include "BlockLinkedList.h"
+//#include "FreeList.h"
 #include "FreeList.h"
 
 
@@ -46,7 +47,7 @@ private:
     int endBlock;
     int numberOfBlocks;
     BlockLinkedList* blockLinkedList;
-    FreeList* motherFreeList;
+    BlockLinkedList* motherFreeList;
 
 protected:
     friend class FreeList;

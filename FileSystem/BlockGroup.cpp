@@ -1,5 +1,5 @@
 /*
- * File:   Block.cpp
+ * File:   BlockGroup.cpp
  * Author: James Ekstrom
  *
  * Created on February 8, 2011, 8:05 PM
@@ -11,6 +11,15 @@
      * Creates a new BlockGroup.
      * @param bll BlockLinkedList to use to initialize.
      */
+
+BlockGroup::BlockGroup(BlockLinkedList bll) {
+    if(bll.initialize(0)) {
+        startBlock = 0;
+        endBlock = 0;
+        numberOfBlocks = 1;
+    }
+}
+
 BlockGroup::BlockGroup(BlockLinkedList* bll) {
     diskPtr = bll->getDisk();
     numBlocks = 0;

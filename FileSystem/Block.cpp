@@ -56,7 +56,9 @@ Block::Block(int blockNumber, Disk* disk) throw(CannotReadException) {
 
 /**The Block deconstructor
  */
-Block::~Block() {}
+Block::~Block() {
+    delete[] m_buffer;
+}
 
 /**Set all bytes of this buffer to zero
  * Does not alter the Disk
