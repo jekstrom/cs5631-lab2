@@ -49,13 +49,19 @@ bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
     // Clear and write the new block    
     newBlock->clearBuffer();
     newBlock->setNext(END_OF_LIST);
-    return newBlock->write(diskPtr);
+    if(newBlock->write(diskPtr))
+    {
+        numBlocks++;
+        return true;
+    }
+    else
+        return false;
 }
 
 Block* BlockLinkedList::getCurrentBlock()
 {
     // Attempt to read block from disk
-//    Block* currentBlockPtr;
+    Block* currentBlockPtr;
     try
     {
         currentBlockPtr = new Block(currentBlockNum, diskPtr);
@@ -77,7 +83,6 @@ void BlockLinkedList::getNextBlock()
         if(curBlkPtr != NULL)
         {
             currentBlockNum = curBlkPtr->getNext();
-//            currentCalled = false;
             delete curBlkPtr;
         }
     }
@@ -91,32 +96,45 @@ bool BlockLinkedList::initialize(int blockNumber)
     startBlockNum = blockNumber;
     endBlockNum = blockNumber;
     currentBlockNum = blockNumber;
-//    currentCalled = false;
 
     // Create and write the new first block on the disk
-        Block firstBlk(blockNumber, Disk::DEFAULT_BLOCK_SIZE);
-        firstBlk.clearBuffer();
-        firstBlk.setNext(END_OF_LIST);
-        return firstBlk.write(diskPtr);
+    Block firstBlk(blockNumber, Disk::DEFAULT_BLOCK_SIZE);
+    firstBlk.clearBuffer();
+    firstBlk.setNext(END_OF_LIST);
+    return firstBlk.write(diskPtr);
 }
 
 bool BlockLinkedList::replace(Block* blk)
 {
-    //TODO: figure out just wth this function is supposed to do
+    Block* curBlkPtr = getCurrentBlock();
+    int curPointer = curBlkPtr->getNext();
+
+    // Rewrite buffer, restore pointer
+    curBlkPtr->setBuffer(blk->getBuffer());
+    curBlkPtr->setNext(curPointer);
+    if(!curBlkPtr->write(diskPtr))
+    {
+        cout << "Error: could not replace block\n";
+        delete curBlkPtr;
+        return false;
+    }
+    else
+        return true;
 }
 
 Block* BlockLinkedList::unlinkBlock()
 {
-    // Change starting block number to the block number of the 2nd block
+    if(0 == numBlocks)
+        return NULL; // List is empty, no block to return
+
     Block* blockPtr;
     try
     {
         blockPtr = new Block(startBlockNum, diskPtr);
         if(currentBlockNum == startBlockNum) // change current block if needed
-        {
             currentBlockNum = blockPtr->getNext();
-//            currentCalled = false;
-        }
+
+        // Change starting block number to the block number of the new 1st block
         startBlockNum = blockPtr->getNext();
     }
     catch(CannotReadException e)
@@ -144,7 +162,7 @@ int BlockLinkedList::countBlocks()
         curBlkPtr = this->getCurrentBlock();
     }
 
-//    currentCalled = false;
+    delete curBlkPtr;
     return count;
 }
 
@@ -160,6 +178,9 @@ void BlockLinkedList::output()
         delete curBlkPtr;
         curBlkPtr = this->getCurrentBlock();
     }
+}
 
-//    currentCalled = false;
+void BlockLinkedList::rewind()
+{
+    currentBlockNum = startBlockNum;
 }

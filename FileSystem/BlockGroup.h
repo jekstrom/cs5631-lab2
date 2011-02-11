@@ -21,7 +21,13 @@ public:
      * Creates a new BlockGroup.
      * @param bll BlockLinkedList to use to initialize.
      */
-    BlockGroup(BlockLinkedList* bll);
+    BlockGroup(BlockLinkedList bll);
+
+    /**
+     * Creates a new BlockGroup which will get new nodes from the given FreeList.
+     * @param fl The FreeList that the new BlockGroup will get nodes from.
+     */
+    BlockGroup(FreeList* fl);
 
     /**
      * Enables you to re-open a BlockGroup. Assumes that the BlockGroup is not
@@ -43,11 +49,12 @@ public:
     bool addBlock();
 
 private:
-    int startBlock;
-    int endBlock;
-    int numberOfBlocks;
+    // These variables aren't needed, can use protected superclass variables
+//    int startBlock;
+//    int endBlock;
+//    int numberOfBlocks;
     BlockLinkedList* blockLinkedList;
-    BlockLinkedList* motherFreeList;
+    FreeList* motherFreeList;
 
 protected:
     friend class FreeList;

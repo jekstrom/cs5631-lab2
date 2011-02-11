@@ -43,7 +43,6 @@ public:
 
     ~BlockLinkedList()
     {
-        delete currentBlockPtr;
     }
     
     /**
@@ -165,11 +164,7 @@ public:
      * BlockLinkedList. After this call, a call to GetNextBlock will seek to the
      * second Block (if any) in the BlockLinkedList. No changes are made to disk.
      */
-    void rewind()
-    {
-        currentBlockNum = startBlockNum;
-        currentCalled = false;
-    }
+    void rewind();
 
     /**
      * Unlinks the block that is the starting block of this BlockLinkedList.

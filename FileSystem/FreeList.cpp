@@ -20,6 +20,7 @@ FreeList::FreeList(char* fileName, bool createFreeList){
             startBlockNum = masterBlock.getPointer(0);
             endBlockNum = masterBlock.getPointer(1);
             numBlocks = masterBlock.getPointer(2);
+            this->rewind();
         }
         catch(CannotReadException e)
         {
@@ -39,23 +40,18 @@ FreeList::FreeList(char* fileName, bool createFreeList){
         if(!newMaster.write(diskPtr))
             cout << "Error: Could not write new master block.\n";
     }
-
-    //TODO: finish
-
-
-    
-
 }
 
 bool FreeList::close() {
     Block *mb;
 
     //get the master block
-    mb = new Block(MASTER_BLOCK_NUM, FreeList::diskPtr);
+    mb = new Block(MASTER_BLOCK_NUM, diskPtr);
 
     //changes the local varialbes of the master block
     mb->setPointer(startBlockNum, 0);
     mb->setPointer(endBlockNum, 1);
+    mb->setPointer(numBlocks, 2);
 
     //attempts to write the master block back out
     if (!mb->write(diskPtr) || !diskPtr->Close()) {

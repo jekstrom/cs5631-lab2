@@ -1,6 +1,6 @@
-/* 
+/*
  * File:   BlockLinkedListTest.cpp
- * Author: kaleb
+ * Author: Kaleb Jungclaus
  *
  * Created on Feb 7, 2011, 11:41:39 AM
  */

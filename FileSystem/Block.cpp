@@ -185,8 +185,5 @@ void Block::print() {
  * @return true iff the call succeeded in writing the Block to the Disk.
  */
 bool Block::write(Disk* disk) {
-    if(disk->WriteBlock(blockNumber, m_buffer))
-        return true;
-    else
-        return false;
+    return disk->WriteBlock(blockNumber, m_buffer);
 }

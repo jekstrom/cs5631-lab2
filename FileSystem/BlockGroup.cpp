@@ -13,17 +13,25 @@
      */
 
 BlockGroup::BlockGroup(BlockLinkedList bll) {
-    if(bll.initialize(0)) {
-        startBlock = 0;
-        endBlock = 0;
-        numberOfBlocks = 1;
-    }
+    //Not really sure how the FreeList gets added when this constructor is used...
+    diskPtr = bll.getDisk();
+    numBlocks = 0;
+    blockSize = bll.getBlockSize();
+
+    //This is not how to use initialize. Such a call would write over the master block
+//    if(bll.initialize(0)) {
+//        startBlock = 0;
+//        endBlock = 0;
+//        numberOfBlocks = 1;
+//    }
 }
 
-BlockGroup::BlockGroup(BlockLinkedList* bll) {
-    diskPtr = bll->getDisk();
+// This constructor makes more sense to me. - Kaleb
+BlockGroup::BlockGroup(FreeList* fl) {
+    diskPtr = fl->getDisk();
     numBlocks = 0;
-    blockSize = bll->getBlockSize();
+    blockSize = fl->getBlockSize();
+    motherFreeList = fl;
 }
 
     /**
@@ -38,9 +46,9 @@ BlockGroup::BlockGroup(BlockLinkedList* bll) {
      */
 BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
         FreeList* motherFreeList) {
-    this->startBlock = startBlock;
-    this->endBlock = endBlock;
-    this->numberOfBlocks = numberOfBlocks;
+    this->startBlockNum = startBlock;
+    this->endBlockNum = endBlock;
+    this->numBlocks = numberOfBlocks;
     this->motherFreeList = motherFreeList;
 }
 
@@ -51,11 +59,8 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
      */
 bool BlockGroup::addBlock() {
     if(this->motherFreeList->getNumberOfBlocks() != 0) {
-        motherFreeList->getNextBlock();
-        Block* curBlk = motherFreeList->getCurrentBlock();
+        Block* curBlk = motherFreeList->unlinkBlock();
         blockLinkedList->addBlock(curBlk);
-        numberOfBlocks++;
-        endBlock = curBlk->getBlockNumber();
         delete curBlk;
         return true;
     }
