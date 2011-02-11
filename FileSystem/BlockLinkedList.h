@@ -178,6 +178,11 @@ public:
      */
     Block* unlinkBlock();
 
+    /**
+     * Tests the methods of the class.
+     */
+    void test();
+
 protected:
 
     /**
@@ -220,6 +225,14 @@ protected:
      * A pointer to the Disk that the list will read from and write to.
      */
     Disk* diskPtr;
+
+private:
+
+    // Test methods. Each assumes that the previous test methods have been called.
+    void test1();
+    void test2();
+    void test3();
+    void test4();
 };
 
 #endif	/* BLOCKLINKEDLIST_H */

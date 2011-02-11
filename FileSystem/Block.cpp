@@ -46,17 +46,17 @@ Block::Block(int length) {
  * @param disk the Disk to read from
  */
 Block::Block(int blockNumber, Disk* disk) throw(CannotReadException) {
-    unsigned char block[Disk::DEFAULT_BLOCK_SIZE];
+    //unsigned char block[Disk::DEFAULT_BLOCK_SIZE];
+    m_buffer = new unsigned char[disk->blockSize()];
     this->blockNumber = blockNumber;
-    if(disk->ReadBlock(blockNumber,block))
-        m_buffer = block;
-    else
-        throw new CannotReadException();
+    if(!disk->ReadBlock(blockNumber, m_buffer))
+         throw new CannotReadException();
 }
 
 /**The Block deconstructor
  */
 Block::~Block() {
+    // This is causing an error sometimes
     delete[] m_buffer;
 }
 
@@ -136,7 +136,7 @@ int Block::getPointer(int location) {
         integer[i] = m_buffer[bufferIndex];
         bufferIndex++;
     }
-    int pointer = (int) integer;
+    int pointer = *((int*) integer);
     return pointer;
 }
 

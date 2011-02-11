@@ -60,6 +60,10 @@ bool BlockLinkedList::addBlock(Block* newBlock) throw(CannotReadException)
 
 Block* BlockLinkedList::getCurrentBlock()
 {
+    // Check if end of list has been reached.
+    if(END_OF_LIST == currentBlockNum)
+        return NULL;
+
     // Attempt to read block from disk
     Block* currentBlockPtr;
     try
@@ -75,10 +79,10 @@ Block* BlockLinkedList::getCurrentBlock()
 }
 
 void BlockLinkedList::getNextBlock()
-{
-    // Follow pointer to next block number
+{    
     if(END_OF_LIST != currentBlockNum)
     {
+        // Follow pointer to next block number
         Block* curBlkPtr = getCurrentBlock();
         if(curBlkPtr != NULL)
         {
@@ -183,4 +187,107 @@ void BlockLinkedList::output()
 void BlockLinkedList::rewind()
 {
     currentBlockNum = startBlockNum;
+}
+
+void BlockLinkedList::test()
+{
+    test1();
+    test2();
+    test3();
+    test4();
+}
+
+void BlockLinkedList::test1()
+{
+    cout << "Testing initialize():\n";
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+
+    cout << "Calling initailize(1)...\n";
+    bool initReturn = this->initialize(1);
+
+    cout << "Return of initialize() = " << initReturn << "\n";
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+    cout << "Start Block = " << this->getStartBlockNumber() << "\n";
+    cout << "End Block = " << this->getEndBlockNumber() << "\n";
+    this->output();
+}
+
+void BlockLinkedList::test2()
+{
+    cout << "Testing addBlock():\n";
+    this->rewind();
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+    cout << "Start Block = " << this->getStartBlockNumber() << "\n";
+    cout << "End Block = " << this->getEndBlockNumber() << "\n";
+    this->output();
+
+    Block newBlock(42, Disk::DEFAULT_BLOCK_SIZE);
+    cout << "Block newBlock(42, Disk::DEFAULT_BLOCK_SIZE)\n";
+    cout << "Calling add(newBlock)...\n";
+    bool addReturn = this->addBlock(&newBlock);
+
+    cout << "Return of addBlock() = " << addReturn << "\n";
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+    cout << "Start Block = " << this->getStartBlockNumber() << "\n";
+    cout << "End Block = " << this->getEndBlockNumber() << "\n";
+    this->output();
+}
+
+void BlockLinkedList::test3()
+{
+    cout << "Testing getCurrentBlock(), getNextBlock(), rewind():\n";
+    this->rewind();
+    Block* curBlkPtr = this->getCurrentBlock();
+    cout << "Current Block = " << curBlkPtr->getBlockNumber() << "\n";
+
+    cout << "Calling getNextBlock()...\n";
+    this->getNextBlock();
+    delete curBlkPtr;
+
+    curBlkPtr = this->getCurrentBlock();
+    cout << "Current Block = " << curBlkPtr->getBlockNumber() << "\n";
+
+    cout << "Calling getNextBlock()...\n";
+    this->getNextBlock();
+    delete curBlkPtr;
+
+    curBlkPtr = this->getCurrentBlock();
+    if(this->getCurrentBlock() == NULL)
+        cout << "Current Block = NULL\n";
+    else
+        cout << "Current Block != NULL\n";
+
+    cout << "Calling rewind()...\n";
+    this->rewind();
+    delete curBlkPtr;
+
+    curBlkPtr = this->getCurrentBlock();
+    cout << "Current Block = " << curBlkPtr->getBlockNumber() << "\n";
+    delete curBlkPtr;
+}
+
+void BlockLinkedList::test4()
+{
+    cout << "Testing unlinkBlock():\n";
+    this->rewind();
+    Block* curBlkPtr = this->getCurrentBlock();
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+    cout << "Start Block = " << this->getStartBlockNumber() << "\n";
+    cout << "End Block = " << this->getEndBlockNumber() << "\n";
+    this->output();
+    this->rewind();
+
+    cout << "Calling unlinkBlock()...\n";
+    Block* unBlkPtr = this->unlinkBlock();
+
+    curBlkPtr = this->getCurrentBlock();
+    cout << "List length = " << this->getNumberOfBlocks() << "\n";
+    cout << "Start Block = " << this->getStartBlockNumber() << "\n";
+    cout << "End Block = " << this->getEndBlockNumber() << "\n";
+    cout << "Current Block = " << curBlkPtr->getBlockNumber() << "\n";
+    cout << "Unlinked Block = " << unBlkPtr->getBlockNumber() << "\n";
+    this->output();
+
+    delete curBlkPtr;
+    delete unBlkPtr;
 }

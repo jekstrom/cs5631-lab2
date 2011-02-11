@@ -7,8 +7,8 @@
 
 #include <cstdlib>
 
-#include "Block.h"
 #include "BlockTester.h"
+#include "FileSystemHeaders.h"
 
 using namespace std;
 
@@ -17,7 +17,13 @@ using namespace std;
  */
 int main() {
 
-    BlockTester test1;
+    //BlockTester test1;
+
+    Disk testDisk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    testDisk.Format();
+    BlockLinkedList listOne(&testDisk, Disk::DEFAULT_BLOCK_SIZE);
+    listOne.test();
+
     return 0;
 }
 
