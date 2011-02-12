@@ -28,7 +28,7 @@ public:
             printf("1) Create a new BlockGroup initialized with a BlockLinkedList\n");
             printf("2) Create a new BlockGroup initialized with a FreeList\n");
             printf("3) Open a BlockGroup\n");
-            printf("4) Add empty Block to BlockGroup");
+            printf("4) Add empty Block to BlockGroup\n");
             scanf("%d", &cmd);
 
             switch(cmd) {
@@ -39,7 +39,7 @@ public:
                     printf("Attempting to create a new BlockGroup...\n");
                     printf("Initializing BlockLinkedList...\n");
                     bll->initialize(0);
-                    printf("BlockLinkedList info:\n")
+                    printf("BlockLinkedList info:\n");
                     printf("First Block Number = %d\n",bll->getStartBlockNumber());
                     printf("Last Block Number = %d\n",bll->getEndBlockNumber());
                     printf("Number of Blocks = %d\n",bll->getNumberOfBlocks());
@@ -61,7 +61,7 @@ public:
                         printf("Initializing FreeList...\n");
                         fl = new FreeList("testfile",1);
                         
-                        BlockGroup freebg = fl->createNew();
+                        BlockGroup *freebg = fl->createNew();
                         printf("FreeList: \n");
                         freebg->output();
 
@@ -79,7 +79,7 @@ public:
                     printf("Attempting to open previously created BlockGroup...\n");
                     if (bll != NULL) {
                         printf("Using Previously created BlockLinkedList data\n");
-                        printf("BlockLinkedList info:\n")
+                        printf("BlockLinkedList info:\n");
                         printf("First Block Number = %d\n",bll->getStartBlockNumber());
                         printf("Last Block Number = %d\n",bll->getEndBlockNumber());
                         printf("Number of Blocks = %d\n",bll->getNumberOfBlocks());
@@ -89,12 +89,12 @@ public:
                     }
                     else if (fl != NULL) {
                         printf("Using Previously created FreeList data\n");
-                        printf("FreeList info:\n")
+                        printf("FreeList info:\n");
                         printf("First Block Number = %d\n",fl->getStartBlockNumber());
                         printf("Last Block Number = %d\n",fl->getEndBlockNumber());
                         printf("Number of Blocks = %d\n",fl->getNumberOfBlocks());
                         bg = new BlockGroup(fl->getStartBlockNumber(),fl->getEndBlockNumber(),
-                            fl->getNumberOfBlocks());
+                            fl->getNumberOfBlocks(),fl);
                         bg->output();
                     }
                     else {
