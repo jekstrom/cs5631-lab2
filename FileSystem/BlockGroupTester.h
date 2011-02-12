@@ -17,6 +17,8 @@ public:
      * Tests the BlockGroup class
      */
     BlockGroupTester() {
+        const int LENGTH = Disk::DEFAULT_BLOCK_SIZE;
+        Disk *disk1 = NULL;
         int cmd = 0;
         BlockGroup *bg = NULL;
         BlockLinkedList *bll = NULL;
@@ -39,7 +41,9 @@ public:
                 case 1: //Create a new BlockGroup initialized with a BlockLinkedList
                     printf("Attempting to create a new BlockGroup...\n");
                     printf("Initializing BlockLinkedList...\n");
-                    bll->initialize(0);
+                    disk1 = new Disk("disk1", 100, Disk::DEFAULT_BLOCK_SIZE);
+                    bll = new BlockLinkedList(disk1,LENGTH);
+                    bll->initialize(1);
                     printf("BlockLinkedList info:\n");
                     printf("First Block Number = %d\n",bll->getStartBlockNumber());
                     printf("Last Block Number = %d\n",bll->getEndBlockNumber());
