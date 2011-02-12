@@ -61,6 +61,9 @@ bool BlockGroup::addBlock() {
     if(this->motherFreeList->getNumberOfBlocks() != 0) {
         Block* curBlk = motherFreeList->unlinkBlock();
         blockLinkedList->addBlock(curBlk);
+        this->motherFreeList->unlinkBlock();
+        numBlocks++;
+        endBlockNum = curBlk->getBlockNumber();
         delete curBlk;
         return true;
     }
