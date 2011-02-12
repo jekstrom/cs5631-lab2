@@ -29,6 +29,7 @@ public:
             printf("2) Create a new BlockGroup initialized with a FreeList\n");
             printf("3) Open a BlockGroup\n");
             printf("4) Add empty Block to BlockGroup\n");
+            printf("5) Delete BlockGroup\n");
             scanf("%d", &cmd);
 
             switch(cmd) {
@@ -56,7 +57,7 @@ public:
                     break;
 
                 case 2: //Create a new BlockGroup initialized with a FreeList
-                    if (bg != NULL) {
+                    if (&bg != NULL) {
                         printf("Attempting to create a new BlockGroup...\n");
                         printf("Initializing FreeList...\n");
                         fl = new FreeList("testfile",1);
@@ -77,7 +78,7 @@ public:
 
                 case 3:  //Open a BlockGroup
                     printf("Attempting to open previously created BlockGroup...\n");
-                    if (bll != NULL) {
+                    if (&bll != NULL) {
                         printf("Using Previously created BlockLinkedList data\n");
                         printf("BlockLinkedList info:\n");
                         printf("First Block Number = %d\n",bll->getStartBlockNumber());
@@ -87,7 +88,7 @@ public:
                             bll->getNumberOfBlocks(),fl);
                         bg->output();
                     }
-                    else if (fl != NULL) {
+                    else if (&fl != NULL) {
                         printf("Using Previously created FreeList data\n");
                         printf("FreeList info:\n");
                         printf("First Block Number = %d\n",fl->getStartBlockNumber());
@@ -114,6 +115,10 @@ public:
                         break;
                     }
 
+                    break;
+
+                case 5:
+                    delete bg;
                     break;
             } //end switch
         }
