@@ -20,12 +20,12 @@ int main() {
 
     //BlockTester test1;
 
-//    Disk testDisk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-//    testDisk.Format();
-//    BlockLinkedList listOne(&testDisk, Disk::DEFAULT_BLOCK_SIZE);
-//    listOne.test();
+    Disk testDisk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    testDisk.Format();
+    BlockLinkedList listOne(&testDisk, Disk::DEFAULT_BLOCK_SIZE);
+    listOne.test();
 
-    BlockGroupTester();
+//    BlockGroupTester();
 
     return 0;
 }

@@ -126,7 +126,10 @@ bool BlockLinkedList::replace(Block* blk)
         return false;
     }
     else
+    {
+        delete curBlkPtr;
         return true;
+    }
 }
 
 Block* BlockLinkedList::unlinkBlock()
@@ -200,6 +203,7 @@ void BlockLinkedList::test()
     test2();
     test3();
     test4();
+    test5();
 }
 
 void BlockLinkedList::test1()
@@ -219,7 +223,7 @@ void BlockLinkedList::test1()
 
 void BlockLinkedList::test2()
 {
-    cout << "Testing addBlock():\n";
+    cout << "\nTesting addBlock():\n";
     this->rewind();
     cout << "List length = " << this->getNumberOfBlocks() << "\n";
     cout << "Start Block = " << this->getStartBlockNumber() << "\n";
@@ -240,7 +244,7 @@ void BlockLinkedList::test2()
 
 void BlockLinkedList::test3()
 {
-    cout << "Testing getCurrentBlock(), getNextBlock(), rewind():\n";
+    cout << "\nTesting getCurrentBlock(), getNextBlock(), rewind():\n";
     this->rewind();
     Block* curBlkPtr = this->getCurrentBlock();
     cout << "Current Block = " << curBlkPtr->getBlockNumber() << "\n";
@@ -273,7 +277,7 @@ void BlockLinkedList::test3()
 
 void BlockLinkedList::test4()
 {
-    cout << "Testing unlinkBlock():\n";
+    cout << "\nTesting unlinkBlock():\n";
     this->rewind();
     Block* curBlkPtr = this->getCurrentBlock();
     cout << "List length = " << this->getNumberOfBlocks() << "\n";
@@ -295,4 +299,43 @@ void BlockLinkedList::test4()
 
     delete curBlkPtr;
     delete unBlkPtr;
+}
+
+void BlockLinkedList::test5()
+{
+    cout << "\nTesting replace():\n";
+    this->rewind();
+
+    Block* curBlkPtr = this->getCurrentBlock();
+    cout << "Current Block:\n";
+    cout << "Block Number = " << curBlkPtr->getBlockNumber() << ",\n";
+    cout << "Block Pointer = " << curBlkPtr->getNext() << ",\n";
+    cout << "Block Data = " << curBlkPtr->getBuffer() << "\n";
+    delete curBlkPtr;
+
+    cout << "Creating new block with data '12345'...\n";
+    Block testBlock(Disk::DEFAULT_BLOCK_SIZE);
+    testBlock.setNext(-1);
+    for(int i = 1; i <= 5; i++)
+        testBlock.setPointer(i, i);
+    cout << "New Block's Pointer = " << testBlock.getNext() << "\n";
+    cout << "New Block's Data = ";
+    for(int i = 1; i <= 5; i++)
+        cout << testBlock.getPointer(i);
+    cout << "\n";
+
+    cout << "Calling replace()...\n";
+    this->replace(&testBlock);
+
+    curBlkPtr = this->getCurrentBlock();
+    cout << "Current Block:\n";
+    cout << "Block Number = " << curBlkPtr->getBlockNumber() << ",\n";
+    cout << "Block Pointer = " << curBlkPtr->getNext() << ",\n";
+    cout << "Block Data = ";
+    for(int i = 1; i <= 5; i++)
+        cout << curBlkPtr->getPointer(i);
+    cout << "\n";
+
+    // causing "double free or coruption error
+//    delete curBlkPtr;
 }

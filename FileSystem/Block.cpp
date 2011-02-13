@@ -114,13 +114,11 @@ int Block::getBlockNumber() {
  * m_buffer to change
  */
 void Block::setPointer(int pointer, int location) {
-    int *p;
-    p = &pointer;
-    char *p2 = (char*)p;
-    int counter = 0;
-    for(int i = location*sizeof(int); i < sizeof(int); i++) {
-        m_buffer[i] = p2[counter];
-        counter++;
+    char* p = (char*) &pointer;
+    int bufferIndex = location*sizeof(int);
+    for(int i = 0; i < sizeof(int); i++) {
+        m_buffer[bufferIndex] = p[i];
+        bufferIndex++;
     }
 }
 
