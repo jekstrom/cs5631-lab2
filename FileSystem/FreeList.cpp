@@ -123,7 +123,7 @@ BlockGroup* FreeList::createNew() {
     {
         cout << "Error: could not update master block.\n";
         delete b;
-        return NULL:
+        return NULL;
     }
     
     delete b;
