@@ -59,7 +59,10 @@ int main() {
                         cout << "There is no free list open.\n";
                     break;
                 case 4:
-                    flPtr->output();
+                    if(flPtr != NULL)
+                        flPtr->output();
+                    else
+                        cout "There is no free list open.\n";
                     break;
                 case 5:
                     if (flPtr != NULL) {
