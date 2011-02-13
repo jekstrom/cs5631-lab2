@@ -210,17 +210,6 @@ protected:
      */
     int currentBlockNum;
 
-//    /**
-//     * A pointer to the current block in the list.
-//     */
-//    Block* currentBlockPtr;
-//
-//    /**
-//     * Keeps track of whether or not getCurrentBlock has been called since the
-//     * last change of the current block pointer.
-//     */
-//    bool currentCalled;
-
     /**
      * A pointer to the Disk that the list will read from and write to.
      */
