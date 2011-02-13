@@ -53,6 +53,7 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
     this->endBlockNum = endBlock;
     this->numBlocks = numberOfBlocks;
     this->motherFreeList = motherFreeList;
+    this->diskPtr = this->motherFreeList->getDisk();
 }
 
     /**
