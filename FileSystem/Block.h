@@ -10,6 +10,9 @@
 
 #include "Disk.h"
 
+/**
+ * Representation of a single block on disk
+ */
 class Block {
 private:
     int blockNumber;

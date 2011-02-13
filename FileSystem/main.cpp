@@ -13,11 +13,12 @@
 using namespace std;
 
 /*
- *
+ * Performs testing
  */
 int main() {
 
     int command;
+
     BlockGroup* bgPtr;
     FreeList* flPtr;
     while(true)

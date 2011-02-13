@@ -12,7 +12,10 @@
 //#include "FreeList.h"
 #include "FreeList.h"
 
-
+/**
+     * Creates a new BlockGroup.
+     * @param bll BlockLinkedList to use to initialize.
+     */
 class BlockGroup : public BlockLinkedList
 {
 public:

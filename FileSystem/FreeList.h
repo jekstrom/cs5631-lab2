@@ -15,6 +15,9 @@
 
 class BlockGroup;
 
+/**
+ * Represents all of the currently unused blocks
+ */
 class FreeList : public BlockLinkedList
 {
 public:
