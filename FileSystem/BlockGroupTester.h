@@ -49,11 +49,6 @@ public:
                     printf("Last Block Number = %d\n",bll->getEndBlockNumber());
                     printf("Number of Blocks = %d\n",bll->getNumberOfBlocks());
 
-                    printf("Setting up MasterBlock\n");
-                    bll->getCurrentBlock()->setPointer(0,0); //first block number
-                    bll->getCurrentBlock()->setPointer(0,1); //last block number
-                    bll->getCurrentBlock()->setPointer(1,2); //number of blocks
-
                     printf("Creating BlockGroup with 1 Block BlockLinkedList\n");
                     bg = new BlockGroup(bll);
                     bg->output();

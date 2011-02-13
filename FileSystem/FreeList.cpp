@@ -1,6 +1,7 @@
 #include "FreeList.h"
 #include "BlockLinkedList.h"
 #include "BlockGroup.h"
+#include <stdlib.h>
 #include <iostream>
 
 using namespace std;
@@ -137,8 +138,4 @@ BlockGroup* FreeList::createNew() {
     
     delete b;
     return bGroup;
-}
-
-void FreeList::test() {
-    //Todo; waiting on testing of superclass
 }

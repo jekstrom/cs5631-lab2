@@ -9,20 +9,11 @@
 
 
 BlockGroup::BlockGroup(BlockLinkedList bll) {
-    //Not really sure how the FreeList gets added when this constructor is used...
     diskPtr = bll.getDisk();
     numBlocks = 0;
     blockSize = bll.getBlockSize();
-
-    //This is not how to use initialize. Such a call would write over the master block
-//    if(bll.initialize(0)) {
-//        startBlock = 0;
-//        endBlock = 0;
-//        numberOfBlocks = 1;
-//    }
 }
 
-// This constructor makes more sense to me. - Kaleb
 BlockGroup::BlockGroup(FreeList* fl) {
     diskPtr = fl->getDisk();
     numBlocks = 0;
