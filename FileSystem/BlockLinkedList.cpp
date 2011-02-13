@@ -336,6 +336,6 @@ void BlockLinkedList::test5()
         cout << curBlkPtr->getPointer(i);
     cout << "\n";
 
-    // causing "double free or coruption error
+    // causing "double free or coruption error"
 //    delete curBlkPtr;
 }

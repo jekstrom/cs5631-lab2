@@ -29,10 +29,9 @@ FreeList::FreeList(char* fileName, bool createFreeList){
         }
     }
     else
-    {
-        // Format might not be needed
-//        // Write zeros to entire disk
-//        diskPtr->Format();
+    {        
+        // Write zeros to entire disk
+        diskPtr->Format();
 
         // Initialize free list data members
         startBlockNum = 1;
