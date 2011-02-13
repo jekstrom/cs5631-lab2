@@ -48,6 +48,7 @@ Block::Block(int length) {
  */
 Block::Block(int blockNumber, Disk* disk) throw(CannotReadException) {
     //unsigned char block[Disk::DEFAULT_BLOCK_SIZE];
+    length = disk->blockSize() - sizeof(int);
     m_buffer = new unsigned char[disk->blockSize()];
     this->blockNumber = blockNumber;
     if(!disk->ReadBlock(blockNumber, m_buffer))

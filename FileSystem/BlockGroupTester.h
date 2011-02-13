@@ -67,11 +67,15 @@ public:
                         fl = new FreeList("testfile", true);
                         printf("FreeList: \n");
                         fl->output();
-                        
-                        BlockGroup *freebg = fl->createNew();
+
+//                        printf("Creating new BlockGroup\n");
+//                        BlockGroup *freebg = fl->createNew();
+//                        printf("BlockGroup:\n");
+//                        freebg->output();
                         
                         printf("Creating new BlockGroup\n");
-                        bg = new BlockGroup(fl);
+                        bg = new BlockGroup(fl);                        
+                        printf("BlockGroup:\n");
                         bg->output();
                     }
                     else {
@@ -123,6 +127,7 @@ public:
 
                 case 5:
                     delete bg;
+                    bg = NULL;
                     break;
             } //end switch
         }

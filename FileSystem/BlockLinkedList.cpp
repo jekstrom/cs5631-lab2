@@ -20,6 +20,9 @@ BlockLinkedList::BlockLinkedList(Disk* disk, int blkSize)
     diskPtr = disk;
     blockSize = blkSize - 4;
     numBlocks = 0;
+    startBlockNum = END_OF_LIST;
+    endBlockNum = END_OF_LIST;
+    currentBlockNum = END_OF_LIST;
 }
 
 BlockLinkedList::BlockLinkedList(BlockLinkedList* b)
@@ -173,15 +176,17 @@ int BlockLinkedList::countBlocks()
 void BlockLinkedList::output()
 {
     currentBlockNum = startBlockNum;
-
     Block* curBlkPtr = this->getCurrentBlock();
+    
+    cout << "Start of list\n";
     while(curBlkPtr != NULL)
     {
-        cout << curBlkPtr->getBlockNumber() << "\n";
+        cout << curBlkPtr->getBlockNumber() << ", ";
         this->getNextBlock();
         delete curBlkPtr;
         curBlkPtr = this->getCurrentBlock();
     }
+    cout << "\nEnd of list\n";
 }
 
 void BlockLinkedList::rewind()

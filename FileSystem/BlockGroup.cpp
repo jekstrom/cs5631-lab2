@@ -32,6 +32,9 @@ BlockGroup::BlockGroup(FreeList* fl) {
     numBlocks = 0;
     blockSize = fl->getBlockSize();
     motherFreeList = fl;
+    startBlockNum = 0;
+    endBlockNum = 0;
+    currentBlockNum = startBlockNum;
 }
 
     /**
@@ -70,12 +73,9 @@ bool BlockGroup::addBlock() {
 
         // Otherwise take and add first block from free list
         Block* curBlk = motherFreeList->unlinkBlock();
-        blockLinkedList->addBlock(curBlk);
-        this->motherFreeList->unlinkBlock();
-        numBlocks++;
-        endBlockNum = curBlk->getBlockNumber();
+        bool addStatus = BlockLinkedList::addBlock(curBlk);
         delete curBlk;
-        return true;
+        return addStatus;
     }
     else {
         printf("BlockGroup::addBlock Failed, FreeList empty.");

@@ -25,7 +25,7 @@ FreeList::FreeList(char* fileName, bool createFreeList){
         }
         catch(CannotReadException e)
         {
-            // something, something, error handling
+            cout << "Error: could not read free list from master block";
         }
     }
     else
@@ -93,6 +93,13 @@ void FreeList::returnBlocks(BlockLinkedList* bll) {
         addBlock(b);
         delete b;
     }
+
+    // update master block
+    Block master(MASTER_BLOCK_NUM, diskPtr);
+    master.setPointer(endBlockNum, 0);
+    master.setPointer(numBlocks, 2);
+    if(!master.write(diskPtr))
+        cout << "Error: could not update master block.\n";
 }
 
 BlockGroup* FreeList::createNew() {
