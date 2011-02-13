@@ -58,7 +58,17 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
      * @return true iff Block could be added.
      */
 bool BlockGroup::addBlock() {
-    if(this->motherFreeList->getNumberOfBlocks() != 0) {
+    if(this->motherFreeList->getNumberOfBlocks() > 0) {
+        // If block group is empty, initialize with first block from free list
+        if(numBlocks == 0)
+        {
+            Block* firstBlk = motherFreeList->unlinkBlock();
+            int startNum = firstBlk->getBlockNumber();
+            delete firstBlk;
+            return initialize(startNum);
+        }
+
+        // Otherwise take and add first block from free list
         Block* curBlk = motherFreeList->unlinkBlock();
         blockLinkedList->addBlock(curBlk);
         this->motherFreeList->unlinkBlock();

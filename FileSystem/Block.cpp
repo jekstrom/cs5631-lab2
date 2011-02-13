@@ -31,6 +31,7 @@ Block::Block(int blockNumber, int length) {
  */
 Block::Block(int length) {
     this->length = length;
+    blockNumber = 0;
     m_buffer = new unsigned char[length];
     for (int i = 0; i < this->length; i++)
         m_buffer[i] = 0;
@@ -56,7 +57,6 @@ Block::Block(int blockNumber, Disk* disk) throw(CannotReadException) {
 /**The Block deconstructor
  */
 Block::~Block() {
-    // This is causing an error sometimes
     delete[] m_buffer;
 }
 

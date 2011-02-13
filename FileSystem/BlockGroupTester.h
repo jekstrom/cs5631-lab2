@@ -64,12 +64,12 @@ public:
                     if (&bg != NULL) {
                         printf("Attempting to create a new BlockGroup...\n");
                         printf("Initializing FreeList...\n");
-                        fl = new FreeList("testfile",1);
+                        fl = new FreeList("testfile", true);
+                        printf("FreeList: \n");
+                        fl->output();
                         
                         BlockGroup *freebg = fl->createNew();
-                        printf("FreeList: \n");
-                        freebg->output();
-
+                        
                         printf("Creating new BlockGroup\n");
                         bg = new BlockGroup(fl);
                         bg->output();

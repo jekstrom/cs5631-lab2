@@ -64,36 +64,36 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Release.mk dist/Release/GNU-Linux-x86/filesystem
+	"${MAKE}"  -f nbproject/Makefile-Release.mk build/Release/GNU-Linux-x86/tests/TestFiles/f3
 
-dist/Release/GNU-Linux-x86/filesystem: ${OBJECTFILES}
-	${MKDIR} -p dist/Release/GNU-Linux-x86
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/filesystem ${OBJECTFILES} ${LDLIBSOPTIONS} 
+build/Release/GNU-Linux-x86/tests/TestFiles/f3: ${OBJECTFILES}
+	${MKDIR} -p build/Release/GNU-Linux-x86/tests/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f3 ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/BlockLinkedList.o: BlockLinkedList.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp
 
 ${OBJECTDIR}/Block.o: Block.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Block.o Block.cpp
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Block.o Block.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/BlockGroup.o: BlockGroup.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
 
 ${OBJECTDIR}/FreeList.o: FreeList.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/FreeList.o FreeList.cpp
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/FreeList.o FreeList.cpp
 
 # Subprojects
 .build-subprojects:
@@ -105,12 +105,6 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/BlockLinkedListTest.o ${OBJECTFILES:%.
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
 
 
-${TESTDIR}/tests/BlockLinkedListTest.o: tests/BlockLinkedListTest.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -I. -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
-
-
 ${OBJECTDIR}/BlockLinkedList_nomain.o: ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/BlockLinkedList.o`; \
@@ -119,7 +113,7 @@ ${OBJECTDIR}/BlockLinkedList_nomain.o: ${OBJECTDIR}/BlockLinkedList.o BlockLinke
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockLinkedList_nomain.o BlockLinkedList.cpp;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockLinkedList_nomain.o BlockLinkedList.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/BlockLinkedList.o ${OBJECTDIR}/BlockLinkedList_nomain.o;\
 	fi
@@ -132,7 +126,7 @@ ${OBJECTDIR}/Block_nomain.o: ${OBJECTDIR}/Block.o Block.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Block_nomain.o Block.cpp;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Block_nomain.o Block.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Block.o ${OBJECTDIR}/Block_nomain.o;\
 	fi
@@ -145,7 +139,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.cpp;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
@@ -158,7 +152,7 @@ ${OBJECTDIR}/BlockGroup_nomain.o: ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup_nomain.o BlockGroup.cpp;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup_nomain.o BlockGroup.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/BlockGroup.o ${OBJECTDIR}/BlockGroup_nomain.o;\
 	fi
@@ -171,7 +165,7 @@ ${OBJECTDIR}/FreeList_nomain.o: ${OBJECTDIR}/FreeList.o FreeList.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/FreeList_nomain.o FreeList.cpp;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/FreeList_nomain.o FreeList.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/FreeList.o ${OBJECTDIR}/FreeList_nomain.o;\
 	fi
@@ -188,7 +182,7 @@ ${OBJECTDIR}/FreeList_nomain.o: ${OBJECTDIR}/FreeList.o FreeList.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r build/Release
-	${RM} dist/Release/GNU-Linux-x86/filesystem
+	${RM} build/Release/GNU-Linux-x86/tests/TestFiles/f3
 
 # Subprojects
 .clean-subprojects:

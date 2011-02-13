@@ -25,6 +25,8 @@ public:
 
     /**
      * Creates a new BlockGroup which will get new nodes from the given FreeList.
+     * The block group will have zero blocks in it, so blocks must bea added before
+     * the group can be used.
      * @param fl The FreeList that the new BlockGroup will get nodes from.
      */
     BlockGroup(FreeList* fl);

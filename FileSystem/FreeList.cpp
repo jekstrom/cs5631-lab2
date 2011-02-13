@@ -6,10 +6,11 @@
 using namespace std;
 
 FreeList::FreeList(char* fileName, bool createFreeList){
-    blockSize = Disk::DEFAULT_BLOCK_SIZE;
+    // Block size is the number of "usable" bytes in each block
+    blockSize = Disk::DEFAULT_BLOCK_SIZE - 4;
 
     diskPtr = new Disk(fileName,
-            DEFAULT_NUMBER_OF_BLOCKS, blockSize);
+            DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
 
     if(!createFreeList)
     {
@@ -29,16 +30,36 @@ FreeList::FreeList(char* fileName, bool createFreeList){
     }
     else
     {
-        // Write zeros to entire disk
-        diskPtr->Format();
+        // Format might not be needed
+//        // Write zeros to entire disk
+//        diskPtr->Format();
+
+        // Initialize free list data members
+        startBlockNum = 1;
+        endBlockNum = DEFAULT_NUMBER_OF_BLOCKS - 1;
+        numBlocks = DEFAULT_NUMBER_OF_BLOCKS - 1;
+        currentBlockNum = startBlockNum;
 
         // Create and write new master block
-        Block newMaster(Disk::DEFAULT_BLOCK_SIZE);
-        newMaster.setPointer(1,0);
-        newMaster.setPointer(DEFAULT_NUMBER_OF_BLOCKS - 1, 1);
-        newMaster.setPointer(DEFAULT_NUMBER_OF_BLOCKS - 1, 2);
+        Block newMaster(diskPtr->blockSize());
+        newMaster.setPointer(startBlockNum, 0);
+        newMaster.setPointer(endBlockNum, 1);
+        newMaster.setPointer(numBlocks, 2);
         if(!newMaster.write(diskPtr))
             cout << "Error: Could not write new master block.\n";
+
+        for(int i = startBlockNum; i < endBlockNum; i++)
+        {
+            Block newBlock(i, Disk::DEFAULT_BLOCK_SIZE);
+            newBlock.setNext(i + 1);
+            if(!newBlock.write(diskPtr))
+                cout << "Error: Write failure while linking free list.\n";
+        }
+
+        // should be at last block
+        Block lastBlock(endBlockNum, Disk::DEFAULT_BLOCK_SIZE);
+        // Through constructor, m_buffer is all zeros, no need to change pointer
+        lastBlock.write(diskPtr);
     }
 }
 
@@ -93,6 +114,17 @@ BlockGroup* FreeList::createNew() {
     //init block group
     bNumber = b->getBlockNumber();
     bGroup->initialize(bNumber);
+
+    // update master block
+    Block master(MASTER_BLOCK_NUM, diskPtr);
+    master.setPointer(startBlockNum, 0);
+    master.setPointer(numBlocks, 2);
+    if(!master.write(diskPtr))
+    {
+        cout << "Error: could not update master block.\n";
+        delete b;
+        return NULL:
+    }
     
     delete b;
     return bGroup;
