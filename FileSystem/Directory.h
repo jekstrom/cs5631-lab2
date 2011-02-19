@@ -9,6 +9,8 @@
 #define	DIRECTORY_H
 
 #include "Disk.h"
+#include <string>
+#include <list>
 
 /**
  * This class represents a (and for now, the only) directory in the file system.
@@ -38,14 +40,14 @@ public:
      * @param fcbNum File Control Block number for the new file
      * @return true iff the file was successfully added
      */
-    bool addFile(string filename, int fcbNum);
+    bool addFile(std::string filename, int fcbNum);
 
     /**
      * Retrieves the FCB number of a file with the giben name
      * @param filename the name of the file to search for
      * @return the File Control Block number of the file, or -1 if the file wasn't found
      */
-    int findFile(string filename);
+    int findFile(std::string filename);
 
     /**
      * Changes the name of a file in the directory.
@@ -53,20 +55,20 @@ public:
      * @param newName The new name for the file
      * @return true iff the file was found
      */
-    bool renameFile(string filename, string newName);
+    bool renameFile(std::string filename, std::string newName);
 
     /**
      * Removes a file from the directory.
      * @param filename The name of the file to remove.
      * @return true iff the file was found and removed successfully
      */
-    bool removeFile(string filename);
+    bool removeFile(std::string filename);
 
     /**
      * Returns a list of all entries in the directory.
      * @return A list containing every entry in the directory
      */
-    list<entry> listEntries();
+    std::list<entry> listEntries();
 
     /**
      * A structure representing a directory entry.
@@ -81,7 +83,7 @@ public:
         /**
          * The name of a file.
          */
-        string name;
+        std::string name;
     };
 
 };
