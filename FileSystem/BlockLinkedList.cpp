@@ -81,7 +81,7 @@ Block* BlockLinkedList::getCurrentBlock()
     return currentBlockPtr;
 }
 
-void BlockLinkedList::getNextBlock()
+bool BlockLinkedList::getNextBlock()
 {    
     if(END_OF_LIST != currentBlockNum)
     {
@@ -91,8 +91,9 @@ void BlockLinkedList::getNextBlock()
         {
             currentBlockNum = curBlkPtr->getNext();
             delete curBlkPtr;
+            return true;
         }
-    }
+    } else return false;
     // If end of list has been reached, do nothing
 }
 
@@ -336,6 +337,4 @@ void BlockLinkedList::test5()
         cout << curBlkPtr->getPointer(i);
     cout << "\n";
 
-    // causing "double free or coruption error"
-//    delete curBlkPtr;
 }

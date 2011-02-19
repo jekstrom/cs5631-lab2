@@ -37,6 +37,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/BlockGroup.o \
+	${OBJECTDIR}/Directory.o \
 	${OBJECTDIR}/FreeList.o
 
 # Test Directory
@@ -90,6 +91,11 @@ ${OBJECTDIR}/BlockGroup.o: BlockGroup.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
 
+${OBJECTDIR}/Directory.o: Directory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -I. -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Directory.o Directory.cpp
+
 ${OBJECTDIR}/FreeList.o: FreeList.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -103,6 +109,12 @@ ${OBJECTDIR}/FreeList.o: FreeList.cpp
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/BlockLinkedListTest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+
+
+${TESTDIR}/tests/BlockLinkedListTest.o: tests/BlockLinkedListTest.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
 
 
 ${OBJECTDIR}/BlockLinkedList_nomain.o: ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp 
@@ -155,6 +167,19 @@ ${OBJECTDIR}/BlockGroup_nomain.o: ${OBJECTDIR}/BlockGroup.o BlockGroup.cpp
 	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/BlockGroup_nomain.o BlockGroup.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/BlockGroup.o ${OBJECTDIR}/BlockGroup_nomain.o;\
+	fi
+
+${OBJECTDIR}/Directory_nomain.o: ${OBJECTDIR}/Directory.o Directory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Directory.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.cc) -O2 -I. -I. -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/Directory_nomain.o Directory.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Directory.o ${OBJECTDIR}/Directory_nomain.o;\
 	fi
 
 ${OBJECTDIR}/FreeList_nomain.o: ${OBJECTDIR}/FreeList.o FreeList.cpp 

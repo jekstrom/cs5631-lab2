@@ -97,8 +97,9 @@ public:
      * Changes the value returned by GetCurrentBlock() to the next Block in the file, 
      * unless no more Blocks exist. In this case, GetCurrentBlock() will now return null. 
      * No changes are made to the disk.
+     * @return true if not end of list
      */
-    void getNextBlock();
+    bool getNextBlock();
     
     /**
      * Return the number of blocks currently in this BlockLinkedList.

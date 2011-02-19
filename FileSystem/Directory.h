@@ -9,6 +9,7 @@
 #define	DIRECTORY_H
 
 #include "Disk.h"
+#include "Entry.h"
 #include <string>
 #include <list>
 
@@ -20,6 +21,9 @@
 class Directory
 {
 public:
+    const static int ENTRY_SIZE = 36;
+    const static int MAX_NAME_SIZE = 32;
+
     /**
      * Creates a new directory on disk, or loads an existing directory from a disk,
      * based on the value of createNew.
@@ -68,24 +72,11 @@ public:
      * Returns a list of all entries in the directory.
      * @return A list containing every entry in the directory
      */
-    std::list<entry> listEntries();
+    std::list<Entry> listEntries();
 
-    /**
-     * A structure representing a directory entry.
-     */
-    struct entry
-    {
-        /**
-         * The File Control Block number for a file.
-         */
-        int fcb;
 
-        /**
-         * The name of a file.
-         */
-        std::string name;
-    };
-
+private:
+    std::list<Entry> list;
 };
 
 #endif	/* DIRECTORY_H */

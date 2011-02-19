@@ -63,6 +63,62 @@ FreeList::FreeList(char* fileName, bool createFreeList){
     }
 }
 
+FreeList::FreeList(Disk* disk, bool createFreeList){
+    // Block size is the number of "usable" bytes in each block
+    blockSize = Disk::DEFAULT_BLOCK_SIZE - 4;
+
+    diskPtr = disk;
+
+    if(!createFreeList)
+    {
+        try
+        {
+            // Read free list info from master block
+            Block masterBlock(MASTER_BLOCK_NUM, FreeList::diskPtr);
+            startBlockNum = masterBlock.getPointer(0);
+            endBlockNum = masterBlock.getPointer(1);
+            numBlocks = masterBlock.getPointer(2);
+            this->rewind();
+        }
+        catch(CannotReadException e)
+        {
+            cout << "Error: could not read free list from master block";
+        }
+    }
+    else
+    {
+        // Write zeros to entire disk
+        diskPtr->Format();
+
+        // Initialize free list data members
+        startBlockNum = 1;
+        endBlockNum = DEFAULT_NUMBER_OF_BLOCKS - 1;
+        numBlocks = DEFAULT_NUMBER_OF_BLOCKS - 1;
+        currentBlockNum = startBlockNum;
+
+        // Create and write new master block
+        Block newMaster(diskPtr->blockSize());
+        newMaster.setPointer(startBlockNum, 0);
+        newMaster.setPointer(endBlockNum, 1);
+        newMaster.setPointer(numBlocks, 2);
+        if(!newMaster.write(diskPtr))
+            cout << "Error: Could not write new master block.\n";
+
+        for(int i = startBlockNum; i < endBlockNum; i++)
+        {
+            Block newBlock(i, Disk::DEFAULT_BLOCK_SIZE);
+            newBlock.setNext(i + 1);
+            if(!newBlock.write(diskPtr))
+                cout << "Error: Write failure while linking free list.\n";
+        }
+
+        // should be at last block
+        Block lastBlock(endBlockNum, Disk::DEFAULT_BLOCK_SIZE);
+        // Through constructor, m_buffer is all zeros, no need to change pointer
+        lastBlock.write(diskPtr);
+    }
+}
+
 bool FreeList::close() {
     Block *mb;
 

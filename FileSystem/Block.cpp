@@ -59,7 +59,7 @@ int Block::getBlockNumber() {
 }
 
 void Block::setPointer(int pointer, int location) {
-    if (location < 4 && location > -1) {
+    if (location < 9 && location > -1) {
         char* p = (char*) &pointer;
         int bufferIndex = location * sizeof (int);
         for (int i = 0; i < sizeof (int); i++) {
@@ -72,7 +72,7 @@ void Block::setPointer(int pointer, int location) {
 }
 
 int Block::getPointer(int location) {
-    char integer[sizeof(int) ] = {0};
+    char integer[sizeof(int)] = {0};
     int bufferIndex = location * sizeof(int);
     for (int i = 0; i < sizeof(int); i++) {
         integer[i] = m_buffer[bufferIndex];

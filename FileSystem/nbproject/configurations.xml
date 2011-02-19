@@ -12,7 +12,9 @@
       <itemPath>BlockLinkedList.h</itemPath>
       <itemPath>BlockTester.h</itemPath>
       <itemPath>CannotReadException.h</itemPath>
+      <itemPath>Directory.h</itemPath>
       <itemPath>Disk.h</itemPath>
+      <itemPath>Entry.h</itemPath>
       <itemPath>FileSystemHeaders.h</itemPath>
       <itemPath>FreeList.h</itemPath>
     </logicalFolder>
@@ -28,6 +30,7 @@
       <itemPath>Block.cpp</itemPath>
       <itemPath>BlockGroup.cpp</itemPath>
       <itemPath>BlockLinkedList.cpp</itemPath>
+      <itemPath>Directory.cpp</itemPath>
       <itemPath>FreeList.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -85,10 +88,14 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -146,10 +153,14 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>

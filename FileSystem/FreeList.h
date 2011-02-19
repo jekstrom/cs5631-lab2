@@ -37,6 +37,8 @@ public:
      */
     FreeList(char* fileName, bool createFreeList);
 
+    FreeList(Disk*, bool);
+
     /**
      * Writes out the current start block of the free list to block 0, and closes the Disk.
      * @return true iff the Free List could be closed.
