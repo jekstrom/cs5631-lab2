@@ -9,17 +9,19 @@
 #define	ENTRY_H
 #include <string>
 
+using namespace std;
+
 class Entry {
 public:
 
-    Entry(int f,std::string s) {
+    Entry(int f,string s) {
         fcb = f;
         name = s;
     };
 
     int fcb;
     
-    std::string name;
+    string name;
 
 };
 #endif	/* ENTRY_H */

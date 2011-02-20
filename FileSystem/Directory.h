@@ -13,6 +13,8 @@
 #include <string>
 #include <list>
 
+using namespace std;
+
 /**
  * This class represents a (and for now, the only) directory in the file system.
  * It is responsible for relating human-readable file names to the appropriate
@@ -41,43 +43,48 @@ public:
 
     /**
      * Add a file with the given name and FCB number to the directory.
-     * @param filename name for the new file
+     * @param filename Name for the new file, will be truncated if longer than
+     * 31 characters
      * @param fcbNum File Control Block number for the new file
      * @return true iff the file was successfully added
      */
-    bool addFile(std::string filename, int fcbNum);
+    bool addFile(string filename, int fcbNum);
 
     /**
      * Retrieves the FCB number of a file with the given name
-     * @param filename the name of the file to search for
+     * @param filename the name of the file to search for, will be truncated if
+     * longer than 31 characters
      * @return the File Control Block number of the file, or -1 if the file wasn't found
      */
-    int findFile(std::string filename);
+    int findFile(string filename);
 
     /**
      * Changes the name of a file in the directory.
-     * @param filename The current name of the file
-     * @param newName The new name for the file
+     * @param filename The current name of the file, will be truncated if longer
+     * than 31 characters
+     * @param newName The new name for the file, will be truncated if longer than
+     * 31 characters
      * @return true iff the file was found
      */
-    bool renameFile(std::string filename, std::string newName);
+    bool renameFile(string filename, string newName);
 
     /**
      * Removes a file from the directory.
-     * @param filename The name of the file to remove.
+     * @param filename The name of the file to remove, will be truncated if longer
+     * than 31 characters
      * @return true iff the file was found and removed successfully
      */
-    bool removeFile(std::string filename);
+    bool removeFile(string filename);
 
     /**
      * Returns a list of all entries in the directory.
      * @return A list containing every entry in the directory
      */
-    std::list<Entry> listEntries();
+    list<Entry> listEntries();
 
 
 private:
-    std::list<Entry> entryList;
+    list<Entry> entryList;
 
     Disk* disk;
 };
