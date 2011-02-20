@@ -50,9 +50,7 @@ Directory::Directory(Disk* disk, bool createNew) {
 
                     if ((int) fcbBuffer == -1) break;
 
-                    Entry temp;
-                    temp.fcb = (int) fcbBuffer;
-                    temp.name = nameBuffer;
+                    Entry temp((int) fcbBuffer, nameBuffer);
 
                     entryList.push_back(temp);
 
@@ -74,7 +72,7 @@ bool Directory::flush() {
     //write to disk
     FreeList *freeList = new FreeList(disk, false);
     Block *masterBlock = new Block(0, disk);
-    BlockGroup directory = new BlockGroup(masterBlock->getPointer(3),
+    BlockGroup *directory = new BlockGroup(masterBlock->getPointer(3),
             masterBlock->getPointer(4),
             masterBlock->getPointer(5),
             freeList);
@@ -92,31 +90,31 @@ bool Directory::flush() {
             directory->addBlock();
     }
 
-    Block tempBlock = new Block(masterBlock->getPointer(3), disk);
-    int *p;
-    p = &buffer;
-    char* p2;
-    p2 = (char*) p;
+    Block *tempBlock = new Block(masterBlock->getPointer(3), disk);
+//    int *p;
+//    p = &buffer;
+//    char *p2;
+//    p2 = &buffer;
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
         //do {
 
-            p2[0] = tempBlock->getPointer(0);
+            buffer[0] = tempBlock->getPointer(0);
             for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
                 if(tempList.size() != 0) {
-                p2[j*ENTRY_SIZE + sizeof(int)] = tempList.front().fcb;
-                p2[j*ENTRY_SIZE + 2*sizeof(int)] = tempList.front().name;
+                buffer[j*ENTRY_SIZE + sizeof(int)] = tempList.front().fcb;
+                buffer[j*ENTRY_SIZE + 2*sizeof(int)] = *tempList.front().name.c_str();
                 tempList.pop_front();
                 } else break;
             }
 
-            tempBlock.write(disk);
+            tempBlock->write(disk);
             directory->getNextBlock();
             tempBlock = directory->getCurrentBlock();
     }
 }
 
 bool Directory::addFile(std::string filename, int fcbNum) {
-    Entry newEntry(filename, fcbNum);
+    Entry newEntry(fcbNum, filename);
     entryList.push_back(newEntry);
 }
 
