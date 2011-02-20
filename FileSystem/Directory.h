@@ -23,6 +23,7 @@ class Directory
 public:
     const static int ENTRY_SIZE = 36;
     const static int MAX_NAME_SIZE = 32;
+    const static int ENTRIES_PER_BLOCK = 14;
 
     /**
      * Creates a new directory on disk, or loads an existing directory from a disk,
@@ -76,7 +77,9 @@ public:
 
 
 private:
-    std::list<Entry> list;
+    std::list<Entry> entryList;
+
+    Disk* disk;
 };
 
 #endif	/* DIRECTORY_H */

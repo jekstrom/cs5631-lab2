@@ -12,6 +12,11 @@
 class Entry {
 public:
 
+    Entry(int f,std::string s) {
+        fcb = f;
+        name = s;
+    };
+
     int fcb;
     
     std::string name;
