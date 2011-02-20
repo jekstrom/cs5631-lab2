@@ -4,6 +4,8 @@
 #include "BlockGroup.h"
 #include <math.h>
 
+using namespace std;
+
 Directory::Directory(Disk* disk, bool createNew) {
     this->disk = disk;
 
@@ -81,7 +83,7 @@ bool Directory::flush() {
     unsigned char buffer[Disk::DEFAULT_BLOCK_SIZE];
     int numBlocksNeeded = ceil((entryList.size() / 14));
 
-    std::list<Entry> tempList(entryList);
+    list<Entry> tempList(entryList);
 
 
     if (numBlocksNeeded > directorySize) {
@@ -109,13 +111,13 @@ bool Directory::flush() {
     delete tempBlock;
 }
 
-bool Directory::addFile(std::string filename, int fcbNum) {
+bool Directory::addFile(string filename, int fcbNum) {
     Entry newEntry(fcbNum, filename);
     entryList.push_back(newEntry);
 }
 
-int Directory::findFile(std::string filename) {
-    std::list<Entry>::iterator i = entryList.begin();
+int Directory::findFile(string filename) {
+    list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) //returns 0 if strings are equal
             return i->fcb;
@@ -123,8 +125,8 @@ int Directory::findFile(std::string filename) {
     return -1; //file not found
 }
 
-bool Directory::renameFile(std::string filename, std::string newName) {
-    std::list<Entry>::iterator i = entryList.begin();
+bool Directory::renameFile(string filename, string newName) {
+    list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) {//returns 0 if strings are equal
             i->name = newName;
@@ -133,8 +135,8 @@ bool Directory::renameFile(std::string filename, std::string newName) {
     return false; //file not found
 }
 
-bool Directory::removeFile(std::string filename) {
-    std::list<Entry>::iterator i = entryList.begin();
+bool Directory::removeFile(string filename) {
+    list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) //returns 0 if strings are equal
             entryList.erase(i);
@@ -142,6 +144,6 @@ bool Directory::removeFile(std::string filename) {
     return -1; //file not found
 }
 
-std::list<Entry> Directory::listEntries() {
+list<Entry> Directory::listEntries() {
     return entryList;
 }

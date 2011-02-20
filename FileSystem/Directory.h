@@ -23,9 +23,6 @@ using namespace std;
 class Directory
 {
 public:
-    const static int ENTRY_SIZE = 36;
-    const static int MAX_NAME_SIZE = 32;
-    const static int ENTRIES_PER_BLOCK = 14;
 
     /**
      * Creates a new directory on disk, or loads an existing directory from a disk,
@@ -87,6 +84,22 @@ private:
     list<Entry> entryList;
 
     Disk* disk;
+
+    /**
+     * The number of bytes in a directory entry.
+     */
+    const static int ENTRY_SIZE = 36;
+    
+    /**
+     * The number of bytes in each entry that can be used for the filename. Thus,
+     * the effective maximum filename length is 31.
+     */
+    const static int MAX_NAME_SIZE = 32;
+
+    /**
+     * The number of directory entries per disc block.
+     */
+    const static int ENTRIES_PER_BLOCK = 14;
 };
 
 #endif	/* DIRECTORY_H */
