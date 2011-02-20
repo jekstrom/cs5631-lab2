@@ -11,16 +11,32 @@
 
 using namespace std;
 
-class Entry {
+/**
+ * This class represents an entry in a Directory. It is responsible for storing
+ * the name and associated File Control Block number of a file.
+ */
+class Entry
+{
 public:
 
-    Entry(int f,string s) {
-        fcb = f;
-        name = s;
+    /**
+     * Creates a new directory entry with the given information.
+     * @param fcbNum The FCB number of the file represented by this entry
+     * @param filename The name of the file represented by this entry
+     */
+    Entry(int fcbNum,string filename) {
+        fcb = fcbNum;
+        name = filename;
     };
 
+    /**
+     * The File Control Block number of the file represented by this entry.
+     */
     int fcb;
-    
+
+    /**
+     * The name of the file represented by this entry.
+     */
     string name;
 
 };

@@ -114,6 +114,7 @@ bool BlockLinkedList::initialize(int blockNumber)
 
 bool BlockLinkedList::replace(Block* blk)
 {
+    // NOT CURRENTLY WORKING
     Block* curBlkPtr = getCurrentBlock();
     int curPointer = curBlkPtr->getNext();
 

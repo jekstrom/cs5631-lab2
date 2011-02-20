@@ -107,7 +107,7 @@ bool Directory::flush() {
         directory->getNextBlock();
         tempBlock = directory->getCurrentBlock();
     }
-    delete tempList;
+    tempList;
     delete tempBlock;
 }
 

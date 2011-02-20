@@ -37,7 +37,13 @@ public:
      */
     FreeList(char* fileName, bool createFreeList);
 
-    FreeList(Disk*, bool);
+    /**
+     * This constructor generates a RAM object representing the free list for the Disk.
+     * @param disk A pointer to an open Disk object to be used by this free list.
+     * @param createFreeList If true, a new freelist should be created on disk.
+     * Else, an existing free list should be read from the disk.
+     */
+    FreeList(Disk* disk, bool createFreeList);
 
     /**
      * Writes out the current start block of the free list to block 0, and closes the Disk.

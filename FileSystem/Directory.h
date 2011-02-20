@@ -48,7 +48,7 @@ public:
     bool addFile(string filename, int fcbNum);
 
     /**
-     * Retrieves the FCB number of a file with the given name
+     * Retrieves the FCB number of a file with the given name.
      * @param filename the name of the file to search for, will be truncated if
      * longer than 31 characters
      * @return the File Control Block number of the file, or -1 if the file wasn't found
