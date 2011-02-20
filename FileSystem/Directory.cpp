@@ -91,13 +91,7 @@ bool Directory::flush() {
     }
 
     Block *tempBlock = new Block(masterBlock->getPointer(3), disk);
-    //    int *p;
-    //    p = &buffer;
-    //    char *p2;
-    //    p2 = &buffer;
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
-        //do {
-
         buffer[0] = tempBlock->getPointer(0);
         for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
             if (tempList.size() != 0) {
@@ -121,32 +115,31 @@ bool Directory::addFile(std::string filename, int fcbNum) {
 }
 
 int Directory::findFile(std::string filename) {
-    std::list<Entry> tempList;
-    tempList.list(entryList);
-    for (int i = 0; i < tempList.size(); i++) {
-        if (!tempList.front().name.compare(filename)) //returns 0 if strings are equal
-            return tempList.front().fcb;
-        else
-            tempList.pop_front();
+    std::list<Entry>::iterator i = entryList.begin();
+    for (; i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) //returns 0 if strings are equal
+            return i->fcb;
     }
     return -1; //file not found
 }
 
 bool Directory::renameFile(std::string filename, std::string newName) {
-    std::list<Entry> tempList;
-    tempList.list(entryList);
-    for (int i = 0; i < tempList.size(); i++) {
-        if (!tempList.front().name.compare(filename)) {//returns 0 if strings are equal
-            tempList.front().name = newName;
+    std::list<Entry>::iterator i = entryList.begin();
+    for (; i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+            i->name = newName;
         }
-        else
-            tempList.pop_front();
     }
     return false; //file not found
 }
 
 bool Directory::removeFile(std::string filename) {
-
+    std::list<Entry>::iterator i = entryList.begin();
+    for (; i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) //returns 0 if strings are equal
+            entryList.erase(i);
+    }
+    return -1; //file not found
 }
 
 std::list<Entry> Directory::listEntries() {
