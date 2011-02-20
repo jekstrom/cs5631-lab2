@@ -91,26 +91,28 @@ bool Directory::flush() {
     }
 
     Block *tempBlock = new Block(masterBlock->getPointer(3), disk);
-//    int *p;
-//    p = &buffer;
-//    char *p2;
-//    p2 = &buffer;
+    //    int *p;
+    //    p = &buffer;
+    //    char *p2;
+    //    p2 = &buffer;
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
         //do {
 
-            buffer[0] = tempBlock->getPointer(0);
-            for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
-                if(tempList.size() != 0) {
-                buffer[j*ENTRY_SIZE + sizeof(int)] = tempList.front().fcb;
-                buffer[j*ENTRY_SIZE + 2*sizeof(int)] = *tempList.front().name.c_str();
+        buffer[0] = tempBlock->getPointer(0);
+        for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
+            if (tempList.size() != 0) {
+                buffer[j * ENTRY_SIZE + sizeof (int) ] = tempList.front().fcb;
+                buffer[j * ENTRY_SIZE + 2 * sizeof (int) ] = *tempList.front().name.c_str();
                 tempList.pop_front();
-                } else break;
-            }
+            } else break;
+        }
 
-            tempBlock->write(disk);
-            directory->getNextBlock();
-            tempBlock = directory->getCurrentBlock();
+        tempBlock->write(disk);
+        directory->getNextBlock();
+        tempBlock = directory->getCurrentBlock();
     }
+    delete tempList;
+    delete tempBlock;
 }
 
 bool Directory::addFile(std::string filename, int fcbNum) {
@@ -119,11 +121,28 @@ bool Directory::addFile(std::string filename, int fcbNum) {
 }
 
 int Directory::findFile(std::string filename) {
-    
+    std::list<Entry> tempList;
+    tempList.list(entryList);
+    for (int i = 0; i < tempList.size(); i++) {
+        if (!tempList.front().name.compare(filename)) //returns 0 if strings are equal
+            return tempList.front().fcb;
+        else
+            tempList.pop_front();
+    }
+    return -1; //file not found
 }
 
 bool Directory::renameFile(std::string filename, std::string newName) {
-
+    std::list<Entry> tempList;
+    tempList.list(entryList);
+    for (int i = 0; i < tempList.size(); i++) {
+        if (!tempList.front().name.compare(filename)) {//returns 0 if strings are equal
+            tempList.front().name = newName;
+        }
+        else
+            tempList.pop_front();
+    }
+    return false; //file not found
 }
 
 bool Directory::removeFile(std::string filename) {
