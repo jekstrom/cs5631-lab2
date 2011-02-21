@@ -141,7 +141,7 @@ bool Directory::removeFile(string filename) {
         if (!i->name.compare(filename)) //returns 0 if strings are equal
             entryList.erase(i);
     }
-    return -1; //file not found
+    return false; //file not found
 }
 
 list<Entry> Directory::listEntries() {
