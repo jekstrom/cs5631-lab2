@@ -9,59 +9,53 @@ using namespace std;
 Directory::Directory(Disk* disk, bool createNew) {
     this->disk = disk;
 
-    FreeList *freeList = new FreeList(disk, false);
-    Block *masterBlock = new Block(0, disk);
+    FreeList freeList = FreeList(disk, false);
+    Block masterBlock = Block(0, disk);
 
     if (createNew) {
-        BlockGroup *directory = new BlockGroup(freeList);
-        directory->addBlock();
-        //set fcb number for the first entry to -1
-        directory->getCurrentBlock()->setPointer(-1, 1);
+        BlockGroup directory = BlockGroup(&freeList);
+        directory.addBlock();
 
-        masterBlock->setPointer(directory->getStartBlockNumber(), 3);
-        masterBlock->setPointer(directory->getEndBlockNumber(), 4);
-        masterBlock->setPointer(directory->getNumberOfBlocks(), 5);
+        masterBlock.setPointer(directory.getStartBlockNumber(), 3);
+        masterBlock.setPointer(directory.getEndBlockNumber(), 4);
+        masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
 
-        masterBlock->write(disk);
+        masterBlock.write(disk);
     } else {
-        BlockGroup *directory = new BlockGroup(masterBlock->getPointer(3)
-                , masterBlock->getPointer(4),
-                masterBlock->getPointer(5),
-                freeList);
+        BlockGroup directory = BlockGroup(masterBlock.getPointer(3)
+                , masterBlock.getPointer(4),
+                masterBlock.getPointer(5),
+                &freeList);
 
 
-        if (directory->getNumberOfBlocks() > 0) {
-            Block *tempBlock = new Block(directory->getStartBlockNumber());
+        if (directory.getNumberOfBlocks() > 0) {
+            Block* tempBlock = new Block(directory.getStartBlockNumber(), disk); // handle exception
+            directory.getNextBlock();
             //traverse directory, store in memory
             do { //search every block
                 unsigned char *blockBuffer;
                 blockBuffer = tempBlock->getBuffer();
+
                 for (int j = 4; j < Disk::DEFAULT_BLOCK_SIZE; j += ENTRY_SIZE) {
                     char fcbBuffer[sizeof (int) ] = {0};
-                    char nameBuffer[MAX_NAME_SIZE] = {""};
-                    char buffer[ENTRY_SIZE] = {NULL};
-
-                    buffer [j] = blockBuffer[j];
+                    char nameBuffer[MAX_NAME_SIZE] = {""};                    
 
                     for (int i = 0; i < ENTRY_SIZE; i++) {
-                        if (i < 4)
-                            fcbBuffer[i] = buffer[i];
+                        if (i < sizeof(int))
+                            fcbBuffer[i] = blockBuffer[j+i];
                         else
-                            nameBuffer[i - sizeof (int) ] = buffer[i];
+                            nameBuffer[i - sizeof (int) ] = blockBuffer[j+i];
                     }
 
-                    if ((int) fcbBuffer == -1) break;
+                    int* fcbPtr = (int*) fcbBuffer;
+                    if (*fcbPtr == -1)
+                        break;
 
-                    Entry temp((int) fcbBuffer, nameBuffer);
-
-                    entryList.push_back(temp);
-
-                    delete[] fcbBuffer;
-                    delete[] nameBuffer;
-                    delete[] buffer;
+                    entryList.push_back(Entry(*fcbPtr, string(nameBuffer)));
                 }
-                tempBlock = directory->getCurrentBlock();
-            } while (directory->getNextBlock());
+                delete tempBlock;
+                tempBlock = directory.getCurrentBlock();
+            } while (directory.getNextBlock());
         }
 
     }
@@ -72,51 +66,61 @@ bool Directory::flush() {
     //search through list
     //construct blocks
     //write to disk
-    FreeList *freeList = new FreeList(disk, false);
-    Block *masterBlock = new Block(0, disk);
-    BlockGroup *directory = new BlockGroup(masterBlock->getPointer(3),
-            masterBlock->getPointer(4),
-            masterBlock->getPointer(5),
-            freeList);
+    FreeList freeList = FreeList(disk, false);
+    Block masterBlock = Block(0, disk);
+    BlockGroup directory = BlockGroup(masterBlock.getPointer(3),
+            masterBlock.getPointer(4),
+            masterBlock.getPointer(5),
+            &freeList);
 
-    int directorySize = masterBlock->getPointer(5);
+    int directorySize = masterBlock.getPointer(5);
     unsigned char buffer[Disk::DEFAULT_BLOCK_SIZE];
     int numBlocksNeeded = ceil((entryList.size() / 14));
 
     list<Entry> tempList(entryList);
 
-
     if (numBlocksNeeded > directorySize) {
         //add blocks to directory
         for (int i = 0; i < numBlocksNeeded - directorySize; i++)
-            directory->addBlock();
+            directory.addBlock();
     }
 
-    Block *tempBlock = new Block(masterBlock->getPointer(3), disk);
+    Block *tempBlock = new Block(masterBlock.getPointer(3), disk);
+    //Block newBlock = Block(tempBlock->getBlockNumber());
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
-        buffer[0] = tempBlock->getPointer(0);
+       // newBlock.setNext() = tempBlock->getNext(0);
+        buffer = tempBlock->getBuffer();
         for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
             if (tempList.size() != 0) {
-                buffer[j * ENTRY_SIZE + sizeof (int) ] = tempList.front().fcb;
-                buffer[j * ENTRY_SIZE + 2 * sizeof (int) ] = *tempList.front().name.c_str();
+                //buffer[j * ENTRY_SIZE + sizeof (int) ] = tempList.front().fcb;
+                tempBlock->setPointer(tempList.front().fcb, (j * ENTRY_SIZE + sizeof (int))/4);
+
+                char* nameBuffer = tempList.front().name.c_str();
+                for(int k = 0; k < sizeof(nameBuffer); k++)
+                    buffer[j * ENTRY_SIZE + 2 * sizeof(int) + k] = nameBuffer[k];
+
                 tempList.pop_front();
-            } else break;
+            } 
+            else
+                break;
         }
 
         tempBlock->write(disk);
-        directory->getNextBlock();
-        tempBlock = directory->getCurrentBlock();
+        directory.getNextBlock();
+        delete tempBlock;
+        tempBlock = directory.getCurrentBlock();
     }
-    tempList;
     delete tempBlock;
 }
 
 bool Directory::addFile(string filename, int fcbNum) {
+    //add length check for name
     Entry newEntry(fcbNum, filename);
     entryList.push_back(newEntry);
 }
 
 int Directory::findFile(string filename) {
+    //add length check for name
     list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) //returns 0 if strings are equal
@@ -126,6 +130,7 @@ int Directory::findFile(string filename) {
 }
 
 bool Directory::renameFile(string filename, string newName) {
+    //add length check for name
     list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) {//returns 0 if strings are equal
@@ -136,6 +141,7 @@ bool Directory::renameFile(string filename, string newName) {
 }
 
 bool Directory::removeFile(string filename) {
+    //add length check for name
     list<Entry>::iterator i = entryList.begin();
     for (; i != entryList.end(); i++) {
         if (!i->name.compare(filename)) //returns 0 if strings are equal
