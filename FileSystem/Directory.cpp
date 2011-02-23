@@ -92,7 +92,8 @@ bool Directory::flush() {
         for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
             if (tempList.size() != 0) {
                 //buffer[j * ENTRY_SIZE + sizeof (int) ] = tempList.front().fcb;
-                tempBlock->setPointer(tempList.front().fcb, (j * ENTRY_SIZE + sizeof (int)) / 4);
+                tempBlock->setPointer(tempList.front().fcb,
+                        (j * ENTRY_SIZE + sizeof (int)) / 4);
 
                 char* nameBuffer = tempList.front().name.c_str();
                 for (int k = 0; k < sizeof (nameBuffer); k++)
@@ -145,8 +146,7 @@ bool Directory::removeFile(string filename) {
 
 Entry Directory::traverseList(string filename) {
     if (filename.size() < 33) {
-        list<Entry>::iterator i = entryList.begin();
-        for (; i != entryList.end(); i++) {
+        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
             if (!i->name.compare(filename)) //returns 0 if strings are equal
                 return i;
         }
