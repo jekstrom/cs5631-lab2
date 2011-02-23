@@ -95,7 +95,7 @@ bool Directory::flush() {
                 tempBlock->setPointer(tempList.front().fcb,
                         (j * ENTRY_SIZE + sizeof (int)) / 4);
 
-                char* nameBuffer = tempList.front().name.c_str();
+                const char* nameBuffer = tempList.front().name.c_str();
                 for (int k = 0; k < sizeof (nameBuffer); k++)
                     buffer[j * ENTRY_SIZE + 2 * sizeof (int) +k] = nameBuffer[k];
 
@@ -122,36 +122,38 @@ bool Directory::addFile(string filename, int fcbNum) {
 }
 
 int Directory::findFile(string filename) {
-    if (traverseList(filename) != NULL) {
-        return traverseList(filename).fcb;
+    if (filename.size() < 33) {
+        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+            if (!i->name.compare(filename)) {//returns 0 if strings are equal
+                return i->fcb;
+            }
+        }
     } else
         return -1; //file not found
 }
 
 bool Directory::renameFile(string filename, string newName) {
-    if (traverseList(filename) != NULL) {
-        traverseList(filename).name = newName;
-        return true;
+    if (filename.size() < 33) {
+        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+            if (!i->name.compare(filename)) {//returns 0 if strings are equal
+                i->name = newName;
+                return true;
+            }
+        }
     } else
         return false; //file not found
 }
 
 bool Directory::removeFile(string filename) {
-    if (traverseList(filename) != NULL) {
-        entryList.erase(traverseList(filename));
-        return true;
-    } else
-        return false; //file not found
-}
-
-Entry Directory::traverseList(string filename) {
     if (filename.size() < 33) {
         for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-            if (!i->name.compare(filename)) //returns 0 if strings are equal
-                return i;
+            if (!i->name.compare(filename)) {//returns 0 if strings are equal
+                entryList.erase(i);
+                return true;
+            }
         }
-    }
-    return NULL; //file not found or filename too long
+    } else
+        return false; //file not found
 }
 
 list<Entry> Directory::listEntries() {

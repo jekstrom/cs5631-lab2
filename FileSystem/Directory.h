@@ -81,13 +81,6 @@ public:
 
 
 private:
-    /**
-     * Traverses the list to find an entry with the given file name
-     * @param filename the file name to look for
-     * @return the entry or NULL if it doesn't exist
-     */
-    Entry traverseList(string filename);
-
     list<Entry> entryList;
 
     Disk* disk;
