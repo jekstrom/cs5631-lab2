@@ -73,7 +73,7 @@ bool Directory::flush() {
             &freeList);
 
     int directorySize = masterBlock.getPointer(5);
-    unsigned char buffer[Disk::DEFAULT_BLOCK_SIZE];
+    unsigned char* buffer = new unsigned char[Disk::DEFAULT_BLOCK_SIZE];
     int numBlocksNeeded = ceil((entryList.size() / 14));
 
     list<Entry> tempList(entryList);
@@ -108,6 +108,7 @@ bool Directory::flush() {
         directory.getNextBlock();
         delete tempBlock;
         tempBlock = directory.getCurrentBlock();
+        delete buffer;
     }
     delete tempBlock;
 }
