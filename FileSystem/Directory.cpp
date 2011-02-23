@@ -129,8 +129,8 @@ int Directory::findFile(string filename) {
                 return i->fcb;
             }
         }
-    } else
-        return -1; //file not found
+    }
+    return -1; //file not found
 }
 
 bool Directory::renameFile(string filename, string newName) {
@@ -141,8 +141,8 @@ bool Directory::renameFile(string filename, string newName) {
                 return true;
             }
         }
-    } else
-        return false; //file not found
+    }
+    return false; //file not found
 }
 
 bool Directory::removeFile(string filename) {
@@ -153,8 +153,8 @@ bool Directory::removeFile(string filename) {
                 return true;
             }
         }
-    } else
-        return false; //file not found
+    }
+    return false; //file not found
 }
 
 list<Entry> Directory::listEntries() {
