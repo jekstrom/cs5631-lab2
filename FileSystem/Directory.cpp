@@ -1,4 +1,3 @@
-//
 #include "Directory.h"
 #include "FreeList.h"
 #include "BlockGroup.h"
@@ -38,13 +37,13 @@ Directory::Directory(Disk* disk, bool createNew) {
 
                 for (int j = 4; j < Disk::DEFAULT_BLOCK_SIZE; j += ENTRY_SIZE) {
                     char fcbBuffer[sizeof (int) ] = {0};
-                    char nameBuffer[MAX_NAME_SIZE] = {""};                    
+                    char nameBuffer[MAX_NAME_SIZE] = {""};
 
                     for (int i = 0; i < ENTRY_SIZE; i++) {
-                        if (i < sizeof(int))
-                            fcbBuffer[i] = blockBuffer[j+i];
+                        if (i < sizeof (int))
+                            fcbBuffer[i] = blockBuffer[j + i];
                         else
-                            nameBuffer[i - sizeof (int) ] = blockBuffer[j+i];
+                            nameBuffer[i - sizeof (int) ] = blockBuffer[j + i];
                     }
 
                     int* fcbPtr = (int*) fcbBuffer;
@@ -88,20 +87,19 @@ bool Directory::flush() {
     Block *tempBlock = new Block(masterBlock.getPointer(3), disk);
     //Block newBlock = Block(tempBlock->getBlockNumber());
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
-       // newBlock.setNext() = tempBlock->getNext(0);
+        // newBlock.setNext() = tempBlock->getNext(0);
         buffer = tempBlock->getBuffer();
         for (int j = 0; j < ENTRIES_PER_BLOCK; j++) {
             if (tempList.size() != 0) {
                 //buffer[j * ENTRY_SIZE + sizeof (int) ] = tempList.front().fcb;
-                tempBlock->setPointer(tempList.front().fcb, (j * ENTRY_SIZE + sizeof (int))/4);
+                tempBlock->setPointer(tempList.front().fcb, (j * ENTRY_SIZE + sizeof (int)) / 4);
 
                 char* nameBuffer = tempList.front().name.c_str();
-                for(int k = 0; k < sizeof(nameBuffer); k++)
-                    buffer[j * ENTRY_SIZE + 2 * sizeof(int) + k] = nameBuffer[k];
+                for (int k = 0; k < sizeof (nameBuffer); k++)
+                    buffer[j * ENTRY_SIZE + 2 * sizeof (int) +k] = nameBuffer[k];
 
                 tempList.pop_front();
-            } 
-            else
+            } else
                 break;
         }
 
@@ -114,40 +112,46 @@ bool Directory::flush() {
 }
 
 bool Directory::addFile(string filename, int fcbNum) {
-    //add length check for name
-    Entry newEntry(fcbNum, filename);
-    entryList.push_back(newEntry);
+    if (filename.size() < 33) {
+        Entry newEntry(fcbNum, filename);
+        entryList.push_back(newEntry);
+        return true;
+    } else //filename too long
+        return false;
 }
 
 int Directory::findFile(string filename) {
-    //add length check for name
-    list<Entry>::iterator i = entryList.begin();
-    for (; i != entryList.end(); i++) {
-        if (!i->name.compare(filename)) //returns 0 if strings are equal
-            return i->fcb;
-    }
-    return -1; //file not found
+    if (traverseList(filename) != NULL) {
+        return traverseList(filename).fcb;
+    } else
+        return -1; //file not found
 }
 
 bool Directory::renameFile(string filename, string newName) {
-    //add length check for name
-    list<Entry>::iterator i = entryList.begin();
-    for (; i != entryList.end(); i++) {
-        if (!i->name.compare(filename)) {//returns 0 if strings are equal
-            i->name = newName;
-        }
-    }
-    return false; //file not found
+    if (traverseList(filename) != NULL) {
+        traverseList(filename).name = newName;
+        return true;
+    } else
+        return false; //file not found
 }
 
 bool Directory::removeFile(string filename) {
-    //add length check for name
-    list<Entry>::iterator i = entryList.begin();
-    for (; i != entryList.end(); i++) {
-        if (!i->name.compare(filename)) //returns 0 if strings are equal
-            entryList.erase(i);
+    if (traverseList(filename) != NULL) {
+        entryList.erase(traverseList(filename));
+        return true;
+    } else
+        return false; //file not found
+}
+
+Entry Directory::traverseList(string filename) {
+    if (filename.size() < 33) {
+        list<Entry>::iterator i = entryList.begin();
+        for (; i != entryList.end(); i++) {
+            if (!i->name.compare(filename)) //returns 0 if strings are equal
+                return i;
+        }
     }
-    return false; //file not found
+    return NULL; //file not found or filename too long
 }
 
 list<Entry> Directory::listEntries() {
