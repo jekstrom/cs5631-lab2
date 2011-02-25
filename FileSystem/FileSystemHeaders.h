@@ -16,6 +16,8 @@
 #include "CannotReadException.h"
 #include "Disk.h"
 #include "FreeList.h"
+#include "Directory.h"
+#include "Entry.h"
 
 #endif	/* FILESYSTEMHEADERS_H */
 

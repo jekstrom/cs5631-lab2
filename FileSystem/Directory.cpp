@@ -8,10 +8,11 @@ using namespace std;
 Directory::Directory(Disk* disk, bool createNew) {
     this->disk = disk;
 
-    FreeList freeList = FreeList(disk, false);
+    
     Block masterBlock = Block(0, disk);
 
     if (createNew) {
+        FreeList freeList = FreeList(disk, true);
         BlockGroup directory = BlockGroup(&freeList);
         directory.addBlock();
 
@@ -21,6 +22,8 @@ Directory::Directory(Disk* disk, bool createNew) {
 
         masterBlock.write(disk);
     } else {
+        FreeList freeList = FreeList(disk, false);
+
         BlockGroup directory = BlockGroup(masterBlock.getPointer(3)
                 , masterBlock.getPointer(4),
                 masterBlock.getPointer(5),
