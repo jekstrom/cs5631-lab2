@@ -40,7 +40,7 @@ Directory::Directory(Disk* disk, bool createNew) {
             do { //search every block
                 unsigned char *blockBuffer = tempBlock->getBuffer();
 
-                for (int j = 4; j < Disk::DEFAULT_BLOCK_SIZE; j += ENTRY_SIZE) {
+                for (int j = 4; j < Disk::DEFAULT_BLOCK_SIZE - ENTRY_SIZE; j += ENTRY_SIZE) {
                     char fcbBuffer[sizeof (int) ] = {0};
                     char nameBuffer[MAX_NAME_SIZE] = {""};
 
