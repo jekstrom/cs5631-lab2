@@ -19,6 +19,7 @@ Directory::Directory(Disk* disk, bool createNew) {
         masterBlock.setPointer(directory.getStartBlockNumber(), 3);
         masterBlock.setPointer(directory.getEndBlockNumber(), 4);
         masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
+        masterBlock.setPointer(0, 6); // number of entries
 
         masterBlock.write(disk);
     } else {
@@ -29,14 +30,15 @@ Directory::Directory(Disk* disk, bool createNew) {
                 masterBlock.getPointer(5),
                 &freeList);
 
+        int numEntries = masterBlock.getPointer(6);
 
         if (directory.getNumberOfBlocks() > 0) {
-            Block* tempBlock = new Block(directory.getStartBlockNumber(), disk); // handle exception
-            directory.getNextBlock();
+            directory.rewind();
+            Block* tempBlock = directory.getCurrentBlock();
+            
             //traverse directory, store in memory
             do { //search every block
-                unsigned char *blockBuffer;
-                blockBuffer = tempBlock->getBuffer();
+                unsigned char *blockBuffer = tempBlock->getBuffer();
 
                 for (int j = 4; j < Disk::DEFAULT_BLOCK_SIZE; j += ENTRY_SIZE) {
                     char fcbBuffer[sizeof (int) ] = {0};
@@ -50,14 +52,20 @@ Directory::Directory(Disk* disk, bool createNew) {
                     }
 
                     int* fcbPtr = (int*) fcbBuffer;
-                    if (*fcbPtr == -1)
-                        break;
+//                    if (*fcbPtr == -1)
+//                        break;
 
                     entryList.push_back(Entry(*fcbPtr, string(nameBuffer)));
+
+                    // stop if all entries have been read
+                    if(numEntries == entryList.size())
+                        break;
                 }
                 delete tempBlock;
+                directory.getNextBlock();
                 tempBlock = directory.getCurrentBlock();
-            } while (directory.getNextBlock());
+                
+            } while (entryList.size() < numEntries);
         }
 
     }
@@ -77,7 +85,7 @@ bool Directory::flush() {
 
     int directorySize = masterBlock.getPointer(5);
     unsigned char* buffer = new unsigned char[Disk::DEFAULT_BLOCK_SIZE];
-    int numBlocksNeeded = ceil((entryList.size() / 14));
+    int numBlocksNeeded = (entryList.size() / 14) + 1;
 
     list<Entry> tempList(entryList);
 
@@ -99,7 +107,7 @@ bool Directory::flush() {
                         (j * ENTRY_SIZE + sizeof (int)) / 4);
 
                 const char* nameBuffer = tempList.front().name.c_str();
-                for (int k = 0; k < sizeof (nameBuffer); k++)
+                for (int k = 0; k <= tempList.front().name.length(); k++)
                     buffer[j * ENTRY_SIZE + 2 * sizeof (int) +k] = nameBuffer[k];
 
                 tempList.pop_front();
@@ -107,57 +115,66 @@ bool Directory::flush() {
                 break;
         }
 
-        tempBlock->write(disk);
+        if(!tempBlock->write(disk))
+            return false; // failed in writing to disk
         directory.getNextBlock();
         delete tempBlock;
         tempBlock = directory.getCurrentBlock();
-        delete buffer;
     }
     delete tempBlock;
+
+    // update master block
+    masterBlock.setPointer(directory.getStartBlockNumber(), 3);
+    masterBlock.setPointer(directory.getEndBlockNumber(), 4);
+    masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
+    masterBlock.setPointer(entryList.size(), 6);
+    return masterBlock.write(disk);
 }
 
 bool Directory::addFile(string filename, int fcbNum) {
-    if (filename.size() < 33) {
-        Entry newEntry(fcbNum, filename);
-        entryList.push_back(newEntry);
-        return true;
-    } else //filename too long
-        return false;
+    if(filename.length() > 31)
+        filename = filename.substr(0, 31);
+    Entry newEntry(fcbNum, filename);
+    entryList.push_back(newEntry);
+    return true;
 }
 
 int Directory::findFile(string filename) {
-    if (filename.size() < 33) {
-        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-            if (!i->name.compare(filename)) {//returns 0 if strings are equal
-                return i->fcb;
-            }
+    if(filename.length() > 31)
+        filename = filename.substr(0, 31);
+
+    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+            return i->fcb;
         }
     }
+    
     return -1; //file not found
 }
 
 bool Directory::renameFile(string filename, string newName) {
-    if (filename.size() < 33) {
-        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-            if (!i->name.compare(filename)) {//returns 0 if strings are equal
-                i->name = newName;
-                return true;
-            }
+    if(filename.length() > 31)
+        filename = filename.substr(0, 31);
+
+    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+            i->name = newName;
+            return true;
         }
     }
-    return false; //file not found
+
 }
 
 bool Directory::removeFile(string filename) {
-    if (filename.size() < 33) {
-        for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-            if (!i->name.compare(filename)) {//returns 0 if strings are equal
-                entryList.erase(i);
-                return true;
-            }
+    if(filename.length() > 31)
+        filename = filename.substr(0, 31);
+
+    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+            entryList.erase(i);
+            return true;
         }
     }
-    return false; //file not found
 }
 
 list<Entry> Directory::listEntries() {

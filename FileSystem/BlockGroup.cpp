@@ -31,6 +31,8 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
     this->numBlocks = numberOfBlocks;
     this->motherFreeList = motherFreeList;
     this->diskPtr = this->motherFreeList->getDisk();
+    this->blockSize = diskPtr->blockSize() - 4;
+    this->currentBlockNum = startBlockNum;
 }
 
 bool BlockGroup::addBlock() {
