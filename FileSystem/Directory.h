@@ -104,6 +104,13 @@ private:
      * The number of directory entries per disc block.
      */
     const static int ENTRIES_PER_BLOCK = 14;
+
+    /**
+     * Retrieves a pointer to the entry with the specified name.
+     * @param name The name of the entry to search for
+     * @return A pointer to the specified entry, or NULL if the entry wasn't found
+     */
+    Entry* findEntry(string name);
 };
 
 #endif	/* DIRECTORY_H */

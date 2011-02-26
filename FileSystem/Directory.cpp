@@ -148,41 +148,58 @@ bool Directory::flush() {
 
 bool Directory::addFile(string filename, int fcbNum) {
     if(filename.length() > MAX_NAME_SIZE - 1)
-        filename = filename.substr(0, 31);
-    Entry newEntry(fcbNum, filename);
-    entryList.push_back(newEntry);
-    return true;
+        filename = filename.substr(0, MAX_NAME_SIZE - 1);
+    if(findEntry(filename) == NULL)
+    {
+        Entry newEntry(fcbNum, filename);
+        entryList.push_back(newEntry);
+        return true;
+    }
+    else // Already an entry with that name
+        return false;
 }
 
 int Directory::findFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
-        filename = filename.substr(0, 31);
+        filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-        if (!i->name.compare(filename)) {//returns 0 if strings are equal
-            return i->fcb;
-        }
-    }
-    
-    return -1; //file not found
+//    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+//        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+//            return i->fcb;
+//        }
+//    }
+
+    Entry* entPtr = findEntry(filename);
+    if(entPtr != NULL)
+        return entPtr->fcb;
+    else
+        return -1; //file not found
 }
 
 bool Directory::renameFile(string filename, string newName) {
     if(filename.length() > MAX_NAME_SIZE - 1)
-        filename = filename.substr(0, 31);
+        filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-        if (!i->name.compare(filename)) {//returns 0 if strings are equal
-            i->name = newName;
-            return true;
-        }
+//    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+//        if (!i->name.compare(filename)) {//returns 0 if strings are equal
+//            i->name = newName;
+//            return true;
+//        }
+//    }
+
+    Entry* entPtr = findEntry(filename);
+    if(entPtr != NULL)
+    {
+        entPtr->name = newName;
+        return true;
     }
-
+    else
+        return false; //file not found
 }
 
 bool Directory::removeFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
-        filename = filename.substr(0, 31);
+        filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
         if (!i->name.compare(filename)) {//returns 0 if strings are equal
@@ -194,4 +211,16 @@ bool Directory::removeFile(string filename) {
 
 list<Entry> Directory::listEntries() {
     return entryList;
+}
+
+Entry* Directory::findEntry(string name)
+{
+    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+        if (!i->name.compare(name)) {
+            return &(*i);
+        }
+    }
+
+    // Entry not found
+    return NULL;
 }
