@@ -28,10 +28,15 @@ public:
     /**
      * Creates a new BlockGroup which will get new nodes from the given FreeList.
      * The block group will have zero blocks in it, so blocks must be added before
-     * the group can be used.BlockGroup
+     * the group can be used. Nothing is initialized if fl == NULL.
      * @param fl The FreeList that the new BlockGroup will get nodes from.
      */
     BlockGroup(FreeList* fl);
+
+    /**
+     * Default constructor. Does not initialize anything.
+     */
+    BlockGroup();
 
     /**
      * Enables you to re-open a BlockGroup. Assumes that the BlockGroup is not

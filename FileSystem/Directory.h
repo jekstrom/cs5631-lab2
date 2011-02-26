@@ -10,6 +10,7 @@
 
 #include "Disk.h"
 #include "Entry.h"
+#include "BlockGroup.h"
 #include <string>
 #include <list>
 
@@ -85,6 +86,9 @@ private:
 
     Disk* disk;
 
+    BlockGroup directory;
+
+    FreeList freeList;
     /**
      * The number of bytes in a directory entry.
      */

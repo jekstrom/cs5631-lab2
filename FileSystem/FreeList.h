@@ -46,10 +46,23 @@ public:
     FreeList(Disk* disk, bool createFreeList);
 
     /**
-     * Writes out the current start block of the free list to block 0, and closes the Disk.
+     * Default constructor. Does not initialize anything.
+     */
+    FreeList()
+    {}
+
+    /**
+     * Writes information about the free list to the master block and closes
+     * the free list and its disk.
      * @return true iff the Free List could be closed.
      */
     bool close();
+
+    /**
+     * Writes information about the free list to the master block.
+     * @return true iff the free list was flushed successfully
+     */
+    bool flush();
 
     /**
      * Spawn a new BlockGroup from the Free List. The new BlockGroup has one

@@ -141,6 +141,28 @@ bool FreeList::close() {
     }
 }
 
+bool FreeList::flush()
+{
+    Block *mb;
+
+    //get the master block
+    mb = new Block(MASTER_BLOCK_NUM, diskPtr);
+
+    //changes the local varialbes of the master block
+    mb->setPointer(startBlockNum, 0);
+    mb->setPointer(endBlockNum, 1);
+    mb->setPointer(numBlocks, 2);
+
+    //attempts to write the master block back out
+    if (!mb->write(diskPtr)) {
+        delete mb;
+        return false;
+    } else {
+        delete mb;
+        return true;
+    }
+}
+
 void FreeList::returnBlocks(BlockLinkedList* bll) {
     Block *b;
 

@@ -8,6 +8,7 @@
 
 #include "FileSystemHeaders.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -156,6 +157,7 @@ int lab2Test()
             cout << "6) Rename an Entry in the Directory" << endl;
             cout << "7) Remove an Entry from the Directory" << endl;
             cout << "8) Display all Entries in the Directory" << endl;
+            cout << "9) Add 14 Entries" << endl;
 //            showMenu = false;
         }
         else
@@ -288,7 +290,20 @@ int lab2Test()
                         cout << "There is no directory open.\n";
                     break;
                 case 9:
-                    showMenu = true;
+                    if(dirOpen)
+                    {
+                        for(int i = 1; i < 15; i++)
+                        {
+                            stringstream nameStream("");
+                            nameStream << "entry" << i;
+                            if(dirPtr->addFile(nameStream.str(), i))
+                                cout << "Entry " << i << " added successfully.\n";
+                            else
+                                cout << "Failed in adding Entry " << i << ".\n";
+                        }
+                    }
+                    else
+                        cout << "There is no directory open.\n";
                     break;
                 default:
                     cout << "Bad input\n" << endl;

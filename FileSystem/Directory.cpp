@@ -12,8 +12,8 @@ Directory::Directory(Disk* disk, bool createNew) {
     Block masterBlock = Block(0, disk);
 
     if (createNew) {
-        FreeList freeList = FreeList(disk, true);
-        BlockGroup directory = BlockGroup(&freeList);
+        freeList = FreeList(disk, true);
+        directory = BlockGroup(&freeList);
         directory.addBlock();
 
         masterBlock.setPointer(directory.getStartBlockNumber(), 3);
@@ -23,9 +23,9 @@ Directory::Directory(Disk* disk, bool createNew) {
 
         masterBlock.write(disk);
     } else {
-        FreeList freeList = FreeList(disk, false);
+        freeList = FreeList(disk, false);
 
-        BlockGroup directory = BlockGroup(masterBlock.getPointer(3)
+        directory = BlockGroup(masterBlock.getPointer(3)
                 , masterBlock.getPointer(4),
                 masterBlock.getPointer(5),
                 &freeList);
@@ -76,16 +76,16 @@ bool Directory::flush() {
     //search through list
     //construct blocks
     //write to disk
-    FreeList freeList = FreeList(disk, false);
+    
     Block masterBlock = Block(0, disk);
-    BlockGroup directory = BlockGroup(masterBlock.getPointer(3),
-            masterBlock.getPointer(4),
-            masterBlock.getPointer(5),
-            &freeList);
+//    BlockGroup directory = BlockGroup(masterBlock.getPointer(3),
+//            masterBlock.getPointer(4),
+//            masterBlock.getPointer(5),
+//            &freeList);
 
     int directorySize = masterBlock.getPointer(5);
     unsigned char* buffer = new unsigned char[Disk::DEFAULT_BLOCK_SIZE];
-    int numBlocksNeeded = (entryList.size() / 14) + 1;
+    int numBlocksNeeded = ((entryList.size() - 1) / ENTRIES_PER_BLOCK) + 1;
 
     list<Entry> tempList(entryList);
 
@@ -93,9 +93,24 @@ bool Directory::flush() {
         //add blocks to directory
         for (int i = 0; i < numBlocksNeeded - directorySize; i++)
             directory.addBlock();
+        if(!freeList.flush())
+            return false;
+    }
+    else if(numBlocksNeeded < directorySize)
+    {
+        // remove uneeded blocks
+        for(int i = directorySize; i > numBlocksNeeded; i--)
+        {
+            Block* blkPtr = directory.unlinkBlock();
+            freeList.addBlock(blkPtr);
+            delete blkPtr;
+        }
+        if(!freeList.flush())
+            return false;
     }
 
-    Block *tempBlock = new Block(masterBlock.getPointer(3), disk);
+    directory.rewind();
+    Block *tempBlock = directory.getCurrentBlock();
     //Block newBlock = Block(tempBlock->getBlockNumber());
     for (int i = 0; i < numBlocksNeeded; i++) { //for each block
         // newBlock.setNext() = tempBlock->getNext(0);
@@ -128,11 +143,11 @@ bool Directory::flush() {
     masterBlock.setPointer(directory.getEndBlockNumber(), 4);
     masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
     masterBlock.setPointer(entryList.size(), 6);
-    return masterBlock.write(disk);
+    return (masterBlock.write(disk) && freeList.flush());
 }
 
 bool Directory::addFile(string filename, int fcbNum) {
-    if(filename.length() > 31)
+    if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, 31);
     Entry newEntry(fcbNum, filename);
     entryList.push_back(newEntry);
@@ -140,7 +155,7 @@ bool Directory::addFile(string filename, int fcbNum) {
 }
 
 int Directory::findFile(string filename) {
-    if(filename.length() > 31)
+    if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, 31);
 
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
@@ -153,7 +168,7 @@ int Directory::findFile(string filename) {
 }
 
 bool Directory::renameFile(string filename, string newName) {
-    if(filename.length() > 31)
+    if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, 31);
 
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
@@ -166,7 +181,7 @@ bool Directory::renameFile(string filename, string newName) {
 }
 
 bool Directory::removeFile(string filename) {
-    if(filename.length() > 31)
+    if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, 31);
 
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {

@@ -15,13 +15,16 @@ BlockGroup::BlockGroup(BlockLinkedList bll) {
 }
 
 BlockGroup::BlockGroup(FreeList* fl) {
-    diskPtr = fl->getDisk();
-    numBlocks = 0;
-    blockSize = fl->getBlockSize();
-    motherFreeList = fl;
-    startBlockNum = 0;
-    endBlockNum = 0;
-    currentBlockNum = startBlockNum;
+    if(fl != NULL)
+    {
+        diskPtr = fl->getDisk();
+        numBlocks = 0;
+        blockSize = fl->getBlockSize();
+        motherFreeList = fl;
+        startBlockNum = 0;
+        endBlockNum = 0;
+        currentBlockNum = startBlockNum;
+    }
 }
 
 BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
@@ -33,6 +36,10 @@ BlockGroup::BlockGroup(int startBlock, int endBlock, int numberOfBlocks,
     this->diskPtr = this->motherFreeList->getDisk();
     this->blockSize = diskPtr->blockSize() - 4;
     this->currentBlockNum = startBlockNum;
+}
+
+BlockGroup::BlockGroup()
+{
 }
 
 bool BlockGroup::addBlock() {
