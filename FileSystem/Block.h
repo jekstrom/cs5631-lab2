@@ -51,6 +51,12 @@ public:
     Block(int blockNumber, Disk* disk) throw(CannotReadException);
 
     /**
+     * Default constructor. Does not initiate anything.
+     */
+    Block()
+    {}
+
+    /**
      * Deallocates the m_buffer for the Block.
      */
     ~Block();

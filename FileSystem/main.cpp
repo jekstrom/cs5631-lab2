@@ -157,7 +157,7 @@ int lab2Test()
             cout << "6) Rename an Entry in the Directory" << endl;
             cout << "7) Remove an Entry from the Directory" << endl;
             cout << "8) Display all Entries in the Directory" << endl;
-            cout << "9) Add 14 Entries" << endl;
+            cout << "9) Add 14 Entries (the number of entries in one disk block)" << endl;
 //            showMenu = false;
         }
         else

@@ -31,7 +31,7 @@ public:
      * @param disk The disk to be used by this directory
      * @param createNew true to create a new directory, false to load an existing one
      */
-    Directory(Disk* disk, bool createNew);
+    Directory(Disk* disk, bool createNew) throw (CannotReadException);
 
     /**
      * Saves the directory to disk.

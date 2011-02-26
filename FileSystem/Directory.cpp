@@ -1,29 +1,40 @@
 #include "Directory.h"
 #include "FreeList.h"
 #include "BlockGroup.h"
-#include <math.h>
+#include "CannotReadException.h"
+#include <iostream>
 
 using namespace std;
 
-Directory::Directory(Disk* disk, bool createNew) {
+Directory::Directory(Disk* disk, bool createNew) throw (CannotReadException) {
     this->disk = disk;
-
-    
     Block masterBlock = Block(0, disk);
 
     if (createNew) {
-        freeList = FreeList(disk, true);
+        try{
+            freeList = FreeList(disk, true);
+        }
+        catch(CannotReadException e){
+            throw e;
+        }
         directory = BlockGroup(&freeList);
-        directory.addBlock();
+        if(!directory.addBlock())
+            cout << "Error: Failed in creating new Directory.\n";
 
         masterBlock.setPointer(directory.getStartBlockNumber(), 3);
         masterBlock.setPointer(directory.getEndBlockNumber(), 4);
         masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
         masterBlock.setPointer(0, 6); // number of entries
 
-        masterBlock.write(disk);
+        if(!masterBlock.write(disk) || !freeList.flush())
+            cout << "Error: Failed in creating new Directory.\n";
     } else {
-        freeList = FreeList(disk, false);
+        try{
+            freeList = FreeList(disk, false);
+        }
+        catch(CannotReadException e){
+            throw e;
+        }
 
         directory = BlockGroup(masterBlock.getPointer(3)
                 , masterBlock.getPointer(4),
@@ -52,8 +63,6 @@ Directory::Directory(Disk* disk, bool createNew) {
                     }
 
                     int* fcbPtr = (int*) fcbBuffer;
-//                    if (*fcbPtr == -1)
-//                        break;
 
                     entryList.push_back(Entry(*fcbPtr, string(nameBuffer)));
 
@@ -77,11 +86,13 @@ bool Directory::flush() {
     //construct blocks
     //write to disk
     
-    Block masterBlock = Block(0, disk);
-//    BlockGroup directory = BlockGroup(masterBlock.getPointer(3),
-//            masterBlock.getPointer(4),
-//            masterBlock.getPointer(5),
-//            &freeList);
+    Block masterBlock(Disk::DEFAULT_BLOCK_SIZE);
+    try{
+        masterBlock = Block(0, disk);
+    }
+    catch(CannotReadException e){
+        return false;
+    }
 
     int directorySize = masterBlock.getPointer(5);
     unsigned char* buffer = new unsigned char[Disk::DEFAULT_BLOCK_SIZE];
@@ -92,9 +103,8 @@ bool Directory::flush() {
     if (numBlocksNeeded > directorySize) {
         //add blocks to directory
         for (int i = 0; i < numBlocksNeeded - directorySize; i++)
-            directory.addBlock();
-        if(!freeList.flush())
-            return false;
+            if(!directory.addBlock())
+                return false;
     }
     else if(numBlocksNeeded < directorySize)
     {
@@ -102,11 +112,13 @@ bool Directory::flush() {
         for(int i = directorySize; i > numBlocksNeeded; i--)
         {
             Block* blkPtr = directory.unlinkBlock();
-            freeList.addBlock(blkPtr);
+            if(!freeList.addBlock(blkPtr))
+            {
+                delete blkPtr;
+                return false;
+            }
             delete blkPtr;
         }
-        if(!freeList.flush())
-            return false;
     }
 
     directory.rewind();
@@ -163,12 +175,6 @@ int Directory::findFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-//    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-//        if (!i->name.compare(filename)) {//returns 0 if strings are equal
-//            return i->fcb;
-//        }
-//    }
-
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL)
         return entPtr->fcb;
@@ -179,13 +185,6 @@ int Directory::findFile(string filename) {
 bool Directory::renameFile(string filename, string newName) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
-
-//    for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-//        if (!i->name.compare(filename)) {//returns 0 if strings are equal
-//            i->name = newName;
-//            return true;
-//        }
-//    }
 
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL)
