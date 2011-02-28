@@ -1,6 +1,6 @@
 /*
  * File:   BlockLinkedList.cpp
- * Author: Kaleb Jungclaus
+ * Author: Kaleb Jungclaus, James Ekstrom, Matt Fischer
  *
  * Created on February 6, 2011, 4:10 PM
  */

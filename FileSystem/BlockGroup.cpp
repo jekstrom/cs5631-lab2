@@ -1,6 +1,6 @@
 /*
  * File:   BlockGroup.cpp
- * Author: James Ekstrom
+ * Author: James Ekstrom, Kaleb Jungclaus, Matt Fischer
  *
  * Created on February 8, 2011, 8:05 PM
  */

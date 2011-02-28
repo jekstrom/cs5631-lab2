@@ -1,6 +1,6 @@
 /*
  * File:   Block.cpp
- * Author: James Ekstrom
+ * Author: James Ekstrom, Kaleb Jungclaus, Matt Fischer
  *
  * Created on February 4, 2011, 4:05 PM
  */

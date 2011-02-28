@@ -1,6 +1,6 @@
 /* 
  * File:   Directory.h
- * Author: kaleb
+ * Author: Kaleb Jungclaus, James Ekstrom, Matt Fischer
  *
  * Created on February 17, 2011, 7:03 PM
  */

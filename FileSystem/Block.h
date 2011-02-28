@@ -1,6 +1,6 @@
 /* 
  * File:   Block.h
- * Author: James Ekstrom
+ * Author: James Ekstrom, Kaleb Jungclaus, Matt Fischer
  *
  * Created on February 2, 2011, 4:35 PM
  */

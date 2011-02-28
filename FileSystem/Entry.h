@@ -1,6 +1,6 @@
 /* 
  * File:   Entry.h
- * Author: james
+ * Author: James Ekstrom, Kaleb Jungclaus, Matt Fischer
  *
  * Created on February 19, 2011, 5:08 PM
  */

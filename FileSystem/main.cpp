@@ -1,6 +1,6 @@
 /* 
  * File:   main.cpp
- * Author: james
+ * Author: James Ekstrom, Kaleb Jungclaus, Matt Fischer
  *
  * Created on February 4, 2011, 4:24 PM
  */
