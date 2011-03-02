@@ -64,7 +64,7 @@ public:
         //  if(atEOF)
         //      return bytesRead;
         //  else if(currentByte == fileBlocks.getBlockSize()){
-        //      currentBlock++;
+        //      currentBlock = nextBlock;
         //      currentByte = 1;
         //  else
         //      currentByte++;
@@ -89,7 +89,7 @@ public:
         //  if(currentByte == fileBlocks.getBlockSize()){
         //      fileBlocks.add();
         //      currentBlock.write();
-        //      currentBlock++;
+        //      currentBlock = nextBlock;
         //      currentByte = 1;
         //  else
         //      currentByte++;
@@ -133,9 +133,9 @@ public:
     bool writeOpen;
 
     /**
-     * A pointer to the current Block.
+     * The block number of the current Block.
      */
-    Block* currentBlockPtr;
+    unsigned currentBlockNumber;
 
     /**
      * The offset of the current byte within the current block.
