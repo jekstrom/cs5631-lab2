@@ -114,7 +114,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/BlockLinkedListTest.o ${OBJECTFILES:%.
 ${TESTDIR}/tests/BlockLinkedListTest.o: tests/BlockLinkedListTest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
+	$(COMPILE.cc) -O2 -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -I. -MMD -MP -MF $@.d -o ${TESTDIR}/tests/BlockLinkedListTest.o tests/BlockLinkedListTest.cpp
 
 
 ${OBJECTDIR}/BlockLinkedList_nomain.o: ${OBJECTDIR}/BlockLinkedList.o BlockLinkedList.cpp 

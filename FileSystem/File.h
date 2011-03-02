@@ -12,52 +12,145 @@
 class File {
 public:
     /**
-     * File constructor constructs or opens a file from disk
-     * @param filename the filename for the file
-     * @param create if true creates a file if it doesn't exist
-     * @param readAccess if true, opens the file for read access,
-     * else it's open for write access
-     * @param freelist the freelist on disk
-     * @param directory the directory on disk
+     * Reads a file from disk and opens it for either reading or writing.
+     * @param filename The filename for the file to open
+     * @param create If true, the file will be created if it doesn't exist, and
+     * will open it for writing, ignoring readAccess
+     * @param readAccess If true, opens the file for read access,celse opens
+     * the file for write access
+     * @param disk A pointer to the disk
+     * @param directory A pointer to the directory
      */
-    File::File(string filename, bool create, bool readAccess,
-            Disk *disk, Directory *directory) {
+    File(string filename, bool create, bool readAccess,
+            Disk *disk, Directory *directory);
+
+    /**
+     * Opens a closed file for reading or writing.
+     * @param readAccess If true, file will be opened for reading, else the file
+     * will be opened for writing.
+     * @return true iff file opened successfully
+     */
+    bool open(bool readAccess);
+
+    /**
+     * Closes current file access, can be reopened later.
+     * @return true iff file closed successfully
+     */
+    bool close();
+
+    /**
+     * Deallocates the file, returning its blocks to the free list and
+     * removing its entry from the directory.
+     * @return true iff the file was deleted successfully
+     */
+    bool deleteFile();
+
+    /**
+     * Reads from the file.
+     * @param buf The buffer to read bytes into
+     * @param len The number of bytes to read
+     * @return -1 if failure, 0 if end of file, else number of bytes read
+     */
+    int read(void* buf, int len) {
+        //if(!readOpen)
+        //  return -1;
+        
+        //if(atEOF)
+        //  return 0;
+         
+        //for(int bytesRead = 0; bytesRead < len; bytesRead++)
+        //{
+        //  buf[bytesRead] = currentBlock[currentByte];
+        //  if(atEOF)
+        //      return bytesRead;
+        //  else if(currentByte == fileBlocks.getBlockSize()){
+        //      currentBlock++;
+        //      currentByte = 1;
+        //  else
+        //      currentByte++;
+        //}
+        
+        //return len;
     }
 
     /**
-     * Opens a closed file for reading or writing
-     * @param readAccess true if opening for read access, else it is write access
-     * @return true iff file opened successfully
+     * Writes to the file.
+     * @param buf The buffer to write bytes from
+     * @param len The number of bytes to write
+     * @return -1 if failure, else number of bytes written
      */
-    bool File::open(bool readAccess) {}
+    int File::write(void* buf, int len) {
+        //if(!writeOpen)
+        //  return -1;
+                         
+        //for(int bytesWritten = 0; BytesWritten < len; BytesWritten++)
+        //{
+        //  currentBlock[currentByte] = buf[BytesWritten];
+        //  if(currentByte == fileBlocks.getBlockSize()){
+        //      fileBlocks.add();
+        //      currentBlock.write();
+        //      currentBlock++;
+        //      currentByte = 1;
+        //  else
+        //      currentByte++;
+        //}
+        
+        //currentBlock.write();
+        //update fcb;
+        //fcb.write();
+        //return len;
+    }
 
     /**
-     * closes current open file, can be opened later for reading and writing
-     * @return true iff file closed successfully
+     * A pointer to the directory where files should be retrieved from or
+     * created in.
      */
-    bool File::close() {}
+    Directory *directoryPtr;
 
     /**
-     * Reads an open file
-     * @param buf the buffer to read bytes into
-     * @param len the number of bytes to read
-     * @return -1 if failure, 0 if end of file, else number of bytes read
+     * The disk to read and write data from.
      */
-    int File::read(void* buf, int len) {}
-
-    /**
-     * Writes an open file
-     * @param buf the buffer to write bytes from
-     * @param len the number of bytes to write
-     * @return -1 if failure, 0 if end of file, else number of bytes written
-     */
-    int File::write(void* buf, int len) {}
-
-    Directory *directory;
     Disk *disk;
+    
+    /**
+     * The file control block for this file.
+     */
+    Block fcb;
+
+    /**
+     * The block group comprising this file.
+     */
     BlockGroup fileBlocks;
-    unsigned int blockNumber;
-    unsigned int fp;
+    
+    /**
+     * Indicates whether or not the file is open for reading.
+     */
+    bool readOpen;
+
+    /**
+     * Indicates whether or not the file is open for writing.
+     */
+    bool writeOpen;
+
+    /**
+     * A pointer to the current Block.
+     */
+    Block* currentBlockPtr;
+
+    /**
+     * The offset of the current byte within the current block.
+     */
+    unsigned int currentByte;
+    
+    /**
+     * The block number of the last block in the file.
+     */
+    unsigned int endBlockNumber;
+    
+    /**
+     * The offset of the final byte in the last block of the file.
+     */
+    unsigned int endByte;
 };
 
 

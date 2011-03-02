@@ -15,6 +15,7 @@
       <itemPath>Directory.h</itemPath>
       <itemPath>Disk.h</itemPath>
       <itemPath>Entry.h</itemPath>
+      <itemPath>File.h</itemPath>
       <itemPath>FileSystemHeaders.h</itemPath>
       <itemPath>FreeList.h</itemPath>
     </logicalFolder>
@@ -90,10 +91,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -155,10 +158,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
