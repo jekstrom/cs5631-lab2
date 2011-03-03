@@ -133,9 +133,9 @@ public:
     bool writeOpen;
 
     /**
-     * The block number of the current Block.
+     * A pointer to the current block.
      */
-    unsigned currentBlockNumber;
+    Block* currentBlockPtr;
 
     /**
      * The offset of the current byte within the current block.
