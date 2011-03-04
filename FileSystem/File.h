@@ -54,18 +54,19 @@ public:
     int read(void* buf, int len) {
         //if(!readOpen)
         //  return -1;
-        
-        //if(atEOF)
-        //  return 0;
          
         //for(int bytesRead = 0; bytesRead < len; bytesRead++)
         //{
-        //  buf[bytesRead] = currentBlock[currentByte];
         //  if(atEOF)
         //      return bytesRead;
-        //  else if(currentByte == fileBlocks.getBlockSize()){
-        //      currentBlock = nextBlock;
-        //      currentByte = 1;
+        //
+        //  buf[bytesRead] = currentBlock[currentByte + sizeof(int)];
+        //
+        //  else if(currentByte == fileBlocks.getBlockSize() - 1){
+        //      fileBlocks.getNextBlock();
+        //      currentBlock = fileBlocks.getCurrentBlock();
+        //      currentByte = 0;
+        //  }
         //  else
         //      currentByte++;
         //}
@@ -85,17 +86,19 @@ public:
                          
         //for(int bytesWritten = 0; BytesWritten < len; BytesWritten++)
         //{
-        //  currentBlock[currentByte] = buf[BytesWritten];
-        //  if(currentByte == fileBlocks.getBlockSize()){
+        //  currentBlock[currentByte + sizeof(int)] = buf[BytesWritten];
+        //  if(currentByte == fileBlocks.getBlockSize() - 1){
         //      fileBlocks.add();
-        //      currentBlock.write();
-        //      currentBlock = nextBlock;
-        //      currentByte = 1;
+        //      currentBlock->write();
+        //      fileBlocks.getNextBlock();
+        //      currentBlock = fileBlocks.getCurrentBlock();
+        //      currentByte = 0;
+        //  }
         //  else
         //      currentByte++;
         //}
         
-        //currentBlock.write();
+        //currentBlock->write();
         //update fcb;
         //fcb.write();
         //return len;
