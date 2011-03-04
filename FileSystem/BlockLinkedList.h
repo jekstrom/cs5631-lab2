@@ -168,6 +168,12 @@ public:
     void rewind();
 
     /**
+     * After this call, getCurrentBlock will return the last block in the list.
+     * No changes are made to the disk.
+     */
+    void fastForward();
+
+    /**
      * Unlinks the block that is the starting block of this BlockLinkedList.
      * Does not make changes on disk If the starting block could not be read,
      * NULL will be returned. Will also return NULL if the current block

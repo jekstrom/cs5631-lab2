@@ -111,9 +111,14 @@ public:
     Directory *directoryPtr;
 
     /**
-     * The disk to read and write data from.
+     * A pointer to the disk to read and write data from.
      */
-    Disk *disk;
+    Disk *diskPtr;
+
+    /**
+     * The free list, as loaded from the disk.
+     */
+    FreeList freeList;
     
     /**
      * The file control block for this file.

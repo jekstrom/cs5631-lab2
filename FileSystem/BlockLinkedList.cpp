@@ -199,6 +199,11 @@ void BlockLinkedList::rewind()
     currentBlockNum = startBlockNum;
 }
 
+void BlockLinkedList::fastForward()
+{
+    currentBlockNum = endBlockNum;
+}
+
 void BlockLinkedList::test()
 {
     test1();

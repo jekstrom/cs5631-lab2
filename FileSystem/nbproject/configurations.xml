@@ -16,6 +16,7 @@
       <itemPath>Disk.h</itemPath>
       <itemPath>Entry.h</itemPath>
       <itemPath>File.h</itemPath>
+      <itemPath>FileNotFoundException.h</itemPath>
       <itemPath>FileSystemHeaders.h</itemPath>
       <itemPath>FreeList.h</itemPath>
     </logicalFolder>
@@ -32,6 +33,7 @@
       <itemPath>BlockGroup.cpp</itemPath>
       <itemPath>BlockLinkedList.cpp</itemPath>
       <itemPath>Directory.cpp</itemPath>
+      <itemPath>File.cpp</itemPath>
       <itemPath>FreeList.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -92,10 +94,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
@@ -159,10 +163,12 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
+            <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>

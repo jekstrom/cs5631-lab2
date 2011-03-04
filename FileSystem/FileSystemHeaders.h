@@ -18,6 +18,8 @@
 #include "FreeList.h"
 #include "Directory.h"
 #include "Entry.h"
+#include "File.h"
+#include "FileNotFoundException.h"
 
 #endif	/* FILESYSTEMHEADERS_H */
 
