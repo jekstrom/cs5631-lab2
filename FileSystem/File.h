@@ -59,7 +59,8 @@ public:
      * @param len The number of bytes to read
      * @return -1 if failure, 0 if end of file, else number of bytes read
      */
-    int read(void* buf, int len) {
+    int read(void* buf, int len);
+    //{
         //if(!readOpen)
         //  return -1;
          
@@ -80,7 +81,8 @@ public:
         //}
         
         //return len;
-    }
+    //}
+    
 
     /**
      * Writes to the file.
@@ -88,29 +90,34 @@ public:
      * @param len The number of bytes to write
      * @return -1 if failure, else number of bytes written
      */
-    int File::write(void* buf, int len) {
+    int write(void* buf, int len);
+    //{
         //if(!writeOpen)
         //  return -1;
                          
         //for(int bytesWritten = 0; BytesWritten < len; bytesWritten++)
         //{
-        //  currentBlock[currentByte + sizeof(int)] = buf[bytesWritten];
-        //  if(currentByte == fileBlocks.getBlockSize() - 1){
-        //      fileBlocks.add();
+        //  if(currentByte == fileBlocks.getBlockSize() - 1){        
         //      currentBlock->write();
+        //      if(!fileBlocks.add())
+        //          return bytesWritten;
+        //
         //      fileBlocks.getNextBlock();
         //      currentBlock = fileBlocks.getCurrentBlock();
         //      currentByte = 0;
         //  }
         //  else
         //      currentByte++;
+        //
+        //  currentBlock[currentByte + sizeof(int)] = buf[bytesWritten];
+        //  endByte = currentByte;
         //}
         
         //currentBlock->write();
         //update fcb;
         //fcb.write();
         //return len;
-    }
+    //}
 
     /**
      * A pointer to the directory where files should be retrieved from or

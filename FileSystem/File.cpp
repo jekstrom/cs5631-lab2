@@ -18,24 +18,22 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
     {
         // File was not found
         if(!create)
-            throw FileNotFoundException;
+            throw  new FileNotFoundException;
         else
         {
             Block* blkPtr = freeList.unlinkBlock();
             if(blkPtr == NULL)
-                throw exception;// free list is empty
+                throw new exception;// free list is empty
             fcb = *blkPtr;
 
-            directoryPtr->addFile(filename, fcb.ge newtBlockNumber());
+            directoryPtr->addFile(filename, fcb.getBlockNumber());
             // need to reload free list in case directory made changes to it
             freeList = FreeList(diskPtr, false);
 
             BlockGroup* bgPtr = freeList.createNew();
             if(bgPtr == NULL)
-                throw exception; // BlockGroup could not be created
-            fileBlocks = *bgptr;
-            if(!fileBlocks.addBlock())
-                throw exception;
+                throw new BlockGroupException; // BlockGroup could not be created
+            fileBlocks = *bgPtr;
             endByte = 0;
             endBlockNumber = fileBlocks.getEndBlockNumber();
 
@@ -44,8 +42,8 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
             fcb.setPointer(1, fileBlocks.getEndBlockNumber());
             fcb.setPointer(2, fileBlocks.getNumberOfBlocks());
             fcb.setPointer(3, endByte);
-            if(!fcb.write() || !freeList.flush())
-                throw exception;
+            if(!fcb.write(diskPtr) || !freeList.flush())
+                throw new exception;
 
             // open for writing
             open(false);
@@ -125,11 +123,12 @@ int File::read(void* buf, int len)
     char* readBuf = (char*) buf;
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
+    int currentBlockNumber = currentBlockPtr->getBlockNumber();
 
     for(int bytesRead = 0; bytesRead < len; bytesRead++)
     {
         if(currentBlockPtr == NULL ||
-                (endBlockNumber == currentBlockPtr->getBlockNumber() && currentByte > endByte))
+                (endBlockNumber == currentBlockNumber && currentByte > endByte))
             return bytesRead;
 
         readBuf[bytesRead] = blockBuf[currentByte + sizeof(int)];
@@ -143,7 +142,10 @@ int File::read(void* buf, int len)
             currentByte = 0;
 
             if(currentBlockPtr != NULL)
+            {
                 blockBuf = currentBlockPtr->getBuffer();
+                currentBlockNumber = currentBlockPtr->getBlockNumber();
+            }
         }
         else
             currentByte++;
@@ -162,21 +164,22 @@ int File::write(void* buf, int len)
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
 
-    for(int bytesWritten = 0; BytesWritten < len; bytesWritten++)
+    for(int bytesWritten = 0; bytesWritten < len; bytesWritten++)
     {
         if(currentByte == lastByteIndex)
         {
             freeList = FreeList(diskPtr, false); // update free list
 
             if(!currentBlockPtr->write(diskPtr))
-                return -1;
+                return -1; // error
             if(!fileBlocks.addBlock())
-                return bytesWritten;
+                return bytesWritten; // couldn't extend file, stop writing
 
             delete currentBlockPtr;
             fileBlocks.getNextBlock();
             currentBlockPtr = fileBlocks.getCurrentBlock();
             currentByte = 0;
+            endBlockNumber = fileBlocks.getEndBlockNumber();
 
             blockBuf = currentBlockPtr->getBuffer();
         }
@@ -195,7 +198,7 @@ int File::write(void* buf, int len)
     fcb.setPointer(3, endByte);
 
     if(!fcb.write(diskPtr) || !currentBlockPtr->write(diskPtr) || !freeList.flush())
-        return -1;
+        return -1; // error has occurred
 
     // Have written the desired amount
     return len;
