@@ -70,7 +70,7 @@ public:
         //
         //  buf[bytesRead] = currentBlock[currentByte + sizeof(int)];
         //
-        //  else if(currentByte == fileBlocks.getBlockSize() - 1){
+        //  if(currentByte == fileBlocks.getBlockSize() - 1){
         //      fileBlocks.getNextBlock();
         //      currentBlock = fileBlocks.getCurrentBlock();
         //      currentByte = 0;
@@ -92,9 +92,9 @@ public:
         //if(!writeOpen)
         //  return -1;
                          
-        //for(int bytesWritten = 0; BytesWritten < len; BytesWritten++)
+        //for(int bytesWritten = 0; BytesWritten < len; bytesWritten++)
         //{
-        //  currentBlock[currentByte + sizeof(int)] = buf[BytesWritten];
+        //  currentBlock[currentByte + sizeof(int)] = buf[bytesWritten];
         //  if(currentByte == fileBlocks.getBlockSize() - 1){
         //      fileBlocks.add();
         //      currentBlock->write();
@@ -172,6 +172,9 @@ public:
      * The offset of the final byte in the last block of the file.
      */
     unsigned int endByte;
+    
+private:
+    
 };
 
 

@@ -81,6 +81,7 @@ bool File::open(bool readAccess)
         readOpen = true;
         // read from beginning
         fileBlocks.rewind();
+        currentByte = 0;
     }
     else
     {
@@ -88,10 +89,11 @@ bool File::open(bool readAccess)
         writeOpen = true;
         // write to end
         fileBlocks.fastForward();
+        currentByte = endByte;
     }
 
     delete currentBlockPtr;
-    currentBlockPtr = fileBlocks.getNextBlock();
+    currentBlockPtr = fileBlocks.getCurrentBlock();
     return true;
 }
 
@@ -113,4 +115,88 @@ bool File::deleteFile()
     freeList.returnBlocks(&fileBlocks);
 
     return freeList.flush();
+}
+
+int File::read(void* buf, int len)
+{
+    if(!readOpen)
+        return -1;
+
+    char* readBuf = (char*) buf;
+    int lastByteIndex = fileBlocks.getBlockSize() - 1;
+    unsigned char* blockBuf = currentBlockPtr->getBuffer();
+
+    for(int bytesRead = 0; bytesRead < len; bytesRead++)
+    {
+        if(currentBlockPtr == NULL ||
+                (endBlockNumber == currentBlockPtr->getBlockNumber() && currentByte > endByte))
+            return bytesRead;
+
+        readBuf[bytesRead] = blockBuf[currentByte + sizeof(int)];
+
+        if(currentByte == lastByteIndex)
+        {
+            // advance to next block
+            fileBlocks.getNextBlock();
+            delete currentBlockPtr;
+            currentBlockPtr = fileBlocks.getCurrentBlock();
+            currentByte = 0;
+
+            if(currentBlockPtr != NULL)
+                blockBuf = currentBlockPtr->getBuffer();
+        }
+        else
+            currentByte++;
+    }
+
+    // Have read the desired amount
+    return len;
+}
+
+int File::write(void* buf, int len)
+{
+    if(!writeOpen)
+        return -1;
+
+    char* writeBuf = (char*) buf;
+    int lastByteIndex = fileBlocks.getBlockSize() - 1;
+    unsigned char* blockBuf = currentBlockPtr->getBuffer();
+
+    for(int bytesWritten = 0; BytesWritten < len; bytesWritten++)
+    {
+        if(currentByte == lastByteIndex)
+        {
+            freeList = FreeList(diskPtr, false); // update free list
+
+            if(!currentBlockPtr->write(diskPtr))
+                return -1;
+            if(!fileBlocks.addBlock())
+                return bytesWritten;
+
+            delete currentBlockPtr;
+            fileBlocks.getNextBlock();
+            currentBlockPtr = fileBlocks.getCurrentBlock();
+            currentByte = 0;
+
+            blockBuf = currentBlockPtr->getBuffer();
+        }
+        else
+            currentByte++;
+
+        blockBuf[currentByte + sizeof(int)] = writeBuf[bytesWritten];
+
+        endByte = currentByte;
+    }
+
+    // write changes to disk
+    fcb.setPointer(0, fileBlocks.getStartBlockNumber());
+    fcb.setPointer(1, fileBlocks.getEndBlockNumber());
+    fcb.setPointer(2, fileBlocks.getNumberOfBlocks());
+    fcb.setPointer(3, endByte);
+
+    if(!fcb.write(diskPtr) || !currentBlockPtr->write(diskPtr) || !freeList.flush())
+        return -1;
+
+    // Have written the desired amount
+    return len;
 }
