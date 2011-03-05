@@ -25,6 +25,14 @@ public:
             Disk *disk, Directory *directory);
 
     /**
+     * Destructor for the File class.
+     */
+    ~File()
+    {
+        delete currentBlockPtr;
+    }
+
+    /**
      * Opens a closed file for reading or writing.
      * @param readAccess If true, file will be opened for reading, else the file
      * will be opened for writing.
@@ -119,6 +127,11 @@ public:
      * The free list, as loaded from the disk.
      */
     FreeList freeList;
+
+    /**
+     * The name of the file.
+     */
+    string name;
     
     /**
      * The file control block for this file.

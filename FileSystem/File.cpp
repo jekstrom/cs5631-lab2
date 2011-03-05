@@ -9,6 +9,8 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
     directoryPtr = directory;
     diskPtr = disk;
     freeList = FreeList(diskPtr, false);
+    name = filename;
+    currentBlockPtr = NULL;
 
     int fcbNum = directoryPtr->findFile(filename);
 
@@ -42,7 +44,7 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
             fcb.setPointer(1, fileBlocks.getEndBlockNumber());
             fcb.setPointer(2, fileBlocks.getNumberOfBlocks());
             fcb.setPointer(3, endByte);
-            if(!fcb.write())
+            if(!fcb.write() || !freeList.flush())
                 throw exception;
 
             // open for writing
@@ -66,6 +68,49 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
         endByte = fcb.getPointer(3);
         endBlockNumber = fileBlocks.getEndBlockNumber();
 
+        // open file as indicated by readAccess
         open(readAccess);
     }
+}
+
+bool File::open(bool readAccess)
+{
+    if(readAccess)
+    {
+        // open for reading
+        readOpen = true;
+        // read from beginning
+        fileBlocks.rewind();
+    }
+    else
+    {
+        // open for writing
+        writeOpen = true;
+        // write to end
+        fileBlocks.fastForward();
+    }
+
+    delete currentBlockPtr;
+    currentBlockPtr = fileBlocks.getNextBlock();
+    return true;
+}
+
+bool File::close()
+{
+    readOpen = false;
+    writeOpen = false;
+    return true;
+}
+
+bool File::deleteFile()
+{
+    // remove file from directory
+    directoryPtr->removeFile(name);
+
+    // return blocks, update free list
+    freeList = FreeList(diskPtr, false);
+    freeList.addBlock(&fcb);
+    freeList.returnBlocks(&fileBlocks);
+
+    return freeList.flush();
 }

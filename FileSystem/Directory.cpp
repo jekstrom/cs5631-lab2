@@ -91,6 +91,7 @@ bool Directory::flush() {
     Block masterBlock(Disk::DEFAULT_BLOCK_SIZE);
     try{
         masterBlock = Block(0, disk);
+        freeList = FreeList(disk, false);
     }
     catch(CannotReadException e){
         return false;
