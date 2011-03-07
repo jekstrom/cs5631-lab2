@@ -117,8 +117,9 @@ public:
         //update fcb;
         //fcb.write();
         //return len;
-    //}
-
+    //}    
+    
+private:
     /**
      * A pointer to the directory where files should be retrieved from or
      * created in.
@@ -139,7 +140,7 @@ public:
      * The name of the file.
      */
     string name;
-    
+
     /**
      * The file control block for this file.
      */
@@ -149,7 +150,7 @@ public:
      * The block group comprising this file.
      */
     BlockGroup fileBlocks;
-    
+
     /**
      * Indicates whether or not the file is open for reading.
      */
@@ -169,19 +170,16 @@ public:
      * The offset of the current byte within the current block.
      */
     unsigned int currentByte;
-    
+
     /**
      * The block number of the last block in the file.
      */
     unsigned int endBlockNumber;
-    
+
     /**
      * The offset of the final byte in the last block of the file.
      */
     unsigned int endByte;
-    
-private:
-    
 };
 
 
