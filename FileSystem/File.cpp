@@ -18,7 +18,7 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
     {
         // File was not found
         if(!create)
-            throw  new FileNotFoundException;
+            throw new FileNotFoundException;
         else
         {
             Block* blkPtr = freeList.unlinkBlock();
