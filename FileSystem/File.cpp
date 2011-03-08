@@ -73,6 +73,9 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
 
 bool File::open(bool readAccess)
 {
+    if(readOpen || writeOpen)
+        return false; // file is already open
+    
     if(readAccess)
     {
         // open for reading
