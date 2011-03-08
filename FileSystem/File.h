@@ -20,6 +20,8 @@ public:
      * the file for write access
      * @param disk A pointer to the disk
      * @param directory A pointer to the directory
+     * @throws FileNotFoundException if the specified file isn't found and create is false
+     * @throws BlockGroupException if a BlockGroup couldn't be created for a new file
      */
     File(string filename, bool create, bool readAccess,
             Disk *disk, Directory *directory);
