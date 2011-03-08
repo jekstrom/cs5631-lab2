@@ -35,7 +35,8 @@ public:
     }
 
     /**
-     * Opens a closed file for reading or writing.
+     * Opens a closed file for reading or writing. For reading, the file will be
+     * opened at the beginning. For writing, the file will be opened at the end.
      * @param readAccess If true, file will be opened for reading, else the file
      * will be opened for writing.
      * @return true iff file opened successfully
@@ -56,7 +57,8 @@ public:
     bool deleteFile();
 
     /**
-     * Reads from the file.
+     * Reads from the file at the current location of the file pointer. The file
+     * pointer will be advanced by the number of bytes read.
      * @param buf The buffer to read bytes into
      * @param len The number of bytes to read
      * @return -1 if failure, 0 if end of file, else number of bytes read
@@ -87,7 +89,7 @@ public:
     
 
     /**
-     * Writes to the file.
+     * Writes to the end of the file, extending it when necessary and possible.
      * @param buf The buffer to write bytes from
      * @param len The number of bytes to write
      * @return -1 if failure, else number of bytes written
