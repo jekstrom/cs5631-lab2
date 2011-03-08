@@ -165,6 +165,7 @@ int File::write(void* buf, int len)
 
     char* writeBuf = (char*) buf;
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
+    int written = -1;
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
 
     for(int bytesWritten = 0; bytesWritten < len; bytesWritten++)
@@ -176,7 +177,10 @@ int File::write(void* buf, int len)
             if(!currentBlockPtr->write(diskPtr))
                 return -1; // error
             if(!fileBlocks.addBlock())
-                return bytesWritten; // couldn't extend file, stop writing
+            {
+                written = bytesWritten; // couldn't extend file, stop writing
+                break;
+            }
 
             delete currentBlockPtr;
             fileBlocks.getNextBlock();
@@ -194,6 +198,9 @@ int File::write(void* buf, int len)
         endByte = currentByte;
     }
 
+    if(written < 0)
+        written = len;
+
     // write changes to disk
     fcb.setPointer(0, fileBlocks.getStartBlockNumber());
     fcb.setPointer(1, fileBlocks.getEndBlockNumber());
@@ -204,5 +211,5 @@ int File::write(void* buf, int len)
         return -1; // error has occurred
 
     // Have written the desired amount
-    return len;
+    return written;
 }

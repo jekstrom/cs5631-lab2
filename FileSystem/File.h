@@ -16,7 +16,7 @@ public:
      * @param filename The filename for the file to open
      * @param create If true, the file will be created if it doesn't exist, and
      * will open it for writing, ignoring readAccess
-     * @param readAccess If true, opens the file for read access,celse opens
+     * @param readAccess If true, opens the file for read access, else opens
      * the file for write access
      * @param disk A pointer to the disk
      * @param directory A pointer to the directory
