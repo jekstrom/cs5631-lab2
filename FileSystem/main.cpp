@@ -350,8 +350,8 @@ int lab3Test() {
                     //make sure file is in directory
                     if (dirPtr->findFile(name) != -1) {
                         cout << endl << "Succesfully created file" << endl;
-                        //write changes to disk
-                        dirPtr->flush();
+                        //write changes to disk ??
+                        //dirPtr->flush();
                     } else {
                         cout << endl << "File already exists" << endl;
                     }
