@@ -35,8 +35,8 @@ public:
     }
 
     /**
-     * Returns the name of file
-     * @return name
+     * Accessor for the file name
+     * @return std::string the name of the file
      */
     string getName();
 
@@ -50,9 +50,8 @@ public:
     bool open(bool readAccess);
 
     /**
-     * Returns true if the file is open for reading
-     * @return readOpen
-     *
+     * Check if the file is opened for read access
+     * @return Returns true iff the file is open for reading
      */
     bool isOpenForRead();
 
@@ -70,8 +69,8 @@ public:
     bool deleteFile();
 
     /**
-     * Gets the file control block for the file
-     * @return fcb number
+     * Gets the file control block number for the file
+     * @return the fcb number for the file
      */
     int getFcbNumber();
 
@@ -203,6 +202,14 @@ private:
      * The offset of the final byte in the last block of the file.
      */
     unsigned int endByte;
+
+    const short START_BLOCK_PTR_INDEX = 0;
+
+    const short END_BLOCK_PTR_INDEX = 1;
+
+    const short NUM_BLOCKS_PTR_INDEX = 2;
+
+    const short END_BYTE_PTR_INDEX = 3;
 };
 
 

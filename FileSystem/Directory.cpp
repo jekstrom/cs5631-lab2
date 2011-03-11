@@ -218,7 +218,8 @@ list<Entry> Directory::listEntries() {
 Entry* Directory::findEntry(string newName)
 {
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-        if (i->name.compare(newName) == 0) {
+        string temp = i->name;
+        if (newName.compare(temp) == 0 ) {
             return &(*i);
         }
     }

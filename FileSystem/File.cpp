@@ -38,10 +38,10 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
             endBlockNumber = fileBlocks.getEndBlockNumber();
 
             // Update file control block
-            fcb.setPointer(0, fileBlocks.getStartBlockNumber());
-            fcb.setPointer(1, fileBlocks.getEndBlockNumber());
-            fcb.setPointer(2, fileBlocks.getNumberOfBlocks());
-            fcb.setPointer(3, endByte);
+            fcb.setPointer(START_BLOCK_PTR_INDEX, fileBlocks.getStartBlockNumber());
+            fcb.setPointer(END_BLOCK_PTR_INDEX, fileBlocks.getEndBlockNumber());
+            fcb.setPointer(NUM_BLOCKS_PTR_INDEX, fileBlocks.getNumberOfBlocks());
+            fcb.setPointer(END_BYTE_PTR_INDEX, endByte);
             if(!fcb.write(diskPtr) || !freeList.flush())
                 throw new exception;
 
@@ -61,9 +61,10 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
             throw e;
         }
 
-        fileBlocks = BlockGroup(fcb.getPointer(0), fcb.getPointer(1),
-                   fcb.getPointer(2), &freeList);
-        endByte = fcb.getPointer(3);
+        fileBlocks = BlockGroup(fcb.getPointer(START_BLOCK_PTR_INDEX),
+                   fcb.getPointer(END_BLOCK_PTR_INDEX),
+                   fcb.getPointer(NUM_BLOCKS_PTR_INDEX), &freeList);
+        endByte = fcb.getPointer(END_BYTE_PTR_INDEX);
         endBlockNumber = fileBlocks.getEndBlockNumber();
 
         // open file as indicated by readAccess
@@ -202,10 +203,10 @@ int File::write(const void* buf, int len)
         written = len;
 
     // write changes to disk
-    fcb.setPointer(0, fileBlocks.getStartBlockNumber());
-    fcb.setPointer(1, fileBlocks.getEndBlockNumber());
-    fcb.setPointer(2, fileBlocks.getNumberOfBlocks());
-    fcb.setPointer(3, endByte);
+    fcb.setPointer(START_BLOCK_PTR_INDEX, fileBlocks.getStartBlockNumber());
+    fcb.setPointer(END_BLOCK_PTR_INDEX, fileBlocks.getEndBlockNumber());
+    fcb.setPointer(NUM_BLOCKS_PTR_INDEX, fileBlocks.getNumberOfBlocks());
+    fcb.setPointer(END_BYTE_PTR_INDEX, endByte);
 
     if(!fcb.write(diskPtr) || !currentBlockPtr->write(diskPtr) || !freeList.flush())
         return -1; // error has occurred

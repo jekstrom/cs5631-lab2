@@ -11,10 +11,7 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList/>
-            <confList>
-                <confElem>Debug</confElem>
-                <confElem>Release</confElem>
-            </confList>
+            <confList/>
         </data>
     </configuration>
 </project>

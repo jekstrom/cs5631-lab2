@@ -304,10 +304,12 @@ int lab3Test() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     File *f;
     Directory* dirPtr = new Directory(&testDisk, true);
-    string name, writeData, readData;
+    string name, writeData;
     list<Entry> entries;
 
     int mode,result, writeResult, bytesToRead, readResult;
+    bool creat = false;
+    bool readAccess = false;
 
 
     while (true) {
@@ -332,32 +334,42 @@ int lab3Test() {
                 case 0:
                     return (EXIT_SUCCESS);
                     break;
-                case 1:
+                case 1:  //create a file
 
                     cout << "Enter a name for the new file: ";
                     cin >> name;
 
-                    f = new File(name, true, false, &testDisk, dirPtr);
+                    //file is created and added to directory in file ctor
+                    creat = true;
+                    readAccess = false;
+                    f = new File(name, creat, readAccess, &testDisk, dirPtr);
                     files.push_back(*f);
-
-//                    //maybe have addfile(File)
-//                    if (dirPtr->addFile(name, f->getFcbNumber())) {
-//                        cout << endl << "Succesfully created file" << endl;
-//                    } else {
-//                        cout << endl << "File already exists" << endl;
-//                    }
+                    
+                    //maybe have addfile(File) ???
+                    
+                    //make sure file is in directory
+                    if (dirPtr->findFile(name) != -1) {
+                        cout << endl << "Succesfully created file" << endl;
+                        //write changes to disk
+                        dirPtr->flush();
+                    } else {
+                        cout << endl << "File already exists" << endl;
+                    }
 
                     delete f;
                     break;
 
-                case 2:
+                case 2:  //open an existing file
 
                     cout << "Enter name of file: ";
                     cin >> name;
                     cout << endl << "Enter mode (0 = write, 1 = read): ";
                     cin >> mode;
 
-                    if (mode != 1 && mode != 0) {
+                    creat = false;
+                    readAccess = mode;
+
+                    if (mode != 1 || mode != 0) {
                         cout << endl << "Invalid mode" << endl;
                         break;
                     }
@@ -367,7 +379,7 @@ int lab3Test() {
                         files[result].open(mode);
                     } else {
                         try {
-                            f = new File(name, false, mode, &testDisk, dirPtr);
+                            f = new File(name, creat, readAccess, &testDisk, dirPtr);
                             files.push_back(*f);
                         } catch (FileNotFoundException e) {
                             cout << endl << "File not opened" << endl;
@@ -381,7 +393,7 @@ int lab3Test() {
                     delete f;
                     break;
 
-                case 3:
+                case 3:  //close an existing file
                     cout << "Enter name of file: ";
                     cin >> name;
                     result = search(files, name);
@@ -394,7 +406,7 @@ int lab3Test() {
                         break;
                     }
 
-                case 4:
+                case 4:  //write to file
                     cout << "Enter name of file: ";
                     cin >> name;
                     result = search(files, name);
@@ -423,7 +435,7 @@ int lab3Test() {
                         break;
                     }
 
-                case 5:
+                case 5:  //read from file
                     cout << "Enter name of file: ";
                     cin >> name;
                     result = search(files, name);
@@ -456,7 +468,7 @@ int lab3Test() {
                         break;
                     }
 
-                case 6:
+                case 6:  //dsplay all entries in the directory
                     entries = dirPtr->listEntries();
 
                     cout << "Start of Directory\n";
@@ -479,6 +491,13 @@ int lab3Test() {
     delete dirPtr;
 }
 
+/**
+ * Searches any recently created files (in memory) that can be opened for read
+ * or write access (open file table)
+ * @param files the vector containing any open files
+ * @param name the name of the file to search for
+ * @return -1 if file is not found, else the index of the file in the vector
+ */
 int search(vector<File> files, string name) {
         for (int i = 0; i < files.size(); i++) {
             if (strcmp(files[i].getName().c_str(), name.c_str()) == 0) {
