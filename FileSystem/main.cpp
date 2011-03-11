@@ -340,12 +340,12 @@ int lab3Test() {
                     f = new File(name, true, false, &testDisk, dirPtr);
                     files.push_back(*f);
 
-                    //maybe have addfile(File)
-                    if (dirPtr->addFile(name, f->getFcbNumber())) {
-                        cout << endl << "Succesfully created file" << endl;
-                    } else {
-                        cout << endl << "File already exists" << endl;
-                    }
+//                    //maybe have addfile(File)
+//                    if (dirPtr->addFile(name, f->getFcbNumber())) {
+//                        cout << endl << "Succesfully created file" << endl;
+//                    } else {
+//                        cout << endl << "File already exists" << endl;
+//                    }
 
                     delete f;
                     break;
