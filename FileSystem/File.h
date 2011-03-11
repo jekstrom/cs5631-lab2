@@ -203,12 +203,24 @@ private:
      */
     unsigned int endByte;
 
+    /**
+     * Index in block buffer for start block
+     */
     const short START_BLOCK_PTR_INDEX = 0;
 
+    /**
+     * Index in block buffer for end block
+     */
     const short END_BLOCK_PTR_INDEX = 1;
 
+    /**
+     * Index in block buffer for number of blocks
+     */
     const short NUM_BLOCKS_PTR_INDEX = 2;
 
+    /**
+     * Index in block buffer for end byte
+     */
     const short END_BYTE_PTR_INDEX = 3;
 };
 
