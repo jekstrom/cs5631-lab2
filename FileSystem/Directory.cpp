@@ -215,10 +215,10 @@ list<Entry> Directory::listEntries() {
     return entryList;
 }
 
-Entry* Directory::findEntry(string name)
+Entry* Directory::findEntry(string newName)
 {
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-        if (!i->name.compare(name)) {
+        if (i->name.compare(newName) == 0) {
             return &(*i);
         }
     }

@@ -158,7 +158,7 @@ int File::read(void* buf, int len)
     return len;
 }
 
-int File::write(void* buf, int len)
+int File::write(const void* buf, int len)
 {
     if(!writeOpen)
         return -1;
@@ -212,4 +212,16 @@ int File::write(void* buf, int len)
 
     // Have written the desired amount
     return written;
+}
+
+int File::getFcbNumber() {
+    return fcb.getBlockNumber();
+}
+
+string File::getName() {
+    return name;
+}
+
+bool File::isOpenForRead() {
+    return readOpen;
 }

@@ -9,28 +9,31 @@
 #include "FileSystemHeaders.h"
 #include <iostream>
 #include <sstream>
+#include <string.h>
+#include <vector>
+
 
 using namespace std;
 
 int lab1Test();
 int lab2Test();
+int lab3Test();
+int search(vector<File>, string);
 
 /*
  * Performs testing
  */
 int main() {
-    lab2Test();
+    lab3Test();
     return EXIT_SUCCESS;
 }
 
-int lab1Test()
-{
+int lab1Test() {
     int command;
 
     BlockGroup* bgPtr;
     FreeList* flPtr;
-    while(true)
-    {
+    while (true) {
         cout << "CS5631 Team Lab 1 Tester" << endl;
         cout << "0) Exit Program" << endl;
         cout << "1) Create and format FreeList" << endl;
@@ -68,7 +71,7 @@ int lab1Test()
                         cout << "There is no free list open.\n";
                     break;
                 case 4:
-                    if(flPtr != NULL)
+                    if (flPtr != NULL)
                         flPtr->output();
                     else
                         cout << "There is no free list open.\n";
@@ -134,8 +137,7 @@ int lab1Test()
     }
 }
 
-int lab2Test()
-{
+int lab2Test() {
     int command = -1;
     bool showMenu = true;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
@@ -143,11 +145,9 @@ int lab2Test()
     Directory* dirPtr = NULL;
     bool dirOpen = false;
 
-    while(true)
-    {
+    while (true) {
         cout << "CS5631 Team Lab 2 Tester" << endl;
-        if(showMenu)
-        {
+        if (showMenu) {
             cout << "0) Exit Program" << endl;
             cout << "1) Create and format new Directory" << endl;
             cout << "2) Open existing Directory" << endl;
@@ -159,9 +159,7 @@ int lab2Test()
             cout << "8) Display all Entries in the Directory" << endl;
             cout << "9) Add 14 Entries (the number of entries in one disk block)" << endl;
             showMenu = false;
-        }
-        else
-        {
+        } else {
             cout << "..." << endl;
         }
         cout << "Enter Command: ";
@@ -173,39 +171,32 @@ int lab2Test()
                     return (EXIT_SUCCESS);
                     break;
                 case 1:
-                    if(!dirOpen)
-                    {
+                    if (!dirOpen) {
                         dirPtr = new Directory(&testDisk, true);
                         dirOpen = true;
                         cout << "Directory created.\n";
-                    }
-                    else
+                    } else
                         cout << "There is already a directory open.\n";
                     break;
                 case 2:
-                    if(!dirOpen)
-                    {
+                    if (!dirOpen) {
                         dirPtr = new Directory(&testDisk, false);
                         dirOpen = true;
                         cout << "Directory opened.\n";
-                    }
-                    else
+                    } else
                         cout << "There is already a directory open.\n";
                     break;
                 case 3:
-                    if(dirOpen)
-                    {
-                        if(dirPtr->flush())
+                    if (dirOpen) {
+                        if (dirPtr->flush())
                             cout << "Directory flush successful.\n";
                         else
                             cout << "Directory flush failed.\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 4:
-                    if(dirOpen)
-                    {
+                    if (dirOpen) {
                         string name;
                         int fcb;
 
@@ -214,17 +205,15 @@ int lab2Test()
                         cout << "Enter an FCB number for the new Entry: ";
                         cin >> fcb;
 
-                        if(dirPtr->addFile(name, fcb))
+                        if (dirPtr->addFile(name, fcb))
                             cout << "Entry added successfully.\n";
                         else
                             cout << "Failed in adding Entry.\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 5:
-                    if(dirOpen)
-                    {
+                    if (dirOpen) {
                         string name;
                         int fcb;
 
@@ -232,17 +221,15 @@ int lab2Test()
                         cin >> name;
 
                         fcb = dirPtr->findFile(name);
-                        if(-1 == fcb)
+                        if (-1 == fcb)
                             cout << "Entry not found.\n";
                         else
                             cout << "Entry found, contains FCB number " << fcb << ".\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 6:
-                    if(dirOpen)
-                    {
+                    if (dirOpen) {
                         string oldName;
                         string newName;
 
@@ -251,57 +238,49 @@ int lab2Test()
                         cout << "Enter a new name for the Entry: ";
                         cin >> newName;
 
-                        if(dirPtr->renameFile(oldName, newName))
+                        if (dirPtr->renameFile(oldName, newName))
                             cout << "Entry found and successfully renamed.\n";
                         else
                             cout << "Entry not found.\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 7:
-                    if(dirOpen)
-                    {
+                    if (dirOpen) {
                         string name;
 
                         cout << "Enter the name of the Entry to remove: ";
                         cin >> name;
 
-                        if(dirPtr->removeFile(name))
+                        if (dirPtr->removeFile(name))
                             cout << "Entry removed successfully.\n";
                         else
                             cout << "Entry not found or couldn't be removed.\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 8:
-                    if(dirOpen)
-                    {
+                    if (dirOpen) {
                         list<Entry> entries = dirPtr->listEntries();
 
                         cout << "Start of Directory\n";
-                        for(list<Entry>::iterator it = entries.begin(); it != entries.end(); it++)
+                        for (list<Entry>::iterator it = entries.begin(); it != entries.end(); it++)
                             cout << "Name: " << (*it).name << "; FCB number: " << (*it).fcb << "\n";
                         cout << "End of Directory\n";
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 case 9:
-                    if(dirOpen)
-                    {
-                        for(int i = 1; i < 15; i++)
-                        {
+                    if (dirOpen) {
+                        for (int i = 1; i < 15; i++) {
                             stringstream nameStream("");
                             nameStream << "entry" << i;
-                            if(dirPtr->addFile(nameStream.str(), i))
+                            if (dirPtr->addFile(nameStream.str(), i))
                                 cout << "Entry " << i << " added successfully.\n";
                             else
                                 cout << "Failed in adding Entry " << i << ".\n";
                         }
-                    }
-                    else
+                    } else
                         cout << "There is no directory open.\n";
                     break;
                 default:
@@ -316,4 +295,195 @@ int lab2Test()
         cout << "\n";
     }
     delete dirPtr;
+}
+
+int lab3Test() {
+    int command = -1;
+    bool showMenu = true;
+    std::vector<File> files;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    File *f;
+    Directory* dirPtr = new Directory(&testDisk, true);
+    string name, writeData, readData;
+    list<Entry> entries;
+
+    int mode,result, writeResult, bytesToRead, readResult;
+
+
+    while (true) {
+        cout << "CS5631 Team Lab 3 Tester" << endl;
+        if (showMenu) {
+            cout << "0) Exit Program" << endl;
+            cout << "1) Create a file" << endl;
+            cout << "2) Open an existing file" << endl;
+            cout << "3) Close an existing file" << endl;
+            cout << "4) Write to file" << endl;
+            cout << "5) Read from file" << endl;
+            cout << "6) Display all Entries in the Directory" << endl;
+            showMenu = false;
+        } else {
+            cout << "..." << endl;
+        }
+        cout << "Enter Command: ";
+        cin >> command;
+
+        if (cin.peek() == '\n' && cin.good()) {
+            switch (command) {
+                case 0:
+                    return (EXIT_SUCCESS);
+                    break;
+                case 1:
+
+                    cout << "Enter a name for the new file: ";
+                    cin >> name;
+
+                    f = new File(name, true, false, &testDisk, dirPtr);
+                    files.push_back(*f);
+
+                    //maybe have addfile(File)
+                    if (dirPtr->addFile(name, f->getFcbNumber())) {
+                        cout << endl << "Succesfully created file" << endl;
+                    } else {
+                        cout << endl << "File already exists" << endl;
+                    }
+
+                    delete f;
+                    break;
+
+                case 2:
+
+                    cout << "Enter name of file: ";
+                    cin >> name;
+                    cout << endl << "Enter mode (0 = write, 1 = read): ";
+                    cin >> mode;
+
+                    if (mode != 1 && mode != 0) {
+                        cout << endl << "Invalid mode" << endl;
+                        break;
+                    }
+
+                    result = search(files, name);
+                    if (result != -1) {
+                        files[result].open(mode);
+                    } else {
+                        try {
+                            f = new File(name, false, mode, &testDisk, dirPtr);
+                            files.push_back(*f);
+                        } catch (FileNotFoundException e) {
+                            cout << endl << "File not opened" << endl;
+                            break;
+                        }
+
+                        
+                    }
+
+                    cout << endl << "File opened" << endl;
+                    delete f;
+                    break;
+
+                case 3:
+                    cout << "Enter name of file: ";
+                    cin >> name;
+                    result = search(files, name);
+                    if(result != -1) {
+                        files[result].close();
+                        cout << endl << "Successfully closed file" << endl;
+                        break;
+                    } else {
+                        cout <<endl << "File not found" << endl;
+                        break;
+                    }
+
+                case 4:
+                    cout << "Enter name of file: ";
+                    cin >> name;
+                    result = search(files, name);
+                    if(result != -1) {
+                        if(files[result].isOpenForRead()) {
+                            cout << endl << "File open for reading" << endl;
+                            break;
+                        } else {
+                            cout << endl << "Enter data: ";
+                            cin >> writeData;
+
+                            writeResult = files[result].write(writeData.c_str(),
+                                    writeData.size());
+
+                            if(writeResult != -1) {
+                                cout << endl << writeResult <<
+                                        " bytes of data written successfully" << endl;
+                                break;
+                            } else {
+                                cout << endl << "Data written unsuccessfully" << endl;
+                                break;
+                            }
+                        }
+                    } else {
+                        cout << endl << "File not found" << endl;
+                        break;
+                    }
+
+                case 5:
+                    cout << "Enter name of file: ";
+                    cin >> name;
+                    result = search(files, name);
+                    if(result != -1) {
+                        if(!files[result].isOpenForRead()) {
+                            cout << endl << "File open for writing" << endl;
+                            break;
+                        } else {
+                            cout << endl << "Bytes to read: ";
+                            cin >> bytesToRead;
+
+                            char* readBuffer = new char[bytesToRead];
+
+
+                            readResult = files[result].read(readBuffer,
+                                    bytesToRead);
+
+                            if(readResult != -1) {
+                                cout << endl << readResult <<
+                                        " bytes of data read successfully" << endl;
+                                cout << "Data read: " << readBuffer << endl;
+                                break;
+                            } else {
+                                cout << endl << "Data read unsuccessfully" << endl;
+                                break;
+                            }
+                        }
+                    } else {
+                        cout << endl << "File not found" << endl;
+                        break;
+                    }
+
+                case 6:
+                    entries = dirPtr->listEntries();
+
+                    cout << "Start of Directory\n";
+                    for (list<Entry>::iterator it = entries.begin(); it != entries.end(); it++)
+                        cout << "Name: " << (*it).name << "; FCB number: " << (*it).fcb << "\n";
+                    cout << "End of Directory\n";
+                    break;
+
+                default:
+                    cout << "Bad input\n" << endl;
+                    break;
+            }
+        } else {
+            cout << "Bad inpu\nt" << endl;
+
+        }
+
+        cout << "\n";
+    }
+    delete dirPtr;
+}
+
+int search(vector<File> files, string name) {
+        for (int i = 0; i < files.size(); i++) {
+            if (strcmp(files[i].getName().c_str(), name.c_str()) == 0) {
+                return i;
+            }
+        }
+    return -1;
 }

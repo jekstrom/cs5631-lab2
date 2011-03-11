@@ -35,6 +35,12 @@ public:
     }
 
     /**
+     * Returns the name of file
+     * @return name
+     */
+    string getName();
+
+    /**
      * Opens a closed file for reading or writing. For reading, the file will be
      * opened at the beginning. For writing, the file will be opened at the end.
      * @param readAccess If true, file will be opened for reading, else the file
@@ -42,6 +48,13 @@ public:
      * @return true iff file opened successfully
      */
     bool open(bool readAccess);
+
+    /**
+     * Returns true if the file is open for reading
+     * @return readOpen
+     *
+     */
+    bool isOpenForRead();
 
     /**
      * Closes current file access, can be reopened later.
@@ -55,6 +68,12 @@ public:
      * @return true iff the file was deleted successfully
      */
     bool deleteFile();
+
+    /**
+     * Gets the file control block for the file
+     * @return fcb number
+     */
+    int getFcbNumber();
 
     /**
      * Reads from the file at the current location of the file pointer. The file
@@ -94,7 +113,7 @@ public:
      * @param len The number of bytes to write
      * @return -1 if failure, else number of bytes written
      */
-    int write(void* buf, int len);
+    int write(const void* buf, int len);
     //{
         //if(!writeOpen)
         //  return -1;
