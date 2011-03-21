@@ -46,7 +46,7 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
                 throw new exception;
 
             // open for writing
-            open(false);
+            open(readAccess);
         }
     }
     else
@@ -72,6 +72,10 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
     }
 }
 
+File::~File() {
+    delete currentBlockPtr;
+}
+
 bool File::open(bool readAccess)
 {
     if(readOpen || writeOpen)
@@ -94,7 +98,7 @@ bool File::open(bool readAccess)
         currentByte = endByte;
     }
 
-    delete currentBlockPtr;
+//    delete currentBlockPtr;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     return true;
 }
@@ -128,14 +132,15 @@ int File::read(void* buf, int len)
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
     int currentBlockNumber = currentBlockPtr->getBlockNumber();
-
-    for(int bytesRead = 0; bytesRead < len; bytesRead++)
+    for(int bytesRead = 0; bytesRead < len + 1; bytesRead++)
     {
         if(currentBlockPtr == NULL ||
-                (endBlockNumber == currentBlockNumber && currentByte > endByte))
+                (endBlockNumber == currentBlockNumber && currentByte > endByte)) {
+            buf = readBuf;
             return bytesRead;
+        }
 
-        readBuf[bytesRead] = blockBuf[currentByte + sizeof(int)];
+        readBuf[bytesRead] = blockBuf[currentByte + sizeof(int) + 1];
 
         if(currentByte == lastByteIndex)
         {
@@ -155,6 +160,7 @@ int File::read(void* buf, int len)
             currentByte++;
     }
 
+    buf = readBuf;
     // Have read the desired amount
     return len;
 }

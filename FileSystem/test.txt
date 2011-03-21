@@ -1,0 +1,9 @@
+0) Exit Program
+1) Create a file
+2) Open an existing file
+3) Close an existing file
+4) Write to file
+5) Read from file
+6) Display all Entries in the Directory
+Enter name of file: poe
+Enter mode (0 = write, 1 = read): 0

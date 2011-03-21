@@ -29,10 +29,7 @@ public:
     /**
      * Destructor for the File class.
      */
-    ~File()
-    {
-        delete currentBlockPtr;
-    }
+    ~File();
 
     /**
      * Accessor for the file name
