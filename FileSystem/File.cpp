@@ -98,7 +98,8 @@ bool File::open(bool readAccess)
         currentByte = endByte;
     }
 
-//    delete currentBlockPtr;
+    if(currentBlockPtr != NULL)
+        delete currentBlockPtr;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     return true;
 }
