@@ -46,7 +46,7 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
                 throw new exception;
 
             // open for writing
-            open(readAccess);
+            open(false);
         }
     }
     else
