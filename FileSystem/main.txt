@@ -1,0 +1,11 @@
+0) Exit Program
+1) Run test 1
+2) Run test 2a
+3) Run test 2b
+4) Run test 3
+5) Run test 4a (Before Shutdown)
+6) Run test 4b (after Shutdown)
+7) Create SOURCE
+8) Create SOURCE
+9) Run test 5a
+10) Run test 5b
