@@ -12,5 +12,5 @@ Data read: 0123456789
 
 Bytes to read: 20
 
-0 bytes of data read successfully
-Data read: 
+10 bytes of data read successfully
+Data read: 0123456789

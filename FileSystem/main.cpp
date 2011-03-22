@@ -45,9 +45,6 @@ void lab3test11();
 int main() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     Directory dir(&testDisk, true);
-
-    lab3test11();
-
     ofstream outFile;
     outFile.open("main.txt");
     int command = -1;
@@ -703,7 +700,6 @@ int lab3Test() {
 //    return i;
 //}
 
-
 void lab3test1() {
     ofstream outFile;
     outFile.open("test1.txt");
@@ -721,9 +717,6 @@ void lab3test1() {
     creat = true;
     readAccess = false;
     File *f = new File("test1", creat, readAccess, &testDisk, dirPtr);
-    //    files.push_back(*f);
-
-    //maybe have addfile(File) ???
 
     //make sure file is in directory
     if (dirPtr->findFile("test1") != -1) {
@@ -787,6 +780,8 @@ void lab3test1() {
         outFile << "\nData read unsuccessfully" << endl;
     }
 
+    f->close();
+    f->open(true);
     //try to read past end of file
     //file only has 10 bytes
     bytesToRead = 20;
@@ -847,9 +842,9 @@ void lab3test2a() {
         outFile << "\nFile already exists" << endl;
     }
 
-    //writeData = 100 byes
-    string writeData = "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789";
+    //writeData = 100 bytes
+    string writeData = "012345678901234567890123456789012345678901234567890123456789"
+            "0123456789012345678901234567890123456789";
     outFile << "Data being written to file(x6): " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
@@ -857,10 +852,10 @@ void lab3test2a() {
         temp[i] = writeData.c_str()[i];
     int totalBytes = 0;
     for (int i = 0; i < 6; i++) { //write 600 bytes to disk
-        writeResult = f->write(temp,
-                writeData.size());
+        writeResult = f->write(temp, writeData.size());
 
         if (writeResult != -1) {
+            totalBytes += writeResult;
             cout << endl << writeResult <<
                     " bytes of data written successfully" << endl;
             outFile << "\n" << writeResult << " bytes of data"
@@ -873,7 +868,7 @@ void lab3test2a() {
             cout << endl << "Data written unsuccessfully" << endl;
             outFile << "\nData written unsuccessfully" << endl;
         }
-        totalBytes += writeResult;
+
     }
 
     //close file
@@ -888,13 +883,12 @@ void lab3test2a() {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
+        char readBuffer[bytesToRead];
         for (int i = 0; i < bytesToRead; i++)
             readBuffer[i] = 0;
 
 
-        int readResult = f->read(readBuffer,
-                bytesToRead);
+        int readResult = f->read(readBuffer, bytesToRead);
 
         if (readResult != -1) {
             cout << endl << readResult <<
@@ -911,20 +905,31 @@ void lab3test2a() {
         }
     }
 
+    f->close();
+    f->open(true);
+
+    cout << "----------------------------" << endl;
+    cout << "Reading 7 times (700 bytes)" << endl;
+    outFile << "----------------------------" << endl;
+    outFile << "Reading 7 times (700 bytes)" << endl;
+    
     //try to read past end of file
     //read 100 bytes 7 times, going past the 600 bytes
     bytesToRead = 100;
     for (int i = 0; i < 7; i++) {
+        if (i >= 6) {
+            cout << "\nTrying to read past EOF" << endl;
+            outFile << "\nTrying to read past EOF" << endl;
+        }
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
+        char readBuffer[bytesToRead];
         for (int i = 0; i < bytesToRead; i++)
             readBuffer[i] = 0;
 
 
-        int readResult = f->read(readBuffer,
-                bytesToRead);
+        int readResult = f->read(readBuffer, bytesToRead);
 
         if (readResult != -1) {
             cout << endl << readResult <<
@@ -998,7 +1003,7 @@ void lab3test2b() {
         cout << endl << writeResult <<
                 " bytes of data written successfully" << endl;
         outFile << "\n" << writeResult << " bytes of data"
-                "successfully written" << endl;
+                " successfully written" << endl;
     } else {
         cout << endl << "Data written unsuccessfully" << endl;
         outFile << "\nData written unsuccessfully" << endl;
@@ -2187,9 +2192,9 @@ void lab3test8() {
     }
 
     cout << endl;
-    outFile <<"\n";
+    outFile << "\n";
 
-    if(dirPtr->removeFile("test8")) {
+    if (dirPtr->removeFile("test8")) {
         cout << endl << "Successfully deleted file" << endl;
         outFile << "\nSuccessfully deleted file" << endl;
         //dirPtr->flush();
@@ -2210,7 +2215,7 @@ void lab3test8() {
     }
 
     cout << endl;
-    outFile <<"\n";
+    outFile << "\n";
 }
 
 void lab3test9() {
@@ -2272,9 +2277,9 @@ void lab3test9() {
     }
 
     cout << endl;
-    outFile <<"\n";
+    outFile << "\n";
 
-    if(dirPtr->removeFile("test9a")) {
+    if (dirPtr->removeFile("test9a")) {
         cout << endl << "Successfully deleted file a" << endl;
         outFile << "\nSuccessfully deleted file a" << endl;
         //dirPtr->flush();
@@ -2283,7 +2288,7 @@ void lab3test9() {
         outFile << "\nCouldn't delete file a" << endl;
     }
 
-    if(dirPtr->removeFile("test9b")) {
+    if (dirPtr->removeFile("test9b")) {
         cout << endl << "Successfully deleted file b" << endl;
         outFile << "\nSuccessfully deleted file b" << endl;
         //dirPtr->flush();
@@ -2304,20 +2309,18 @@ void lab3test9() {
     }
 
     cout << endl;
-    outFile <<"\n";
+    outFile << "\n";
 }
 
-void lab3test11()
-{
+void lab3test11() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     Directory dir(&testDisk, false);
     fstream fout("/home/kaleb/Desktop/test11.txt", fstream::out);
     char testMsg[22] = "Feeling stressed yet?";
-    int testSize = sizeof(testMsg);
+    int testSize = sizeof (testMsg);
     fout << "Beginning of test.\n\n";
 
-    for(int i = 0; i < 1000; i++)
-    {
+    for (int i = 0; i < 1000; i++) {
         fout << "Creating new file... ";
         File* f = new File("file1", true, false, &testDisk, &dir);
         fout << "file created successfully, open for writing.\n";
@@ -2342,21 +2345,19 @@ void lab3test11()
         fout << "Reading " << testSize << " bytes from file... ";
         char readBuf[testSize];
         int bytesRead = f->read(readBuf, testSize);
-        if(0 > bytesRead)
+        if (0 > bytesRead)
             fout << "Error: could not read from file.\n";
-        else
-        {
+        else {
             fout << "read " << bytesRead << " bytes from file. ";
 
             bool match = true;
-            for(int j = 0; j < testSize; j++)
-                if(testMsg[j] != readBuf[j])
-                {
+            for (int j = 0; j < testSize; j++)
+                if (testMsg[j] != readBuf[j]) {
                     match = false;
                     break;
                 }
 
-            if(match)
+            if (match)
                 fout << "Data in file is correct.\n";
             else
                 fout << "Error: file data is incorrect.\n";
@@ -2364,7 +2365,7 @@ void lab3test11()
 
         fout << "Attempting to read furthur... ";
         bytesRead = f->read(readBuf, testSize);
-        if(0 > bytesRead)
+        if (0 > bytesRead)
             fout << "Error: could not read from file.\n";
         else
             fout << "read " << bytesRead << " bytes from file.\n";
