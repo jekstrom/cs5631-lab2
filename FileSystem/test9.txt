@@ -1,0 +1,13 @@
+Creating file test9
+
+Successfully created file a
+
+Successfully created file b
+
+Entries: test9a, test9b, 
+
+Successfully deleted file a
+
+Successfully deleted file b
+
+Entries: 

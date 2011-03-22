@@ -40,7 +40,7 @@ void lab3test11();
  * Performs testing
  */
 int main() {
-    lab3test7After();
+    lab3test9();
     return EXIT_SUCCESS;
 }
 
@@ -1197,6 +1197,100 @@ void lab3test8() {
     } else {
         cout << endl << "Couldn't delete file" << endl;
         outFile << "\nCouldn't delete file" << endl;
+    }
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList2 = dirPtr->listEntries();
+    while (!entryList2.empty()) {
+        Entry tempEntry = entryList2.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList2.pop_front();
+    }
+
+    cout << endl;
+    outFile <<"\n";
+}
+
+void lab3test9() {
+    ofstream outFile;
+    outFile.open("test9.txt");
+
+    bool creat;
+    bool readAccess;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, true);
+
+    //create a new file, open it for reading
+    cout << "Creating file test9" << endl;
+    outFile << "Creating file test9" << endl;
+
+    //file is created and added to directory in file ctor
+    creat = true;
+    readAccess = false;
+    File *fa = new File("test9a", creat, readAccess, &testDisk, dirPtr);
+    File *fb = new File("test9b", creat, readAccess, &testDisk, dirPtr);
+    //    files.push_back(*f);
+
+    //maybe have addfile(File) ???
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test9a") != -1) {
+        cout << endl << "Succesfully created file a" << endl;
+        outFile << "\nSuccessfully created file a" << endl;
+        //write changes to disk ??
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists a" << endl;
+        outFile << "\nFile already exists a" << endl;
+    }
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test9b") != -1) {
+        cout << endl << "Succesfully created file b" << endl;
+        outFile << "\nSuccessfully created file b" << endl;
+        //write changes to disk ??
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists b" << endl;
+        outFile << "\nFile already exists b" << endl;
+    }
+
+    fa->close();
+    fb->close();
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+
+    cout << endl;
+    outFile <<"\n";
+
+    if(dirPtr->removeFile("test9a")) {
+        cout << endl << "Successfully deleted file a" << endl;
+        outFile << "\nSuccessfully deleted file a" << endl;
+        //dirPtr->flush();
+    } else {
+        cout << endl << "Couldn't delete file a" << endl;
+        outFile << "\nCouldn't delete file a" << endl;
+    }
+
+    if(dirPtr->removeFile("test9b")) {
+        cout << endl << "Successfully deleted file b" << endl;
+        outFile << "\nSuccessfully deleted file b" << endl;
+        //dirPtr->flush();
+    } else {
+        cout << endl << "Couldn't delete file b" << endl;
+        outFile << "\nCouldn't delete file b" << endl;
     }
 
     cout << endl << "Entries: ";
