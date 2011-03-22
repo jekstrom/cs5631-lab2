@@ -127,6 +127,11 @@ int File::read(void* buf, int len) {
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
     int currentBlockNumber = currentBlockPtr->getBlockNumber();
+    int fcbNum = fcb.getBlockNumber();
+    if (fcbNum == currentBlockNumber) {
+        fileBlocks.getNextBlock();
+        currentBlockPtr = fileBlocks.getCurrentBlock();
+    }
     for (int bytesRead = 0; bytesRead < len; bytesRead++) {
         if (currentBlockPtr == NULL ||
                 (endBlockNumber == currentBlockNumber && currentByte > endByte)) {
@@ -165,16 +170,14 @@ int File::write(const void* buf, int len) {
     int written = -1;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
-    int temp = fcb.getBlockNumber();
-    int temp2 = currentBlockPtr->getBlockNumber();
-    if (temp == temp2) {
+    int fcbNum = fcb.getBlockNumber();
+    int currentBlockNum = currentBlockPtr->getBlockNumber();
+    if (fcbNum == currentBlockNum) {
         freeList = FreeList(diskPtr, false);
         fileBlocks.addBlock();
         fileBlocks.getNextBlock();
         currentBlockPtr = fileBlocks.getCurrentBlock();
     }
-    temp = fcb.getBlockNumber();
-    temp2 = currentBlockPtr->getBlockNumber();
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
