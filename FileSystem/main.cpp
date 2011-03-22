@@ -2319,28 +2319,29 @@ void lab3test11()
     for(int i = 0; i < 1000; i++)
     {
         fout << "Creating new file... ";
-        File f("file1", true, false, &testDisk, &dir);
+        File* f = new File("file1", true, false, &testDisk, &dir);
         fout << "file created successfully, open for writing.\n";
 
         fout << "Writing to file... ";
-        if(0 > f.write(testMsg, testSize))
+        if(0 > f->write(testMsg, testSize))
             fout << "Error: could not write to file.\n";
         else
             fout << "write succeeded.\n";
 
         fout << "Closing file... ";
-        if(!f.close())
-            fout << "Error: could not close file\n";
+        if(!f->close())
+            fout << "Error: could not close file.\n";
         else
             fout << "file closed successfully.\n";
 
         fout << "Opening file for writing... ";
-        File f2("file1", false, true, &testDisk, &dir);
+        delete f;
+        f = new File("file1", false, true, &testDisk, &dir);
         fout << "file open for reading\n.";
 
         fout << "Reading " << testSize << " bytes from file... ";
         char readBuf[testSize];
-        int bytesRead = f2.read(readBuf, testSize);
+        int bytesRead = f->read(readBuf, testSize);
         if(0 > bytesRead)
             fout << "Error: could not read from file.\n";
         else
@@ -2362,14 +2363,14 @@ void lab3test11()
         }
 
         fout << "Attempting to read furthur... ";
-        bytesRead = f2.read(readBuf, testSize);
+        bytesRead = f->read(readBuf, testSize);
         if(0 > bytesRead)
             fout << "Error: could not read from file.\n";
         else
             fout << "read " << bytesRead << " bytes from file.\n";
 
         fout << "Deleting file... ";
-        if(!f2.deleteFile())
+        if(!f->deleteFile())
             fout << "Error: could not delete file.\n";
         else
             fout << "file deleted successfully.\n";
@@ -2380,4 +2381,5 @@ void lab3test11()
     }
 
     fout.close();
+}
 
