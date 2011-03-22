@@ -1,0 +1,19 @@
+Creating file test6
+
+Successfully created file
+Data being written to file: 012345
+
+6 bytes of datasuccessfully written
+Data being written to file: 6789
+
+4 bytes of datasuccessfully written
+
+Bytes to read: 10
+
+10 bytes of data read successfully
+Data read: 0123456789
+
+Bytes to read: 20
+
+0 bytes of data read successfully
+Data read: 

@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string.h>
 #include <fstream>
+#include <list>
 
 
 using namespace std;
@@ -18,13 +19,28 @@ using namespace std;
 int lab1Test();
 int lab2Test();
 int lab3Test();
+void lab3test1();
+void lab3test2a();
+void lab3test2b();
+void lab3test3();
+void lab3test4();
+void lab3test5();
+void lab3test6();
+void lab3test7Before();
+void lab3test7After();
+void lab3test8();
+void lab3test9();
+void lab3test10();
+void lab3test11();
+
+
 //int search(vector<File>, string);
 
 /*
  * Performs testing
  */
 int main() {
-    //lab3Test();
+    lab3test7After();
     return EXIT_SUCCESS;
 }
 
@@ -839,4 +855,361 @@ void lab3test2a() {
 
 void lab3test2b() {
     
+}
+
+void lab3test6() {
+    ofstream outFile;
+    outFile.open("test6.txt");
+
+    bool creat;
+    bool readAccess;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, true);
+
+    //create a new file, open it for reading
+    cout << "Creating file test6" << endl;
+    outFile << "Creating file test6" << endl;
+
+    //file is created and added to directory in file ctor
+    creat = true;
+    readAccess = false;
+    File *f = new File("test6", creat, readAccess, &testDisk, dirPtr);
+    //    files.push_back(*f);
+
+    //maybe have addfile(File) ???
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test6") != -1) {
+        cout << endl << "Succesfully created file" << endl;
+        outFile << "\nSuccessfully created file" << endl;
+        //write changes to disk ??
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists" << endl;
+        outFile << "\nFile already exists" << endl;
+    }
+
+    string writeData = "012345";
+    outFile << "Data being written to file: " << writeData << endl;
+    int writeResult = -1;
+    char *temp = new char[writeData.size()];
+    for (int i = 0; i < writeData.size(); i++)
+        temp[i] = writeData.c_str()[i];
+    writeResult = f->write(temp,
+            writeData.size());
+
+    if (writeResult != -1) {
+        cout << endl << writeResult <<
+                " bytes of data written successfully" << endl;
+        outFile << "\n" << writeResult << " bytes of data"
+                "successfully written" << endl;
+    } else {
+        cout << endl << "Data written unsuccessfully" << endl;
+        outFile << "\nData written unsuccessfully" << endl;
+    }
+
+    //close file
+    f->close();
+
+    f->open(false);
+    writeData = "6789";
+    outFile << "Data being written to file: " << writeData << endl;
+    writeResult = -1;
+    temp = new char[writeData.size()];
+    for (int i = 0; i < writeData.size(); i++)
+        temp[i] = writeData.c_str()[i];
+    writeResult = f->write(temp,
+            writeData.size());
+
+    if (writeResult != -1) {
+        cout << endl << writeResult <<
+                " bytes of data written successfully" << endl;
+        outFile << "\n" << writeResult << " bytes of data"
+                "successfully written" << endl;
+    } else {
+        cout << endl << "Data written unsuccessfully" << endl;
+        outFile << "\nData written unsuccessfully" << endl;
+    }
+
+    //close file
+    f->close();
+
+
+    //open file for reading, read data
+    f->open(true);
+
+    int bytesToRead = 10;
+    cout << endl << "Bytes to read: " << bytesToRead;
+    outFile << "\nBytes to read: " << bytesToRead << endl;
+
+    char* readBuffer = new char[bytesToRead];
+    for (int i = 0; i < bytesToRead; i++)
+        readBuffer[i] = 0;
+
+
+    int readResult = f->read(readBuffer,
+            bytesToRead);
+
+    if (readResult != -1) {
+        cout << endl << readResult <<
+                " bytes of data read successfully" << endl;
+
+        outFile << "\n" << readResult << " bytes of data "
+                "read successfully" << endl;
+
+        cout << "Data read: " << readBuffer << endl;
+        outFile << "Data read: " << readBuffer << endl;
+    } else {
+        cout << endl << "Data read unsuccessfully" << endl;
+        outFile << "\nData read unsuccessfully" << endl;
+    }
+
+    //try to read past end of file
+    //file only has 10 bytes
+    bytesToRead = 20;
+    cout << endl << "Bytes to read: " << bytesToRead;
+    outFile << "\nBytes to read: " << bytesToRead << endl;
+
+    readBuffer = new char[bytesToRead];
+    for (int i = 0; i < bytesToRead; i++)
+        readBuffer[i] = 0;
+
+
+    readResult = f->read(readBuffer,
+            bytesToRead);
+
+    if (readResult != -1) {
+        cout << endl << readResult <<
+                " bytes of data read successfully" << endl;
+
+        outFile << "\n" << readResult << " bytes of data "
+                "read successfully" << endl;
+
+        cout << "Data read: " << readBuffer << endl;
+        outFile << "Data read: " << readBuffer << endl;
+    } else {
+        cout << endl << "Data read unsuccessfully" << endl;
+        outFile << "\nData read unsuccessfully" << endl;
+    }
+
+    delete f;
+}
+
+void lab3test7Before() {
+    ofstream outFile;
+    outFile.open("test7.txt");
+
+    bool creat;
+    bool readAccess;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, true);
+
+    //create a new file, open it for reading
+    cout << "Creating file test7" << endl;
+    outFile << "Creating file test7" << endl;
+
+    //file is created and added to directory in file ctor
+    creat = true;
+    readAccess = false;
+    File *f = new File("test7", creat, readAccess, &testDisk, dirPtr);
+    //    files.push_back(*f);
+
+    //maybe have addfile(File) ???
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test7") != -1) {
+        cout << endl << "Succesfully created file" << endl;
+        outFile << "\nSuccessfully created file" << endl;
+        //write changes to disk ??
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists" << endl;
+        outFile << "\nFile already exists" << endl;
+    }
+
+    string writeData = "012345";
+    outFile << "Data being written to file: " << writeData << endl;
+    int writeResult = -1;
+    char *temp = new char[writeData.size()];
+    for (int i = 0; i < writeData.size(); i++)
+        temp[i] = writeData.c_str()[i];
+    writeResult = f->write(temp,
+            writeData.size());
+
+    if (writeResult != -1) {
+        cout << endl << writeResult <<
+                " bytes of data written successfully" << endl;
+        outFile << "\n" << writeResult << " bytes of data"
+                "successfully written" << endl;
+    } else {
+        cout << endl << "Data written unsuccessfully" << endl;
+        outFile << "\nData written unsuccessfully" << endl;
+    }
+
+    //close file
+    f->close();
+}
+
+void lab3test7After() {
+    ofstream outFile;
+    outFile.open("test7.txt");
+
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, false);
+
+    File *f = new File("test7", false, false, &testDisk, dirPtr);
+
+    string writeData = "6789";
+    outFile << "Data being written to file: " << writeData << endl;
+    int writeResult = -1;
+    char *temp = new char[writeData.size()];
+    for (int i = 0; i < writeData.size(); i++)
+        temp[i] = writeData.c_str()[i];
+    writeResult = f->write(temp,
+            writeData.size());
+
+    if (writeResult != -1) {
+        cout << endl << writeResult <<
+                " bytes of data written successfully" << endl;
+        outFile << "\n" << writeResult << " bytes of data"
+                "successfully written" << endl;
+    } else {
+        cout << endl << "Data written unsuccessfully" << endl;
+        outFile << "\nData written unsuccessfully" << endl;
+    }
+
+    //close file
+    f->close();
+
+
+    //open file for reading, read data
+    f->open(true);
+
+    int bytesToRead = 10;
+    cout << endl << "Bytes to read: " << bytesToRead;
+    outFile << "\nBytes to read: " << bytesToRead << endl;
+
+    char* readBuffer = new char[bytesToRead];
+    for (int i = 0; i < bytesToRead; i++)
+        readBuffer[i] = 0;
+
+
+    int readResult = f->read(readBuffer,
+            bytesToRead);
+
+    if (readResult != -1) {
+        cout << endl << readResult <<
+                " bytes of data read successfully" << endl;
+
+        outFile << "\n" << readResult << " bytes of data "
+                "read successfully" << endl;
+
+        cout << "Data read: " << readBuffer << endl;
+        outFile << "Data read: " << readBuffer << endl;
+    } else {
+        cout << endl << "Data read unsuccessfully" << endl;
+        outFile << "\nData read unsuccessfully" << endl;
+    }
+
+    //try to read past end of file
+    //file only has 10 bytes
+    bytesToRead = 20;
+    cout << endl << "Bytes to read: " << bytesToRead;
+    outFile << "\nBytes to read: " << bytesToRead << endl;
+
+    readBuffer = new char[bytesToRead];
+    for (int i = 0; i < bytesToRead; i++)
+        readBuffer[i] = 0;
+
+
+    readResult = f->read(readBuffer,
+            bytesToRead);
+
+    if (readResult != -1) {
+        cout << endl << readResult <<
+                " bytes of data read successfully" << endl;
+
+        outFile << "\n" << readResult << " bytes of data "
+                "read successfully" << endl;
+
+        cout << "Data read: " << readBuffer << endl;
+        outFile << "Data read: " << readBuffer << endl;
+    } else {
+        cout << endl << "Data read unsuccessfully" << endl;
+        outFile << "\nData read unsuccessfully" << endl;
+    }
+
+    delete f;
+}
+
+void lab3test8() {
+    ofstream outFile;
+    outFile.open("test8.txt");
+
+    bool creat;
+    bool readAccess;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, true);
+
+    //create a new file, open it for reading
+    cout << "Creating file test8" << endl;
+    outFile << "Creating file test8" << endl;
+
+    //file is created and added to directory in file ctor
+    creat = true;
+    readAccess = false;
+    File *f = new File("test8", creat, readAccess, &testDisk, dirPtr);
+    //    files.push_back(*f);
+
+    //maybe have addfile(File) ???
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test8") != -1) {
+        cout << endl << "Succesfully created file" << endl;
+        outFile << "\nSuccessfully created file" << endl;
+        //write changes to disk ??
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists" << endl;
+        outFile << "\nFile already exists" << endl;
+    }
+
+    f->close();
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+
+    cout << endl;
+    outFile <<"\n";
+
+    if(dirPtr->removeFile("test8")) {
+        cout << endl << "Successfully deleted file" << endl;
+        outFile << "\nSuccessfully deleted file" << endl;
+        //dirPtr->flush();
+    } else {
+        cout << endl << "Couldn't delete file" << endl;
+        outFile << "\nCouldn't delete file" << endl;
+    }
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList2 = dirPtr->listEntries();
+    while (!entryList2.empty()) {
+        Entry tempEntry = entryList2.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList2.pop_front();
+    }
+
+    cout << endl;
+    outFile <<"\n";
 }
