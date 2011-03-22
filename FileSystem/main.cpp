@@ -879,12 +879,13 @@ void lab3test2a() {
 
     //read 100 bytes 6 times
     int bytesToRead = 100;
+
     for (int i = 0; i < 6; i++) {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char readBuffer[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 
@@ -912,7 +913,7 @@ void lab3test2a() {
     cout << "Reading 7 times (700 bytes)" << endl;
     outFile << "----------------------------" << endl;
     outFile << "Reading 7 times (700 bytes)" << endl;
-    
+
     //try to read past end of file
     //read 100 bytes 7 times, going past the 600 bytes
     bytesToRead = 100;
@@ -924,8 +925,8 @@ void lab3test2a() {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char readBuffer[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 
@@ -2326,13 +2327,13 @@ void lab3test11() {
         fout << "file created successfully, open for writing.\n";
 
         fout << "Writing to file... ";
-        if(0 > f->write(testMsg, testSize))
+        if (0 > f->write(testMsg, testSize))
             fout << "Error: could not write to file.\n";
         else
             fout << "write succeeded.\n";
 
         fout << "Closing file... ";
-        if(!f->close())
+        if (!f->close())
             fout << "Error: could not close file.\n";
         else
             fout << "file closed successfully.\n";
@@ -2371,7 +2372,7 @@ void lab3test11() {
             fout << "read " << bytesRead << " bytes from file.\n";
 
         fout << "Deleting file... ";
-        if(!f->deleteFile())
+        if (!f->deleteFile())
             fout << "Error: could not delete file.\n";
         else
             fout << "file deleted successfully.\n";

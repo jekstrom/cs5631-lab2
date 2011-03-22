@@ -131,15 +131,15 @@ int File::read(void* buf, int len) {
     if (fcbNum == currentBlockNumber) {
         fileBlocks.getNextBlock();
         currentBlockPtr = fileBlocks.getCurrentBlock();
+        blockBuf = currentBlockPtr->getBuffer();
     }
     for (int bytesRead = 0; bytesRead < len; bytesRead++) {
         if (currentBlockPtr == NULL ||
                 (endBlockNumber == currentBlockNumber && currentByte > endByte)) {
-            buf = readBuf;
             return bytesRead - 1;
         }
 
-        readBuf[bytesRead] = blockBuf[currentByte + sizeof (int) + 1];
+        readBuf[bytesRead] = blockBuf[currentByte + sizeof(int) + 1];
 
         if (currentByte == lastByteIndex) {
             // advance to next block
@@ -156,7 +156,6 @@ int File::read(void* buf, int len) {
             currentByte++;
     }
 
-    buf = readBuf;
     // Have read the desired amount
     return len;
 }
@@ -177,14 +176,11 @@ int File::write(const void* buf, int len) {
         fileBlocks.addBlock();
         fileBlocks.getNextBlock();
         currentBlockPtr = fileBlocks.getCurrentBlock();
+        blockBuf = currentBlockPtr->getBuffer();
     }
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
-
-            // write changes to disk
-            if(!currentBlockPtr->write(diskPtr))
-                return -1;
 
             freeList = FreeList(diskPtr, false); // update free list
 
@@ -203,7 +199,7 @@ int File::write(const void* buf, int len) {
         } else
             currentByte++;
 
-        blockBuf[currentByte + sizeof (int)] = writeBuf[bytesWritten];
+        blockBuf[currentByte + sizeof(int)] = writeBuf[bytesWritten];
         endByte = currentByte;
     }
 

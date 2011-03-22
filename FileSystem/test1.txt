@@ -8,7 +8,7 @@ Data being written to file: 0123456789
 Bytes to read: 10
 
 10 bytes of data read successfully
-Data read: 0123456789
+Data read: 0123456789Ï
 
 Bytes to read: 20
 
