@@ -163,7 +163,18 @@ int File::write(const void* buf, int len) {
     char* writeBuf = (char*) buf;
     int lastByteIndex = fileBlocks.getBlockSize() - 1;
     int written = -1;
+    currentBlockPtr = fileBlocks.getCurrentBlock();
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
+    int temp = fcb.getBlockNumber();
+    int temp2 = currentBlockPtr->getBlockNumber();
+    if (temp == temp2) {
+        freeList = FreeList(diskPtr, false);
+        fileBlocks.addBlock();
+        fileBlocks.getNextBlock();
+        currentBlockPtr = fileBlocks.getCurrentBlock();
+    }
+    temp = fcb.getBlockNumber();
+    temp2 = currentBlockPtr->getBlockNumber();
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
@@ -189,7 +200,7 @@ int File::write(const void* buf, int len) {
         } else
             currentByte++;
 
-        blockBuf[currentByte + sizeof (int) ] = writeBuf[bytesWritten];
+        blockBuf[currentByte + sizeof (int)] = writeBuf[bytesWritten];
         endByte = currentByte;
     }
 
@@ -202,7 +213,7 @@ int File::write(const void* buf, int len) {
     fcb.setPointer(fileBlocks.getNumberOfBlocks(), NUM_BLOCKS_PTR_INDEX);
     fcb.setPointer(endByte, END_BYTE_PTR_INDEX);
 
-    if (!currentBlockPtr->write(diskPtr) || !freeList.flush())
+    if (!fcb.write(diskPtr) || !currentBlockPtr->write(diskPtr) || !freeList.flush())
         return -1; // error has occurred
 
     // Have written the desired amount
