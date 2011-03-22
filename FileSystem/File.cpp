@@ -11,6 +11,8 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
     freeList = FreeList(diskPtr, false);
     name = filename;
     currentBlockPtr = NULL;
+    readOpen = false;
+    writeOpen = false;
 
     int fcbNum = directoryPtr->findFile(filename);
 
@@ -108,6 +110,8 @@ bool File::close()
 {
     readOpen = false;
     writeOpen = false;
+//    delete currentBlockPtr;
+//    currentBlockPtr = NULL;
     return true;
 }
 
