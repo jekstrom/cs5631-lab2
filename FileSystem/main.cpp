@@ -1046,7 +1046,7 @@ void lab3test2b() {
             "01234567890123456789012345678901234567890123456789"
             "01234567890123456789012345678901234567890123456789"
             "01234567890123456789012345678901234567890123456789";
-    outFile << "Data being written to file(x6): " << writeData << endl;
+    outFile << "Data being written to file: " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
@@ -1087,7 +1087,6 @@ void lab3test2b() {
 
         outFile << "\n" << readResult << " bytes of data "
                 "read successfully" << endl;
-
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {

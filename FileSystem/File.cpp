@@ -136,14 +136,23 @@ int File::read(void* buf, int len) {
     for (int bytesRead = 0; bytesRead < len; bytesRead++) {
         if (currentBlockPtr == NULL ||
                 (endBlockNumber == currentBlockNumber && currentByte > endByte)) {
+            //get rid of NULL chars
+            for (int i = 0; i < bytesRead; i++)
+                if (readBuf[i] == 0 && readBuf[i + 1] != 0)
+                    readBuf[i] = readBuf[i + 1];
             return bytesRead - 1;
         }
 
         readBuf[bytesRead] = blockBuf[currentByte + sizeof (int) + 1];
-        char temp = readBuf[bytesRead];
+
         //check null-termination
-        if (readBuf[bytesRead] == 0 && endBlockNumber == currentBlockNumber)
+        if (readBuf[bytesRead] == 0 && endBlockNumber == currentBlockNumber) {
+            //get rid of NULL characters
+            for (int i = 0; i < bytesRead; i++)
+                if (readBuf[i] == 0 && readBuf[i + 1] != 0)
+                    readBuf[i] = readBuf[i + 1];
             return bytesRead;
+        }
 
         if (currentByte == lastByteIndex) {
             // advance to next block
@@ -161,6 +170,11 @@ int File::read(void* buf, int len) {
     }
 
     // Have read the desired amount
+
+    //get rid of NULL chars
+    for (int i = 0; i < len; i++)
+        if (readBuf[i] == 0 && readBuf[i + 1] != 0)
+            readBuf[i] = readBuf[i + 1];
     return len;
 }
 
@@ -173,15 +187,15 @@ int File::write(const void* buf, int len) {
     int written = -1;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
-//        int fcbNum = fcb.getBlockNumber();
-//        int currentBlockNum = currentBlockPtr->getBlockNumber();
-//        if (fcbNum == currentBlockNum) {
-//            freeList = FreeList(diskPtr, false);
-//            fileBlocks.addBlock();
-//            fileBlocks.getNextBlock();
-//            currentBlockPtr = fileBlocks.getCurrentBlock();
-//            blockBuf = currentBlockPtr->getBuffer();
-//        }
+    //        int fcbNum = fcb.getBlockNumber();
+    //        int currentBlockNum = currentBlockPtr->getBlockNumber();
+    //        if (fcbNum == currentBlockNum) {
+    //            freeList = FreeList(diskPtr, false);
+    //            fileBlocks.addBlock();
+    //            fileBlocks.getNextBlock();
+    //            currentBlockPtr = fileBlocks.getCurrentBlock();
+    //            blockBuf = currentBlockPtr->getBuffer();
+    //        }
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
@@ -223,7 +237,7 @@ int File::write(const void* buf, int len) {
     fcb.setPointer(fileBlocks.getNumberOfBlocks(), NUM_BLOCKS_PTR_INDEX);
     fcb.setPointer(endByte, END_BYTE_PTR_INDEX);
 
-    if (!fcb.write(diskPtr)|| !freeList.flush())
+    if (!fcb.write(diskPtr) || !freeList.flush())
         return -1; // error has occurred
 
     // Have written the desired amount
