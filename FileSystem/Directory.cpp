@@ -99,7 +99,11 @@ bool Directory::flush() {
 
     int directorySize = masterBlock.getPointer(5);
     unsigned char* buffer = new unsigned char[Disk::DEFAULT_BLOCK_SIZE];
-    int numBlocksNeeded = ((entryList.size() - 1) / ENTRIES_PER_BLOCK) + 1;
+    int numBlocksNeeded;
+    if (entryList.size() > 0)
+        numBlocksNeeded = ((entryList.size() - 1) / ENTRIES_PER_BLOCK) + 1;
+    else
+        numBlocksNeeded = 0;
 
     list<Entry> tempList(entryList);
 

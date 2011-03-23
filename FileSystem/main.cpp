@@ -33,7 +33,9 @@ void lab3test7Before();
 void lab3test7After();
 void lab3test8();
 void lab3test9();
-void lab3test10();
+void lab3test10a();
+void lab3test10b();
+void lab3test10c();
 void lab3test11();
 
 
@@ -82,8 +84,12 @@ int main() {
             outFile << "14) Run test 8" <<endl;
             cout << "15) Run test 9" <<endl;
             outFile << "15) Run test 9" <<endl;
-            cout << "16) Run test 10" <<endl;
-            outFile << "16) Run test 10" <<endl;
+            cout << "16) Run test 10a" <<endl;
+            outFile << "16) Run test 10a" <<endl;
+            cout << "17) Run test 10b" <<endl;
+            outFile << "17) Run test 10b" <<endl;
+            cout << "18) Run test 10c" <<endl;
+            outFile << "18) Run test 10c" <<endl;
         } else {
             cout << "..." << endl;
             outFile << "..." << endl;
@@ -158,7 +164,15 @@ int main() {
                     break;
 
                 case 16:
-                    lab3test10();
+                    lab3test10a();
+                    break;
+
+                case 17:
+                    lab3test10b();
+                    break;
+
+                case 18:
+                    lab3test10c();
                     break;
 
                 default:
@@ -2306,8 +2320,133 @@ void lab3test9() {
     outFile << "\n";
 }
 
-void lab3test10() {
+void lab3test10a() {
+    ofstream outFile;
+    outFile.open("test10a.txt");
+
+    bool creat;
+    bool readAccess;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, true);
+
+    //create a new file, open it for reading
+    cout << "Creating file test10" << endl;
+    outFile << "Creating file test10" << endl;
+
+    //file is created and added to directory in file ctor
+    creat = true;
+    readAccess = false;
+    File *f = new File("test10", creat, readAccess, &testDisk, dirPtr);
+
+    //make sure file is in directory
+    if (dirPtr->findFile("test10") != -1) {
+        cout << endl << "Succesfully created file a" << endl;
+        outFile << "\nSuccessfully created file a" << endl;
+        dirPtr->flush();
+    } else {
+        cout << endl << "File already exists a" << endl;
+        outFile << "\nFile already exists a" << endl;
+    }
+
+    cout << endl << "Closing file." <<endl;
+    outFile << endl << "Closing file." <<endl;
+    f->close();
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+    cout << "\nShutting down program." <<endl;
+    outFile << "\nShutting down program." <<endl;
+    cout << endl;
+    outFile << "\n";
+    exit(1);
+}
+
+void lab3test10b() {
+    ofstream outFile;
+    outFile.open("test10b.txt");
+
+    bool creat = false;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, creat);
+
+    cout << "Restarting program..."<<endl;
+    outFile << "Restarting program..."<<endl;
+
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    list<Entry> entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+
+    if (dirPtr->removeFile("test10")) {
+        cout << endl << "Successfully deleted file." << endl;
+        outFile << "\nSuccessfully deleted file." << endl;
+        if (!dirPtr->flush()) {
+            cout << "Error writing directory to disk." <<endl;
+            outFile << "Error writing directory to disk." <<endl;
+        }
+    } else {
+        cout << endl << "Couldn't delete file." << endl;
+        outFile << "\nCouldn't delete file." << endl;
+    }
     
+    cout << endl << "Entries: ";
+    outFile << "\nEntries: ";
+
+    entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+
+    cout << "\nShutting down program." <<endl;
+    outFile << "\nShutting down program." <<endl;
+
+    cout << endl;
+    outFile << "\n";
+
+    exit(1);
+}
+
+void lab3test10c() {
+    ofstream outFile;
+    outFile.open("test10c.txt");
+
+    bool creat = false;
+    Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+    Directory* dirPtr = new Directory(&testDisk, creat);
+
+    cout << "Restarting program..."<<endl;
+    outFile << "Restarting program..."<<endl;
+
+    cout << endl << "Entries: ";
+    outFile << endl << "\nEntries: ";
+
+    list<Entry> entryList = dirPtr->listEntries();
+    while (!entryList.empty()) {
+        Entry tempEntry = entryList.front();
+        cout << tempEntry.name << ", ";
+        outFile << tempEntry.name << ", ";
+        entryList.pop_front();
+    }
+
+    cout << "\n"<<endl;
+    outFile << "\n"<<endl;
 }
 
 void lab3test11() {

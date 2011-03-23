@@ -1,0 +1,8 @@
+Creating file test10
+
+Successfully created file a
+
+Closing file.
+
+Entries: test10, 
+Shutting down program.

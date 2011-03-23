@@ -1,0 +1,7 @@
+Restarting program...
+
+Entries: test10, 
+Successfully deleted file.
+
+Entries: 
+Shutting down program.
