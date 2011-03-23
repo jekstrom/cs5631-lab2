@@ -66,12 +66,12 @@ int main() {
             outFile << "6) Run test 4b (after Shutdown)" << endl;
             cout << "7) Create SOURCE" << endl;
             outFile << "7) Create SOURCE" << endl;
-            cout << "8) Create SOURCE" << endl;
-            outFile << "8) Create SOURCE" << endl;
-            cout << "9) Run test 5a" << endl;
-            outFile << "9) Run test 5a" << endl;
-            cout << "10) Run test 5b" << endl;
-            outFile << "10) Run test 5b" << endl;
+            cout << "8) Run test 5a" << endl;
+            outFile << "8) Run test 5a" << endl;
+            cout << "9) Run test 5b" << endl;
+            outFile << "9) Run test 5b" << endl;
+            cout << "10) Run test 6" << endl;
+            outFile << "10) Run test 6" << endl;
             cout << "11) Run test 11" << endl;
         } else {
             cout << "..." << endl;
@@ -1356,7 +1356,7 @@ void createSource() {
     //writeData = 100 byes
     string writeData = "01234567890123456789012345678901234567890123456789"
             "01234567890123456789012345678901234567890123456789";
-    outFile << "Data being written to file(x6): " << writeData << endl;
+    outFile << "Data being written to file(x100): " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
@@ -1367,10 +1367,7 @@ void createSource() {
                 writeData.size());
 
         if (writeResult != -1) {
-            //            cout << endl << writeResult <<
-            //                    " bytes of data written successfully" << endl;
-            //            outFile << "\n" << writeResult << " bytes of data"
-            //                    "successfully written" << endl;
+            totalBytes += writeResult;
             cout << endl << totalBytes <<
                     " total bytes of data written successfully" << endl;
             outFile << "\n" << totalBytes << " total bytes of data"
@@ -1379,7 +1376,7 @@ void createSource() {
             cout << endl << "Data written unsuccessfully" << endl;
             outFile << "\nData written unsuccessfully" << endl;
         }
-        totalBytes += writeResult;
+        
     }
 
     //close file
@@ -1437,13 +1434,12 @@ void lab3test5a() {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 
-        int readResult = f->read(readBuffer,
-                bytesToRead);
+        int readResult = f->read(readBuffer, bytesToRead);
 
         if (readResult != -1) {
             cout << endl << readResult <<
@@ -1467,21 +1463,26 @@ void lab3test5a() {
         writeResult = f2->write(writeData, 100);
 
         if (writeResult != -1) {
+            totalBytes += writeResult;
             cout << endl << totalBytes <<
-                    " total bytes of data written successfully" << endl;
+                    " total bytes of data written successfully to file 2" << endl;
             outFile << "\n" << totalBytes << " total bytes of data"
-                    "successfully written" << endl;
+                    "successfully written to file 2" << endl;
         } else {
-            cout << endl << "Data written unsuccessfully" << endl;
-            outFile << "\nData written unsuccessfully" << endl;
+            cout << endl << "Data written unsuccessfully to file 2" << endl;
+            outFile << "\nData written unsuccessfully to file 2" << endl;
         }
-        totalBytes += writeResult;
     }
 
     //close both files
     f->close();
     f2->close();
 
+    if (!dirPtr->flush()) {
+        cout << "Error flushing directory!"<<endl;
+        outFile << "Error flushing directory!"<<endl;
+        exit(1);
+    }
     //display directory entries
     entries = dirPtr->listEntries();
 
@@ -1497,31 +1498,31 @@ void lab3test5a() {
 
     //open DEST for reading, verify contents
     f2->open(true);
+
     bytesToRead = 100;
     for (int i = 0; i < 100; i++) {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 
-        int readResult = f->read(readBuffer,
-                bytesToRead);
+        int readResult = f2->read(readBuffer, bytesToRead);
 
         if (readResult != -1) {
             cout << endl << readResult <<
-                    " bytes of data read successfully" << endl;
+                    " bytes of data read successfully from file 2" << endl;
 
             outFile << "\n" << readResult << " bytes of data "
-                    "read successfully" << endl;
+                    "read successfully from file 2" << endl;
 
             cout << "Data read: " << readBuffer << endl;
             outFile << "Data read: " << readBuffer << endl;
         } else {
-            cout << endl << "Data read unsuccessfully" << endl;
-            outFile << "\nData read unsuccessfully" << endl;
+            cout << endl << "Data read unsuccessfully from file 2" << endl;
+            outFile << "\nData read unsuccessfully from file 2" << endl;
         }
     }
 }

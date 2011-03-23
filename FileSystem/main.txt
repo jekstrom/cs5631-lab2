@@ -6,6 +6,6 @@
 5) Run test 4a (Before Shutdown)
 6) Run test 4b (after Shutdown)
 7) Create SOURCE
-8) Create SOURCE
-9) Run test 5a
-10) Run test 5b
+8) Run test 5a
+9) Run test 5b
+10) Run test 6
