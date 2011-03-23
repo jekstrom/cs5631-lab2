@@ -1002,8 +1002,7 @@ void lab3test2b() {
     char *temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
         temp[i] = writeData.c_str()[i];
-    writeResult = f->write(temp,
-            writeData.size());
+    writeResult = f->write(temp, writeData.size());
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
@@ -1026,8 +1025,8 @@ void lab3test2b() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char readBuffer[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    char readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = '\0';
 
 
@@ -1047,14 +1046,16 @@ void lab3test2b() {
         outFile << "\nData read unsuccessfully" << endl;
     }
 
+    f->close();
+    f->open(true);
     //try to read past end of file
     //read 700 bytes, going past the 600 bytes
-    bytesToRead = 700;
+    bytesToRead = 650;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-//    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
