@@ -1109,10 +1109,12 @@ void lab3test3() {
 
     //writeData = 1 byte 100 times
     for (int i = 0; i < 100; i++) {
-        char* writeData[1];
-        int temp = i % 10;
-        writeData[0] = (char*) &temp;
-        outFile << "Data being written to file: " << writeData << endl;
+        char writeData[2] = {0};
+        if (i % 10 < 5)
+            writeData[0] = 'a';
+        else
+            writeData[0] = 'b';
+        outFile << "Data being written to file: " << *writeData << endl;
         int writeResult = -1;
         int totalBytes = 0;
         writeResult = f->write(writeData, 1);
@@ -1145,8 +1147,8 @@ void lab3test3() {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
         int readResult = f->read(readBuffer, bytesToRead);
@@ -1166,6 +1168,8 @@ void lab3test3() {
         }
     }
 
+    f->close();
+    f->open(true);
     //try to read past end of file
     //read 1 byte 101 times, going past the 100 bytes
     bytesToRead = 1;
@@ -2383,7 +2387,7 @@ void lab3test11() {
             fout << "file deleted successfully.\n";
 
         fout << endl;
-//        fout.flush();
+        //        fout.flush();
         cout << "Done with loop " << i + 1 << ".\n";
     }
 

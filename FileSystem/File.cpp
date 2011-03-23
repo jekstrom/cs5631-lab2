@@ -140,7 +140,7 @@ int File::read(void* buf, int len) {
         }
 
         readBuf[bytesRead] = blockBuf[currentByte + sizeof (int) + 1];
-
+        char temp = readBuf[bytesRead];
         //check null-termination
         if (readBuf[bytesRead] == 0 && endBlockNumber == currentBlockNumber)
             return bytesRead;

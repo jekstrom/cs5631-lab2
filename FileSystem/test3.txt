@@ -1,0 +1,1508 @@
+Creating file test3
+
+Successfully created file
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: a
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+Data being written to file: b
+
+1 bytes of datasuccessfully written
+
+0 total bytes of datasuccessfully written
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a‰Y∑‰Y∑ØM
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a„Y∑„Y∑
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: a
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+1 bytes of data read successfully
+Data read: b
+
+Bytes to read: 1
+
+0 bytes of data read successfully
+Data read: 
