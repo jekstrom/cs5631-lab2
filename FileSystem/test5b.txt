@@ -1,0 +1,48 @@
+Creating file X
+
+Successfully created file
+Creating file Y
+
+Successfully created file
+Data being written to file: 0123456789
+
+10 bytes of datasuccessfully written to X
+Data being written to file: 0123456789
+
+10 bytes of datasuccessfully written to Y
+Data being written to file: 0123456789
+
+10 bytes of datasuccessfully written to X
+Data being written to file(x6): 0123456789
+
+10 bytes of datasuccessfully written to Y
+
+Bytes to read: 10
+
+10 bytes of data read successfully from X
+Data read: 0123456789
+
+Bytes to read: 10
+
+10 bytes of data read successfully from Y
+Data read: 0123456789
+
+Bytes to read: 10
+
+10 bytes of data read successfully from X
+Data read: 0123456789
+
+Bytes to read: 10
+
+10 bytes of data read successfully from Y
+Data read: 0123456789
+
+Bytes to read: 21
+
+20 bytes of data read successfully from X
+Data read: 01234567890123456789
+
+Bytes to read: 21
+
+20 bytes of data read successfully from Y
+Data read: 01234567890123456789

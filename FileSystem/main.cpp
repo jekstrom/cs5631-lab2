@@ -1530,11 +1530,10 @@ void lab3test5a() {
 void lab3test5b() {
     ofstream outFile;
     outFile.open("test5b.txt");
-    bool creat = false;
-    bool readAccess = true;
+    bool creat = true;
+    bool readAccess = false;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     Directory* dirPtr = new Directory(&testDisk, creat);
-    list<Entry> entries;
 
     //create a new file, x, open it for writing
     cout << "Creating file X" << endl;
@@ -1577,83 +1576,48 @@ void lab3test5b() {
 
     //write bytes into X
     //writeData = 600 byes
-    string writeData = "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789";
-    outFile << "Data being written to file(x6): " << writeData << endl;
+    string writeData = "0123456789";
+    outFile << "Data being written to file: " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
         temp[i] = writeData.c_str()[i];
-    writeResult = f->write(temp,
-            writeData.size());
+    writeResult = f->write(temp, writeData.size());
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
-                " bytes of data written successfully" << endl;
+                " bytes of data written successfully to X" << endl;
         outFile << "\n" << writeResult << " bytes of data"
-                "successfully written" << endl;
+                "successfully written to X" << endl;
     } else {
-        cout << endl << "Data written unsuccessfully" << endl;
-        outFile << "\nData written unsuccessfully" << endl;
+        cout << endl << "Data written unsuccessfully to X" << endl;
+        outFile << "\nData written unsuccessfully to X" << endl;
     }
 
     //write data to Y
     //writeData = 600 byes
-    writeData = "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789";
-    outFile << "Data being written to file(x6): " << writeData << endl;
+    writeData = "0123456789";
+    outFile << "Data being written to file: " << writeData << endl;
     writeResult = -1;
     temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
         temp[i] = writeData.c_str()[i];
-    writeResult = f2->write(temp,
-            writeData.size());
+    writeResult = f2->write(temp, writeData.size());
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
-                " bytes of data written successfully" << endl;
+                " bytes of data written successfully to Y" << endl;
         outFile << "\n" << writeResult << " bytes of data"
-                "successfully written" << endl;
+                "successfully written to Y" << endl;
     } else {
-        cout << endl << "Data written unsuccessfully" << endl;
-        outFile << "\nData written unsuccessfully" << endl;
+        cout << endl << "Data written unsuccessfully to Y" << endl;
+        outFile << "\nData written unsuccessfully to Y" << endl;
     }
 
     //write bytes into X
     //writeData = 600 byes
-    writeData = "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789";
-    outFile << "Data being written to file(x6): " << writeData << endl;
+    writeData = "0123456789";
+    outFile << "Data being written to file: " << writeData << endl;
     writeResult = -1;
     temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
@@ -1663,44 +1627,32 @@ void lab3test5b() {
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
-                " bytes of data written successfully" << endl;
+                " bytes of data written successfully to X" << endl;
         outFile << "\n" << writeResult << " bytes of data"
-                "successfully written" << endl;
+                "successfully written to X" << endl;
     } else {
-        cout << endl << "Data written unsuccessfully" << endl;
-        outFile << "\nData written unsuccessfully" << endl;
+        cout << endl << "Data written unsuccessfully to X" << endl;
+        outFile << "\nData written unsuccessfully to X" << endl;
     }
 
     //write data to Y
     //writeData = 600 byes
-    writeData = "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789"
-            "01234567890123456789012345678901234567890123456789";
+    writeData = "0123456789";
     outFile << "Data being written to file(x6): " << writeData << endl;
     writeResult = -1;
     temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
         temp[i] = writeData.c_str()[i];
-    writeResult = f2->write(temp,
-            writeData.size());
+    writeResult = f2->write(temp, writeData.size());
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
-                " bytes of data written successfully" << endl;
+                " bytes of data written successfully to Y" << endl;
         outFile << "\n" << writeResult << " bytes of data"
-                "successfully written" << endl;
+                "successfully written to Y" << endl;
     } else {
-        cout << endl << "Data written unsuccessfully" << endl;
-        outFile << "\nData written unsuccessfully" << endl;
+        cout << endl << "Data written unsuccessfully to Y" << endl;
+        outFile << "\nData written unsuccessfully to Y" << endl;
     }
 
     //close both files
@@ -1712,37 +1664,37 @@ void lab3test5b() {
     f2->open(true);
 
     //read from X
-    int bytesToRead = 600;
+    int bytesToRead = 10;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char* readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    char readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
     int readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from X" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from X" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from X" << endl;
+        outFile << "\nData read unsuccessfully from X" << endl;
     }
 
     //read from Y
-    bytesToRead = 600;
+    bytesToRead = 10;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
@@ -1750,50 +1702,50 @@ void lab3test5b() {
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from Y" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from Y" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from Y" << endl;
+        outFile << "\nData read unsuccessfully from Y" << endl;
     }
 
     //read from X
-    bytesToRead = 600;
+    bytesToRead = 10;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
     readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from X" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from X" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from X" << endl;
+        outFile << "\nData read unsuccessfully from X" << endl;
     }
 
     //read from Y
-    bytesToRead = 600;
+    bytesToRead = 10;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
@@ -1801,50 +1753,55 @@ void lab3test5b() {
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from Y" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from Y" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from Y" << endl;
+        outFile << "\nData read unsuccessfully from Y" << endl;
     }
 
+    f->close();
+    f2->close();
+    f->open(true);
+    f2->open(true);
+
     //read too much from X
-    bytesToRead = 601;
+    bytesToRead = 21;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
     readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from X" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from X" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from X" << endl;
+        outFile << "\nData read unsuccessfully from X" << endl;
     }
 
     //read too much from Y
-    bytesToRead = 601;
+    bytesToRead = 21;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
@@ -1852,16 +1809,16 @@ void lab3test5b() {
 
     if (readResult != -1) {
         cout << endl << readResult <<
-                " bytes of data read successfully" << endl;
+                " bytes of data read successfully from Y" << endl;
 
         outFile << "\n" << readResult << " bytes of data "
-                "read successfully" << endl;
+                "read successfully from Y" << endl;
 
         cout << "Data read: " << readBuffer << endl;
         outFile << "Data read: " << readBuffer << endl;
     } else {
-        cout << endl << "Data read unsuccessfully" << endl;
-        outFile << "\nData read unsuccessfully" << endl;
+        cout << endl << "Data read unsuccessfully from Y" << endl;
+        outFile << "\nData read unsuccessfully from Y" << endl;
     }
 
     delete f;
