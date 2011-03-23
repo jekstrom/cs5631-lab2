@@ -73,6 +73,11 @@ int main() {
             cout << "10) Run test 6" << endl;
             outFile << "10) Run test 6" << endl;
             cout << "11) Run test 11" << endl;
+            outFile << "11) Run test 11" << endl;
+            cout << "12) Run test 7 Before" <<endl;
+            outFile << "12) Run test 7 Before" <<endl;
+            cout << "13) Run test 7 After" <<endl;
+            outFile << "13) Run test 7 After" <<endl;
         } else {
             cout << "..." << endl;
             outFile << "..." << endl;
@@ -122,13 +127,26 @@ int main() {
                     lab3test5b();
                     break;
 
+                case 10: //run test 6
+                    lab3test6();
+                    break;
+
                 case 11:
                     lab3test11();
+                    break;
+
+                case 12:
+                    lab3test7Before();
+                    break;
+
+                case 13:
+                    lab3test7After();
                     break;
 
                 default:
                     cout << "bad input";
                     break;
+
             }
 
         }
@@ -1843,9 +1861,6 @@ void lab3test6() {
     creat = true;
     readAccess = false;
     File *f = new File("test6", creat, readAccess, &testDisk, dirPtr);
-    //    files.push_back(*f);
-
-    //maybe have addfile(File) ???
 
     //make sure file is in directory
     if (dirPtr->findFile("test6") != -1) {
@@ -1859,6 +1874,7 @@ void lab3test6() {
     }
 
     string writeData = "012345";
+    cout << "Data being written to file: " << writeData << endl;
     outFile << "Data being written to file: " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
@@ -1882,6 +1898,7 @@ void lab3test6() {
 
     f->open(false);
     writeData = "6789";
+    cout << "Data being written to file: " << writeData << endl;
     outFile << "Data being written to file: " << writeData << endl;
     writeResult = -1;
     temp = new char[writeData.size()];
@@ -1911,13 +1928,12 @@ void lab3test6() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char* readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    char readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
-    int readResult = f->read(readBuffer,
-            bytesToRead);
+    int readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
@@ -1933,19 +1949,20 @@ void lab3test6() {
         outFile << "\nData read unsuccessfully" << endl;
     }
 
+    f->close();
+    f->open(true);
+
     //try to read past end of file
     //file only has 10 bytes
     bytesToRead = 20;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
-    readResult = f->read(readBuffer,
-            bytesToRead);
+    readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
@@ -1981,9 +1998,6 @@ void lab3test7Before() {
     creat = true;
     readAccess = false;
     File *f = new File("test7", creat, readAccess, &testDisk, dirPtr);
-    //    files.push_back(*f);
-
-    //maybe have addfile(File) ???
 
     //make sure file is in directory
     if (dirPtr->findFile("test7") != -1) {
@@ -2029,13 +2043,13 @@ void lab3test7After() {
     File *f = new File("test7", false, false, &testDisk, dirPtr);
 
     string writeData = "6789";
+    cout << "Data being written to file: " << writeData << endl;
     outFile << "Data being written to file: " << writeData << endl;
     int writeResult = -1;
     char *temp = new char[writeData.size()];
     for (int i = 0; i < writeData.size(); i++)
         temp[i] = writeData.c_str()[i];
-    writeResult = f->write(temp,
-            writeData.size());
+    writeResult = f->write(temp, writeData.size());
 
     if (writeResult != -1) {
         cout << endl << writeResult <<
@@ -2058,13 +2072,11 @@ void lab3test7After() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char* readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    char readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
-
-    int readResult = f->read(readBuffer,
-            bytesToRead);
+    int readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
@@ -2080,19 +2092,19 @@ void lab3test7After() {
         outFile << "\nData read unsuccessfully" << endl;
     }
 
+    f->close();
+    f->open(true);
     //try to read past end of file
     //file only has 10 bytes
     bytesToRead = 20;
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
-    readResult = f->read(readBuffer,
-            bytesToRead);
+    readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<

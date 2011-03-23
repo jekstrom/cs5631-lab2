@@ -9,3 +9,6 @@
 8) Run test 5a
 9) Run test 5b
 10) Run test 6
+11) Run test 11
+12) Run test 7 Before
+13) Run test 7 After

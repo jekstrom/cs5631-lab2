@@ -71,8 +71,8 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
 }
 
 File::~File() {
-//    if (currentBlockPtr != NULL)
-//        delete currentBlockPtr;
+    //    if (currentBlockPtr != NULL)
+    //        delete currentBlockPtr;
 }
 
 bool File::open(bool readAccess) {
@@ -173,15 +173,15 @@ int File::write(const void* buf, int len) {
     int written = -1;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
-//    int fcbNum = fcb.getBlockNumber();
-//    int currentBlockNum = currentBlockPtr->getBlockNumber();
-//    if (fcbNum == currentBlockNum) {
-//        freeList = FreeList(diskPtr, false);
-//        fileBlocks.addBlock();
-//        fileBlocks.getNextBlock();
-//        currentBlockPtr = fileBlocks.getCurrentBlock();
-//        blockBuf = currentBlockPtr->getBuffer();
-//    }
+//        int fcbNum = fcb.getBlockNumber();
+//        int currentBlockNum = currentBlockPtr->getBlockNumber();
+//        if (fcbNum == currentBlockNum) {
+//            freeList = FreeList(diskPtr, false);
+//            fileBlocks.addBlock();
+//            fileBlocks.getNextBlock();
+//            currentBlockPtr = fileBlocks.getCurrentBlock();
+//            blockBuf = currentBlockPtr->getBuffer();
+//        }
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
@@ -214,13 +214,16 @@ int File::write(const void* buf, int len) {
     if (written < 0)
         written = len;
 
+    if (!currentBlockPtr->write(diskPtr))
+        return -1;
+
     // write changes to disk
     fcb.setPointer(fileBlocks.getStartBlockNumber(), START_BLOCK_PTR_INDEX);
     fcb.setPointer(fileBlocks.getEndBlockNumber(), END_BLOCK_PTR_INDEX);
     fcb.setPointer(fileBlocks.getNumberOfBlocks(), NUM_BLOCKS_PTR_INDEX);
     fcb.setPointer(endByte, END_BYTE_PTR_INDEX);
 
-    if (!fcb.write(diskPtr) || !currentBlockPtr->write(diskPtr) || !freeList.flush())
+    if (!fcb.write(diskPtr)|| !freeList.flush())
         return -1; // error has occurred
 
     // Have written the desired amount
