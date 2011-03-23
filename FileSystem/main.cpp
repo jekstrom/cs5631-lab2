@@ -46,6 +46,7 @@ void lab3test11();
  */
 int main() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+//    Directory dir(&testDisk, true); // is needed for test 11
     ofstream outFile;
     outFile.open("main.txt");
     int command = -1;
@@ -2501,8 +2502,6 @@ void lab3test11() {
 
         fout << "Opening file for reading... ";
         f->open(true);
-        //        delete f;
-        //        f = new File("file1", false, true, &testDisk, &dir);
         fout << "file open for reading\n";
 
         fout << "Reading " << testSize << " bytes from file... ";
@@ -2529,10 +2528,6 @@ void lab3test11() {
                 fout << "Error: file data is incorrect.\n";
         }
 
-        //reset file pointer
-        f->close();
-        f->open(true);
-
         for (int i = 0; i < sizeof (readBuf); i++)
             readBuf[i] = 0;
 
@@ -2553,7 +2548,6 @@ void lab3test11() {
             fout << "file deleted successfully.\n";
 
         fout << endl;
-        //        fout.flush();
         cout << "Done with loop " << i + 1 << ".\n";
     }
 
