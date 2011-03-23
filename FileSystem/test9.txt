@@ -4,6 +4,10 @@ Successfully created file a
 
 Successfully created file b
 
+Closing file a.
+
+Closing file b.
+
 Entries: test9a, test9b, 
 
 Successfully deleted file a

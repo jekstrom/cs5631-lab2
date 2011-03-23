@@ -78,6 +78,12 @@ int main() {
             outFile << "12) Run test 7 Before" <<endl;
             cout << "13) Run test 7 After" <<endl;
             outFile << "13) Run test 7 After" <<endl;
+            cout << "14) Run test 8" <<endl;
+            outFile << "14) Run test 8" <<endl;
+            cout << "15) Run test 9" <<endl;
+            outFile << "15) Run test 9" <<endl;
+            cout << "16) Run test 10" <<endl;
+            outFile << "16) Run test 10" <<endl;
         } else {
             cout << "..." << endl;
             outFile << "..." << endl;
@@ -141,6 +147,18 @@ int main() {
 
                 case 13:
                     lab3test7After();
+                    break;
+
+                case 14:
+                    lab3test8();
+                    break;
+
+                case 15:
+                    lab3test9();
+                    break;
+
+                case 16:
+                    lab3test10();
                     break;
 
                 default:
@@ -2213,15 +2231,11 @@ void lab3test9() {
     readAccess = false;
     File *fa = new File("test9a", creat, readAccess, &testDisk, dirPtr);
     File *fb = new File("test9b", creat, readAccess, &testDisk, dirPtr);
-    //    files.push_back(*f);
-
-    //maybe have addfile(File) ???
 
     //make sure file is in directory
     if (dirPtr->findFile("test9a") != -1) {
         cout << endl << "Succesfully created file a" << endl;
         outFile << "\nSuccessfully created file a" << endl;
-        //write changes to disk ??
         dirPtr->flush();
     } else {
         cout << endl << "File already exists a" << endl;
@@ -2232,14 +2246,17 @@ void lab3test9() {
     if (dirPtr->findFile("test9b") != -1) {
         cout << endl << "Succesfully created file b" << endl;
         outFile << "\nSuccessfully created file b" << endl;
-        //write changes to disk ??
         dirPtr->flush();
     } else {
         cout << endl << "File already exists b" << endl;
         outFile << "\nFile already exists b" << endl;
     }
 
+    cout << endl << "Closing file a." <<endl;
+    outFile << endl << "Closing file a." <<endl;
     fa->close();
+    cout << endl << "Closing file b." <<endl;
+    outFile << endl << "Closing file b." <<endl;
     fb->close();
 
     cout << endl << "Entries: ";
@@ -2287,6 +2304,10 @@ void lab3test9() {
 
     cout << endl;
     outFile << "\n";
+}
+
+void lab3test10() {
+    
 }
 
 void lab3test11() {

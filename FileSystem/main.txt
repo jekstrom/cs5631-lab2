@@ -12,3 +12,6 @@
 11) Run test 11
 12) Run test 7 Before
 13) Run test 7 After
+14) Run test 8
+15) Run test 9
+16) Run test 10
