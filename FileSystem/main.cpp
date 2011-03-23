@@ -2452,7 +2452,10 @@ void lab3test10c() {
 void lab3test11() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     Directory dir(&testDisk, false);
-    fstream fout("/home/kaleb/Desktop/test11.txt", fstream::out);
+    
+    ofstream fout;
+    fout.open("test11.txt");
+
     char testMsg[22] = "Feeling stressed yet?";
     int testSize = sizeof (testMsg);
     fout << "Beginning of test.\n\n";
@@ -2475,18 +2478,22 @@ void lab3test11() {
         else
             fout << "file closed successfully.\n";
 
-        fout << "Opening file for writing... ";
-        delete f;
-        f = new File("file1", false, true, &testDisk, &dir);
+        fout << "Opening file for reading... ";
+        f->open(true);
+//        delete f;
+//        f = new File("file1", false, true, &testDisk, &dir);
         fout << "file open for reading\n";
 
         fout << "Reading " << testSize << " bytes from file... ";
-        char readBuf[testSize];
+        char readBuf[testSize + 1];
+        for (int i = 0; i < sizeof(readBuf); i++)
+            readBuf[i] = 0;
         int bytesRead = f->read(readBuf, testSize);
         if (0 > bytesRead)
             fout << "Error: could not read from file.\n";
         else {
-            fout << "read " << bytesRead << " bytes from file. ";
+            fout << "read " << bytesRead << " bytes from file. " << endl;
+            fout << "Data read: " << readBuf << "\n";
 
             bool match = true;
             for (int j = 0; j < testSize; j++)
@@ -2501,12 +2508,22 @@ void lab3test11() {
                 fout << "Error: file data is incorrect.\n";
         }
 
+        //reset file pointer
+        f->close();
+        f->open(true);
+        
+        for (int i = 0; i < sizeof(readBuf); i++)
+            readBuf[i] = 0;
+
         fout << "Attempting to read furthur... ";
+
         bytesRead = f->read(readBuf, testSize);
         if (0 > bytesRead)
             fout << "Error: could not read from file.\n";
-        else
+        else {
             fout << "read " << bytesRead << " bytes from file.\n";
+            fout << "Data read: " << readBuf << "\n";
+        }
 
         fout << "Deleting file... ";
         if (!f->deleteFile())
