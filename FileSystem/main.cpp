@@ -44,7 +44,6 @@ void lab3test11();
  */
 int main() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory dir(&testDisk, true);
     ofstream outFile;
     outFile.open("main.txt");
     int command = -1;
@@ -1177,8 +1176,8 @@ void lab3test3() {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 
@@ -1242,8 +1241,7 @@ void lab3test4a() {
         temp[i] = writeData.c_str()[i];
     int totalBytes = 0;
     for (int i = 0; i < 6; i++) { //write 600 bytes to disk
-        writeResult = f->write(temp,
-                writeData.size());
+        writeResult = f->write(temp, writeData.size());
 
         if (writeResult != -1) {
             cout << endl << writeResult <<
@@ -1294,12 +1292,12 @@ void lab3test4b() {
     }
 
     int bytesToRead = 100;
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 6; i++) {
         cout << endl << "Bytes to read: " << bytesToRead;
         outFile << "\nBytes to read: " << bytesToRead << endl;
 
-        char* readBuffer = new char[bytesToRead];
-        for (int i = 0; i < bytesToRead; i++)
+        char readBuffer[bytesToRead + 1];
+        for (int i = 0; i < bytesToRead + 1; i++)
             readBuffer[i] = 0;
 
 

@@ -1005,12 +1005,12 @@ Data read: b
 Bytes to read: 1
 
 1 bytes of data read successfully
-Data read: aäY·äY·¯M
+Data read: a
 
 Bytes to read: 1
 
 1 bytes of data read successfully
-Data read: aãY·ğãY·
+Data read: a
 
 Bytes to read: 1
 

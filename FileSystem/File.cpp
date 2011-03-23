@@ -71,8 +71,8 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
 }
 
 File::~File() {
-    if (currentBlockPtr != NULL)
-        delete currentBlockPtr;
+//    if (currentBlockPtr != NULL)
+//        delete currentBlockPtr;
 }
 
 bool File::open(bool readAccess) {
