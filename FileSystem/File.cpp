@@ -24,6 +24,7 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, Directory*
             if (blkPtr == NULL)
                 throw new exception; // free list is empty
             fcb = *blkPtr;
+            freeList.flush(); // save changes to free list
 
             directoryPtr->addFile(filename, fcb.getBlockNumber());
             // need to reload free list in case directory made changes to it
@@ -173,15 +174,15 @@ int File::write(const void* buf, int len) {
     int written = -1;
     currentBlockPtr = fileBlocks.getCurrentBlock();
     unsigned char* blockBuf = currentBlockPtr->getBuffer();
-    int fcbNum = fcb.getBlockNumber();
-    int currentBlockNum = currentBlockPtr->getBlockNumber();
-    if (fcbNum == currentBlockNum) {
-        freeList = FreeList(diskPtr, false);
-        fileBlocks.addBlock();
-        fileBlocks.getNextBlock();
-        currentBlockPtr = fileBlocks.getCurrentBlock();
-        blockBuf = currentBlockPtr->getBuffer();
-    }
+//    int fcbNum = fcb.getBlockNumber();
+//    int currentBlockNum = currentBlockPtr->getBlockNumber();
+//    if (fcbNum == currentBlockNum) {
+//        freeList = FreeList(diskPtr, false);
+//        fileBlocks.addBlock();
+//        fileBlocks.getNextBlock();
+//        currentBlockPtr = fileBlocks.getCurrentBlock();
+//        blockBuf = currentBlockPtr->getBuffer();
+//    }
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {

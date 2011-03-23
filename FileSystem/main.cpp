@@ -73,6 +73,7 @@ int main() {
             outFile << "9) Run test 5a" << endl;
             cout << "10) Run test 5b" << endl;
             outFile << "10) Run test 5b" << endl;
+            cout << "11) Run test 11" << endl;
         } else {
             cout << "..." << endl;
             outFile << "..." << endl;
@@ -120,6 +121,10 @@ int main() {
 
                 case 9: //run test 5b
                     lab3test5b();
+                    break;
+
+                case 11:
+                    lab3test11();
                     break;
 
                 default:
@@ -1021,13 +1026,12 @@ void lab3test2b() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char* readBuffer = new char[bytesToRead];
+    char readBuffer[bytesToRead];
     for (int i = 0; i < bytesToRead; i++)
-        readBuffer[i] = 0;
+        readBuffer[i] = '\0';
 
 
-    int readResult = f->read(readBuffer,
-            bytesToRead);
+    int readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
@@ -1049,13 +1053,12 @@ void lab3test2b() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
+//    readBuffer = new char[bytesToRead];
     for (int i = 0; i < bytesToRead; i++)
         readBuffer[i] = 0;
 
 
-    readResult = f->read(readBuffer,
-            bytesToRead);
+    readResult = f->read(readBuffer, bytesToRead);
 
     if (readResult != -1) {
         cout << endl << readResult <<
@@ -2322,6 +2325,7 @@ void lab3test11() {
     fout << "Beginning of test.\n\n";
 
     for (int i = 0; i < 1000; i++) {
+        fout << "Iteration number " << i << endl;
         fout << "Creating new file... ";
         File* f = new File("file1", true, false, &testDisk, &dir);
         fout << "file created successfully, open for writing.\n";
@@ -2341,7 +2345,7 @@ void lab3test11() {
         fout << "Opening file for writing... ";
         delete f;
         f = new File("file1", false, true, &testDisk, &dir);
-        fout << "file open for reading\n.";
+        fout << "file open for reading\n";
 
         fout << "Reading " << testSize << " bytes from file... ";
         char readBuf[testSize];
@@ -2377,8 +2381,8 @@ void lab3test11() {
         else
             fout << "file deleted successfully.\n";
 
-        fout << "\n";
-        fout.flush();
+        fout << endl;
+//        fout.flush();
         cout << "Done with loop " << i + 1 << ".\n";
     }
 
