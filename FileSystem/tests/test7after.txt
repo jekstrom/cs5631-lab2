@@ -1,0 +1,13 @@
+Data being written to file: 6789
+
+4 bytes of datasuccessfully written
+
+Bytes to read: 10
+
+10 bytes of data read successfully
+Data read: 0123456789
+
+Bytes to read: 20
+
+10 bytes of data read successfully
+Data read: 0123456789

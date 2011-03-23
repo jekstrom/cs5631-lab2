@@ -1427,7 +1427,7 @@ void createSource() {
         outFile << "\nFile already exists" << endl;
     }
 
-    //writeData = 100 byes
+    //writeData = 100 bytes
     string writeData = "01234567890123456789012345678901234567890123456789"
             "01234567890123456789012345678901234567890123456789";
     outFile << "Data being written to file(x100): " << writeData << endl;
@@ -1437,15 +1437,14 @@ void createSource() {
         temp[i] = writeData.c_str()[i];
     int totalBytes = 0;
     for (int i = 0; i < 100; i++) { //write 10,000 bytes to disk
-        writeResult = f->write(temp,
-                writeData.size());
+        writeResult = f->write(temp, 100);
 
         if (writeResult != -1) {
             totalBytes += writeResult;
             cout << endl << totalBytes <<
                     " total bytes of data written successfully" << endl;
             outFile << "\n" << totalBytes << " total bytes of data"
-                    "successfully written" << endl;
+                    " successfully written" << endl;
         } else {
             cout << endl << "Data written unsuccessfully" << endl;
             outFile << "\nData written unsuccessfully" << endl;
@@ -1531,18 +1530,16 @@ void lab3test5a() {
     }
 
     int writeResult = -1;
-    char *writeData = new char[sizeof(readBuffer)];
-    writeData = readBuffer;
     int totalBytes = 0;
     for (int i = 0; i < 100; i++) { //write those 10,000 bytes to DEST
-        writeResult = f2->write(writeData, 100);
+        writeResult = f2->write(readBuffer, 100);
 
         if (writeResult != -1) {
             totalBytes += writeResult;
             cout << endl << totalBytes <<
                     " total bytes of data written successfully to file 2" << endl;
             outFile << "\n" << totalBytes << " total bytes of data"
-                    "successfully written to file 2" << endl;
+                    " successfully written to file 2" << endl;
         } else {
             cout << endl << "Data written unsuccessfully to file 2" << endl;
             outFile << "\nData written unsuccessfully to file 2" << endl;
@@ -2039,7 +2036,7 @@ void lab3test6() {
 
 void lab3test7Before() {
     ofstream outFile;
-    outFile.open("test7.txt");
+    outFile.open("test7before.txt");
 
     bool creat;
     bool readAccess;
@@ -2091,7 +2088,7 @@ void lab3test7Before() {
 
 void lab3test7After() {
     ofstream outFile;
-    outFile.open("test7.txt");
+    outFile.open("test7after.txt");
 
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     Directory* dirPtr = new Directory(&testDisk, false);

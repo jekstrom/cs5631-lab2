@@ -1,0 +1,6 @@
+Creating file test7
+
+Successfully created file
+Data being written to file: 012345
+
+6 bytes of datasuccessfully written
