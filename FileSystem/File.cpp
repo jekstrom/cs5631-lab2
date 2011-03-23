@@ -141,6 +141,10 @@ int File::read(void* buf, int len) {
 
         readBuf[bytesRead] = blockBuf[currentByte + sizeof(int) + 1];
 
+        //check null-termination
+        if(readBuf[bytesRead] == 0)
+            return bytesRead;
+        
         if (currentByte == lastByteIndex) {
             // advance to next block
             fileBlocks.getNextBlock();
@@ -181,6 +185,9 @@ int File::write(const void* buf, int len) {
 
     for (int bytesWritten = 0; bytesWritten < len; bytesWritten++) {
         if (currentByte == lastByteIndex) {
+
+            //write out changes to disk
+            currentBlockPtr->write(diskPtr);
 
             freeList = FreeList(diskPtr, false); // update free list
 

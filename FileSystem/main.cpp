@@ -758,8 +758,8 @@ void lab3test1() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    char* readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    char readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 
@@ -788,8 +788,8 @@ void lab3test1() {
     cout << endl << "Bytes to read: " << bytesToRead;
     outFile << "\nBytes to read: " << bytesToRead << endl;
 
-    readBuffer = new char[bytesToRead];
-    for (int i = 0; i < bytesToRead; i++)
+    readBuffer[bytesToRead + 1];
+    for (int i = 0; i < bytesToRead + 1; i++)
         readBuffer[i] = 0;
 
 

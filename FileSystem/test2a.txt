@@ -27,10 +27,6 @@ Data being written to file(x6): 012345678901234567890123456789012345678901234567
 
 600 total bytes of datasuccessfully written
 
-100 bytes of datasuccessfully written
-
-700 total bytes of datasuccessfully written
-
 Bytes to read: 100
 
 100 bytes of data read successfully
@@ -58,8 +54,8 @@ Data read: 012345678901234567890123456789012345678901234567890123456789012345678
 
 Bytes to read: 100
 
-100 bytes of data read successfully
-Data read: 
+7 bytes of data read successfully
+Data read: 0123456
 ----------------------------
 Reading 7 times (700 bytes)
 
@@ -90,12 +86,12 @@ Data read: 012345678901234567890123456789012345678901234567890123456789012345678
 
 Bytes to read: 100
 
-100 bytes of data read successfully
-Data read: 
+7 bytes of data read successfully
+Data read: 0123456
 
 Trying to read past EOF
 
 Bytes to read: 100
 
-100 bytes of data read successfully
-Data read: 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+0 bytes of data read successfully
+Data read: 

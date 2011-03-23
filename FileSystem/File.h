@@ -74,7 +74,7 @@ public:
     /**
      * Reads from the file at the current location of the file pointer. The file
      * pointer will be advanced by the number of bytes read.
-     * @param buf The buffer to read bytes into
+     * @param buf The null-terminated buffer to read bytes into
      * @param len The number of bytes to read
      * @return -1 if failure, 0 if end of file, else number of bytes read
      */
