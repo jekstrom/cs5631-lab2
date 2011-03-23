@@ -5,10 +5,6 @@ Data being written to file(x6): 012345678901234567890123456789012345678901234567
 
 100 bytes of datasuccessfully written
 
-0 total bytes of datasuccessfully written
-
-100 bytes of datasuccessfully written
-
 100 total bytes of datasuccessfully written
 
 100 bytes of datasuccessfully written
@@ -26,4 +22,8 @@ Data being written to file(x6): 012345678901234567890123456789012345678901234567
 100 bytes of datasuccessfully written
 
 500 total bytes of datasuccessfully written
+
+100 bytes of datasuccessfully written
+
+600 total bytes of datasuccessfully written
 Shutting down program...
