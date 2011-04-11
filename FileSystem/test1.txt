@@ -1,0 +1,20 @@
+Creating file test1
+
+Successfully created file
+Data being written to file: 0123456789
+
+10 bytes of datasuccessfully written
+
+Bytes to read: 10
+
+10 bytes of data read successfully
+<<<<<<< .mine
+Data read: 0123456789
+=======
+Data read: 0123456789
+>>>>>>> .r119
+
+Bytes to read: 20
+
+10 bytes of data read successfully
+Data read: 0123456789
