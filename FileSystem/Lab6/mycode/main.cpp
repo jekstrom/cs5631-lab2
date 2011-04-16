@@ -178,16 +178,8 @@ CompleteSetupSystem css; // first line of main
             hints.ai_canonname = NULL;
             hints.ai_next = NULL;
 
-//            char* hostnamePtr;
-            if(hostname == "localhost")
-            {
-                hostname = "127.0.0.1";
-//                char hostName[MAXHOSTNAMELEN];
-//                hostnamePtr = hostName;
-//                gethostname(hostnamePtr, MAXHOSTNAMELEN);
-            }
-//            else
-//                hostnamePtr = (char*) hostname.c_str();
+            if(hostname == "localhost")            
+                hostname = "127.0.0.1";            
 
             struct addrinfo* result;
             getaddrinfo(hostname.c_str(), (const char*) port, &hints, &result);
