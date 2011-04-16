@@ -1,13 +1,7 @@
 #include "system/SetupSystem.h"
 #include "message/Message.h"
 #include <iostream>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/param.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include "headerFiles.h"
 
 using namespace muscle;
 using namespace std;
@@ -17,7 +11,7 @@ CompleteSetupSystem css; // first line of main
 
     int cmdIndex = 1;
     char* cmd = argv[cmdIndex];
-    boolean isServer = false;
+    bool isServer = false;
 
     string arg(cmd);
 
@@ -54,8 +48,11 @@ CompleteSetupSystem css; // first line of main
                 cmd = argv[cmdIndex];
                 maxConnections = atoi((const char*) cmd);
             }
-            eles
+            else
                 cout << arg << " is not a valid command." << endl;
+
+            cmdIndex++;
+            cmd = argv[cmdIndex];
         }
 
         // create IPv4 TCP/IP socket
@@ -75,7 +72,7 @@ CompleteSetupSystem css; // first line of main
         struct addrinfo* result;
         getaddrinfo(NULL, port, &hints, &result);
 
-        if(-1 == bind(this->getSid(), result->ai_addr, result->ai_addrlen))
+        if(-1 == bind(sid, result->ai_addr, result->ai_addrlen))
         {
             cout << "Error: failed in binding socket. errno = " << errno << endl;
             return EXIT_FAILURE;
@@ -103,7 +100,7 @@ CompleteSetupSystem css; // first line of main
         // accept connection request
         struct sockaddr_in* addrPtr;
         socklen_t len = (socklen_t) sizeof(struct sockaddr_in);
-        int clientSid = accept(this->getSid(), (struct sockaddr *) addrPtr, &len);
+        int clientSid = accept(sid, (struct sockaddr *) addrPtr, &len);
 
         if(0 > clientSid)
         {
@@ -119,16 +116,21 @@ CompleteSetupSystem css; // first line of main
         int length = 64;
         char buffer[length];
         char* bPtr = buffer;
-        const char* msg = "Message received.";
+        string msgStr = "Message acknowledged.";
+        const char* msg = msgStr.c_str();
         while(true)
         {
             if(0 > recv(clientSid, bPtr, length, 0))
                 cout << "Error: failed in receiving from client. errno = " << errno << endl;
             else
             {
+                // check for quit command
+                if(string(bPtr) == "quit")
+                    return EXIT_SUCCESS;
+
                 cout << "Received message: " << bPtr << endl;
 
-                if(0 > send(clientSid, msg, sizeof(msg), 0))
+                if(0 > send(clientSid, msg, msgStr.length(), 0))
                     cout << "Error: failed in sending to client. errno = " << errno << endl;
                 else
                     cout << "Sent acknowledgement of message.\n" << endl ;
@@ -139,7 +141,7 @@ CompleteSetupSystem css; // first line of main
     {
         // read in additional command-line arguments for client
         char* port = "4242";
-        string hostname = "localhost";
+        string hostname = "127.0.0.1";
         while(cmd != NULL)
         {
             arg = string(cmd);
@@ -155,8 +157,12 @@ CompleteSetupSystem css; // first line of main
                 cmd = argv[cmdIndex];
                 hostname = string(cmd);
             }
-            eles
+            else
                 cout << arg << " is not a valid command." << endl;
+
+            cmdIndex++;
+            cmd = argv[cmdIndex];
+        }
 
             // create IPv4 TCP/IP socket
             int sid = socket(AF_INET, SOCK_STREAM, 0);
@@ -172,23 +178,61 @@ CompleteSetupSystem css; // first line of main
             hints.ai_canonname = NULL;
             hints.ai_next = NULL;
 
-            char* hostnamePtr;
+//            char* hostnamePtr;
             if(hostname == "localhost")
             {
-                char hostName[MAXHOSTNAMELEN];
-                hostnamePtr = hostName;
-                gethostname(hostnamePtr, MAXHOSTNAMELEN);
+                hostname = "127.0.0.1";
+//                char hostName[MAXHOSTNAMELEN];
+//                hostnamePtr = hostName;
+//                gethostname(hostnamePtr, MAXHOSTNAMELEN);
             }
-            else
-                hostnamePtr = (char*) hostname.c_str();
+//            else
+//                hostnamePtr = (char*) hostname.c_str();
 
             struct addrinfo* result;
             getaddrinfo(hostname.c_str(), (const char*) port, &hints, &result);
 
-            int r = connect(sid, result->ai_addr, result->ai_addrlen);
+            if(-1 == connect(sid, result->ai_addr, result->ai_addrlen))
+            {
+                cout << "Error: could not connect to server. errno = " << errno << endl;
+                return EXIT_FAILURE;
+            }
+            else
+                cout << "Connected to " << hostname << " on port " << port << endl;
 
             if(result != NULL)
                 freeaddrinfo(result);
-        }
+
+            // begin loop: read input from user, send to server
+            int lineLen = 64;
+            char line[lineLen];
+            const char* msg;
+            cout << "\nEnter message to server: (type 'quit' to exit)\n" << endl;
+
+            while(true)
+            {
+                // read user input
+                cin.getline(line, lineLen);
+
+                // send to server
+                msg = (const char*) line;
+                if(0 > send(sid, msg, lineLen, 0))
+                {
+                    cout << "Error: failed in sending to server. errno = " << errno << endl;
+                    continue;
+                }
+                else if(string(msg) == "quit")
+                    return EXIT_SUCCESS;
+                else
+                    cout << "Message sent, waiting for acknowledgement... ";
+
+                // wait for acknowledgement
+                if(0 > recv(sid, line, lineLen, 0))
+                    cout << "Error: failed in receiving from server. errno = " << errno << endl;
+                else
+                    cout << line << endl << endl;
+
+                
+            }
     }
 }
