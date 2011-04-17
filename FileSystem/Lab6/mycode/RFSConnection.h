@@ -145,11 +145,9 @@ public:
         Message msg;
 
         msg.AddString(METHOD, LIST_DIR);
-        cout << "Message made." << endl;
 
         uint8 buffer[msg.FlattenedSize()];
         msg.Flatten(buffer);
-        cout << "Message flattened." << endl;
 
         int size = sizeof(buffer);
         if(0 > send(sid, (const char*) &size, sizeof(int), 0))
@@ -157,39 +155,35 @@ public:
             cout << "Error: could not send message size. errno = " << errno << endl;
             return "";
         }
-        cout << "Message size sent." << endl;
 
         if(0 > send(sid, (const char*) buffer, size, 0))
         {
             cout << "Error: could not send message. errno = " << errno << endl;
             return "";
         }
-        cout << "Message sent." << endl;
 
-        if(0 > recv(sid, (char*) &size, sizeof(int), 0))
+        int size2 = 0;
+        if(0 > recv(sid, (char*) &size2, sizeof(int), 0))
         {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return "";
         }
-        cout << "Response size received." << endl;
 
-        if(0 > recv(sid, (char*) buffer, size, 0))
+        uint8 buffer2[size2];
+        if(0 > recv(sid, (char*) buffer2, size2, 0))
         {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return "";
         }
-        cout << "Response received." << endl;
 
-        msg.Unflatten(buffer, size);
-        cout << "Response unflattened." << endl;
+
+        msg.Unflatten(buffer2, size2);
 
         String dirStr("");
         msg.FindString(DIR, dirStr);
-        cout << "Parameter retrieved:" << dirStr.Cstr() << endl;
 
         string dir = dirStr.Cstr();
-        cout << "Return string set: " << dir << endl;
-        return "blah";
+        return dir;
     }
 
     int deleteFile(String filename)
