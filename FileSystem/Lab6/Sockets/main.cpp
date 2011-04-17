@@ -317,9 +317,7 @@ int main(int argc, char** argv) {
                 }
                 else if (lineStr == "3")
                 {
-                    cout << "Start listDirectory." << endl;
                     cout << con.listDirectory() << endl;
-                    cout << "End listDirectory." << endl;
                 }
                 else if (lineStr == "4")
                 {
