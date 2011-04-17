@@ -257,36 +257,74 @@ CompleteSetupSystem css; // first line of main
             // begin loop: read input from user, send to server
             int lineLen = 64;
             char line[lineLen];
-            const char* msg;
+            string lineStr = "";
+            Message msg;
+            RFSConnection con(sid);
+            int fd = 0;
+            bool fileOpen = false;
             cout << "\nEnter message to server: (type 'quit' to exit)\n" << endl;
 
             while(true)
             {
+                cout << "CS5631 Lab 6 Client" << endl;
+                cout << "0) Exit Program" << endl;
+                cout << "1) Open a file" << endl;
+                cout << "2) Close a file" << endl;
+                cout << "3) List directory" << endl;
+                cout << "4) Delete file" << endl;
+                cout << "Enter Command: ";
+
                 // read user input
                 cin.getline(line, lineLen);
+                lineStr = string(line);
 
-                // send to server
-                msg = (const char*) line;
-                if(0 > send(sid, msg, lineLen, 0))
-                {
-                    cout << "Error: failed in sending to server. errno = " << errno << endl;
-                    continue;
-                }
-                else if(string(msg) == "quit")
+                if(listStr == "0")
                 {
                     close(sid);
                     return EXIT_SUCCESS;
                 }
-                else
-                    cout << "Message sent, waiting for acknowledgement... ";
+                else if (lineStr == "1")
+                {
+                    cout << "Filename and open mode: (e.g. file1 read)";
+                    string filename;
+                    string mode;
+                    cin >> filename >> mode;
 
-                // wait for acknowledgement
-                if(0 > recv(sid, line, lineLen, 0))
-                    cout << "Error: failed in receiving from server. errno = " << errno << endl;
+                    fd = con.openFile(filename, mode);
+                    if(fd > -1)
+                    {
+                        cout << "OpenFile: fd = " << fd << endl;
+                        fileOpen = true;
+                    }
+                    else
+                        cout << "Error: OpenFile failed." << endl;
+                }
+                else if (lineStr == "2")
+                {
+                    if(fileOpen)
+                        if(-1 != con.closeFile(fd))
+                            cout << "File closed successfully." << endl;
+                        else
+                            cout << "Error: Failed to close file." << endl;
+                    else
+                        cout << "There is no file currently open.";
+                }
+                else if (lineStr == "3")
+                {
+                    cout << con.listDirectory() << endl;
+                }
+                else if (lineStr == "4")
+                {
+                    cout << "Name of file to delete: ";
+                    string filename;
+                    cin >> filename;
+                    if(-1 == con.deleteFile(filename))
+                        cout << "File not found or could not be deleted." << endl;
+                    else
+                        cout << "File deleted successfully." << endl;
+                }
                 else
-                    cout << line << endl << endl;
-
-                
+                    cout << "Invalid command." << endl;
             }
     }
 }
