@@ -58,6 +58,7 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
+        cout << "Sending message OPEN_FILE." <<endl;
 
         if(0 > recv(sid, (char*) &size, sizeof(int), 0))
         {
@@ -75,6 +76,7 @@ public:
 
         int fd = 0;
         msg.FindInt32(FD, 0, (int32*) &fd);
+        cout << "Received message \"" << fd << "\"." <<endl;
 
         return fd;
     }
@@ -114,6 +116,7 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
+        cout << "Sending message CLOSE_FILE." << endl;
 
         if(0 > recv(sid, (char*) &size, sizeof(int), 0))
         {
@@ -132,6 +135,7 @@ public:
         int result = 0;
         msg.FindInt32(RESULT, 0, (int32*) &result);
 
+        cout << "Received message \"" << result << "\"." << endl;
         return result;
     }
 
@@ -161,6 +165,7 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return "";
         }
+        cout << "Sending message LIST_DIR." << endl;
 
         int size2 = 0;
         if(0 > recv(sid, (char*) &size2, sizeof(int), 0))
@@ -214,6 +219,7 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
+        cout << "Sending message DELETE_FILE." << endl;
 
         if(0 > recv(sid, (char*) &size, sizeof(int), 0))
         {
@@ -231,6 +237,7 @@ public:
 
         int result = 0;
         msg.FindInt32(RESULT, 0, (int32*) &result);
+        cout << "Received message \"" << result << "\"." << endl;
 
         return result;
     }
@@ -259,6 +266,7 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
+        cout << "Sending message QUIT." << endl;
     }
 
     int handleRequest()
@@ -297,6 +305,7 @@ public:
 
         String methodStr("");
         msg.FindString(METHOD, methodStr);
+        cout << "Received message " << methodStr.Cstr() << endl;
 
         if(methodStr == OPEN_FILE)
         {
@@ -336,6 +345,8 @@ public:
                 return -1;
             }
 
+            cout << "Message sent to client" << endl;
+
             if(0 > send(sid, (const char*) buffer, size, 0))
             {
                 cout << "Error: could not send message. errno = " << errno << endl;
@@ -363,6 +374,7 @@ public:
                 cout << "Error: could not send message. errno = " << errno << endl;
                 return -1;
             }
+            cout << "Message sent to client" << endl;
         }
         else if(methodStr == DELETE_FILE)
         {
@@ -385,6 +397,7 @@ public:
                 cout << "Error: could not send message. errno = " << errno << endl;
                 return -1;
             }
+            cout << "Message sent to client" << endl;
         }
         else if(methodStr == QUIT)
         {

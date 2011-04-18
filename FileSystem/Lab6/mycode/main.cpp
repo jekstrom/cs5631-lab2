@@ -278,7 +278,7 @@ int main(int argc, char** argv) {
 
                 if(lineStr == "0")
                 {
-                    close(sid);
+                    con.quit();
                     return EXIT_SUCCESS;
                 }
                 else if (lineStr == "1")
@@ -286,7 +286,7 @@ int main(int argc, char** argv) {
                     string f;
                     string m;
                     cout << "Filename: ";
-                    cin >> f  ;
+                    cin >> f;
                     cout << "Open mode ('read' or 'write'): ";
                     cin >> m;
 
