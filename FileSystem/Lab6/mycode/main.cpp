@@ -3,6 +3,7 @@
 #include <iostream>
 #include "headerFiles.h"
 #include <pthread.h>
+#include "RFSConnection.h"
 
 using namespace muscle;
 using namespace std;
@@ -19,7 +20,7 @@ struct threadParameter
 };
 
 int main(int argc, char** argv) {
-CompleteSetupSystem css; // first line of main
+    CompleteSetupSystem css; // first line of main
 
     int cmdIndex = 1;
     char* cmd = argv[cmdIndex];
@@ -129,15 +130,15 @@ CompleteSetupSystem css; // first line of main
         while(true)
         {
             if(freeThreads > 0)
-            {                
-                socklen_t len = (socklen_t) sizeof(struct sockaddr_in);                
+            {
+                socklen_t len = (socklen_t) sizeof(struct sockaddr_in);
                 tParam[nextThread].socID = accept(sid, (struct sockaddr *) &clientAddr, &len);
                 if(tParam[nextThread].socID == -1)
                 {
                     cout << "Error: failed to connect with a client.\n";
                     continue;
                 }
-                else                
+                else
                     cout << "Client number " << (nextThread+1) << " connected." << endl;
                 tParam[nextThread].threadNumber = nextThread;
 
@@ -184,11 +185,8 @@ CompleteSetupSystem css; // first line of main
                         freeThreads++;
                         nextThread = i;
                     }
-//                cout << "Waiting on client number " << (nextThread+1) << ".\n";
-//                pthread_join(threads[nextThread], NULL);
-//                cout << "Client number " << (nextThread+1) << " disconnected.\n";
             }
-        } // end while        
+        } // end while
     }
     else
     {
@@ -236,8 +234,8 @@ CompleteSetupSystem css; // first line of main
             hints.ai_canonname = NULL;
             hints.ai_next = NULL;
 
-            if(hostname == "localhost")            
-                hostname = "127.0.0.1";            
+            if(hostname == "localhost")
+                hostname = "127.0.0.1";
 
             struct addrinfo* result;
             getaddrinfo(hostname.c_str(), (const char*) port, &hints, &result);
@@ -266,7 +264,7 @@ CompleteSetupSystem css; // first line of main
 
             while(true)
             {
-                cout << "CS5631 Lab 6 Client" << endl;
+                cout << "\nCS5631 Lab 6 Client" << endl;
                 cout << "0) Exit Program" << endl;
                 cout << "1) Open a file" << endl;
                 cout << "2) Close a file" << endl;
@@ -278,18 +276,23 @@ CompleteSetupSystem css; // first line of main
                 cin.getline(line, lineLen);
                 lineStr = string(line);
 
-                if(listStr == "0")
+                if(lineStr == "0")
                 {
                     close(sid);
                     return EXIT_SUCCESS;
                 }
                 else if (lineStr == "1")
                 {
-                    cout << "Filename and open mode: (e.g. file1 read)";
-                    string filename;
-                    string mode;
-                    cin >> filename >> mode;
+                    string f;
+                    string m;
+                    cout << "Filename: ";
+                    cin >> f  ;
+                    cout << "Open mode ('read' or 'write'): ";
+                    cin >> m;
 
+
+                    String filename = f.c_str();
+                    String mode = m.c_str();
                     fd = con.openFile(filename, mode);
                     if(fd > -1)
                     {
@@ -303,11 +306,14 @@ CompleteSetupSystem css; // first line of main
                 {
                     if(fileOpen)
                         if(-1 != con.closeFile(fd))
+                        {
                             cout << "File closed successfully." << endl;
+                            fileOpen = false;
+                        }
                         else
                             cout << "Error: Failed to close file." << endl;
                     else
-                        cout << "There is no file currently open.";
+                        cout << "There is no file currently open." << endl;
                 }
                 else if (lineStr == "3")
                 {
@@ -316,8 +322,10 @@ CompleteSetupSystem css; // first line of main
                 else if (lineStr == "4")
                 {
                     cout << "Name of file to delete: ";
-                    string filename;
-                    cin >> filename;
+                    string file;
+                    cin >> file;
+
+                    String filename = file.c_str();
                     if(-1 == con.deleteFile(filename))
                         cout << "File not found or could not be deleted." << endl;
                     else
@@ -332,35 +340,23 @@ CompleteSetupSystem css; // first line of main
 void* connectionThread(void* dataPtr)
 {
     threadParameter* param = (threadParameter*) dataPtr;
+    RFSConnection clientCon(param->socID);
 
-    // test thread code
-    int length = 64;
-    char buffer[length];
-    char* bPtr = buffer;
-    string msgStr = "Message acknowledged.";
-    const char* msg = msgStr.c_str();
     while(true)
     {
-        if(0 > recv(param->socID, bPtr, length, 0))
-            cout << "Error: failed in receiving from client. errno = " << errno << endl;
-        else
+        int result = clientCon.handleRequest();
+
+        // check for quit command
+        if(1 == result)
         {
-            cout << "Received message: " << bPtr << endl;
-
-            // check for quit command
-            if(string(bPtr) == "quit")
-            {
-                close(param->socID);
-                threadDone[param->threadNumber] = true;
-                cout << "Client number " << param->threadNumber+1 << " disconnected." << endl;
-                pthread_cond_signal(&threadsFree);
-                pthread_exit(NULL);
-            }
-
-            if(0 > send(param->socID, msg, msgStr.length(), 0))
-                cout << "Error: failed in sending to client. errno = " << errno << endl;
-            else
-                cout << "Sent acknowledgement of message.\n" << endl ;
+            close(param->socID);
+            threadDone[param->threadNumber] = true;
+            cout << "Client number " << param->threadNumber+1 << " disconnected." << endl;
+            pthread_cond_signal(&threadsFree);
+            pthread_exit(NULL);
         }
+        else if(-1 == result)
+            cout << "Error: failed in handling client request." << endl;
     }
 }
+
