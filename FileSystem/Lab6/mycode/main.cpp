@@ -287,8 +287,10 @@ int main(int argc, char** argv) {
                     string m;
                     cout << "Filename: ";
                     cin >> f;
+                    cin.ignore(); //ignore the \n
                     cout << "Open mode ('read' or 'write'): ";
                     cin >> m;
+                    cin.ignore(); //ignore the \n
 
 
                     String filename = f.c_str();
@@ -324,6 +326,7 @@ int main(int argc, char** argv) {
                     cout << "Name of file to delete: ";
                     string file;
                     cin >> file;
+                    cin.ignore(); //ignore the \n
 
                     String filename = file.c_str();
                     if(-1 == con.deleteFile(filename))
