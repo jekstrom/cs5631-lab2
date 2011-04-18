@@ -26,18 +26,21 @@ class RFSConnection
 public:
     CompleteSetupSystem css;
 
+    /**
+     * Creates a new RFSConnection which communicates through a given socket.
+     * @param sid The socket descriptor of the connection's socket
+     */
     RFSConnection(int sid)
     {
         this->sid = sid;
     }
 
     /**
-     * openFile sends the method name OpenFile to the server, as well as the
-     * parameters necessary for the OpenFile function (filename and mode),
+     * Sends a request to open a file for wither reading or writing.
      * and receives the server's response via muscle messages
-     * @param filename the name of the file to open
-     * @param mode read or write
-     * @return the file's FD (currently always returns 42)
+     * @param filename The name of the file to open
+     * @param mode One of either "read" or "write"
+     * @return The now open file's FD (server currently returns 42)
      */
     int openFile(String filename, String mode)
     {
@@ -94,25 +97,17 @@ public:
     }
 
     /**
-     * closeFile sends the method name CloseFile with the parameter fd to the
-     * server, and receives the response (success or failure)
+     * Sends a request to close a particular open file.
      * @param fd the file descriptor of the file to close
-     * @return the result of closing the file
+     * @return 0 if the file was successfully closed, -1 otherwise
      */
     int closeFile(int fd)
     {
         const String METHOD("MethodName");
-        const String FILENAME("Filename");
-        const String MODE("OpenMode");
         const String FD("fd");
-        const String DIR("dir");
         const String RESULT("result");
-        const String QUIT("quit");
 
-        const String OPEN_FILE("OpenFile");
         const String CLOSE_FILE("CloseFile");
-        const String LIST_DIR("ListDir");
-        const String DELETE_FILE("OpenMode");
 
         Message msg;
 
@@ -158,9 +153,9 @@ public:
     }
 
     /**
-     * listDirectory sends method name ListDir to the server with no parameters,
+     * Sends a request for a listing of the file directory,
      * and receives the response from the server (the directory as a std::string)
-     * @return the directory as returned from the server
+     * @return A string representing the directory
      */
     string listDirectory()
     {
@@ -215,11 +210,9 @@ public:
     }
 
     /**
-     * deleteFile sends the method name OpenMode to the server with the filename
-     * as a parameter, and receives the result of deleting the file from the server
-     * (success or failure)
-     * @param filename the filename of the file to close
-     * @return result of deleting the file as returned by the server
+     * Sends a request to delete a particular file.
+     * @param filename The name of the file to delete
+     * @return 0 if the file was deleted successfully, else -1
      */
     int deleteFile(String filename)
     {
@@ -273,8 +266,8 @@ public:
     }
 
     /**
-     * quit sends the message quit to the server with no parameters.
-     * @return -1 if a failure in sending the message
+     * Sends a message indicating that the client will disconnct.
+     * @return -1 if there was a failure in sending the message, else 0
      */
     int quit()
     {
@@ -288,6 +281,7 @@ public:
         uint8 buffer[msg.FlattenedSize()];
         msg.Flatten(buffer);
 
+        cout << "Sending message QUIT." << endl;
         int size = sizeof(buffer);
         if(0 > send(sid, (const char*) &size, sizeof(int), 0))
         {
@@ -300,13 +294,14 @@ public:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-        cout << "Sending message QUIT." << endl;
+        cout << "Message sent." << endl;
+
+        return 0;
     }
 
     /**
-     * handleRequest handles any muscle message received and sends the result
-     * back to the client
-     * @return -1 if failure in receiving or sending the message.
+     * Handles client requests sent by using the other methods of RFSConnection.
+     * @return -1 in the case of an error, 0 for success, or 1 if a "quit" message was received.
      */
     int handleRequest()
     {
@@ -349,6 +344,13 @@ public:
         if(methodStr == OPEN_FILE)
         {
             int fd = 42;
+            String filename("");
+            String mode("");
+
+            msg.FindString(FILENAME, filename);
+            msg.FindString(MODE, mode);
+            cout << "Filename: " << filename.Cstr() << ", mode: ";
+            cout << mode.Cstr() << endl;
 
             msg.AddInt32(FD, fd);
 
@@ -371,6 +373,10 @@ public:
         else if(methodStr == CLOSE_FILE)
         {
             int result = 0;
+            int fd = 0;
+
+            msg.FindInt32(FD, 0, (int32*) &fd);
+            cout << "File desriptor: " << fd << endl;
 
             msg.AddInt32(RESULT, result);
 
@@ -418,6 +424,10 @@ public:
         else if(methodStr == DELETE_FILE)
         {
             int result = 0;
+            String filename("");
+
+            msg.FindString(FILENAME, filename);
+            cout << "Filename: " << filename.Cstr() << endl;
 
             msg.AddInt32(RESULT, result);
 
