@@ -17,6 +17,10 @@
 using namespace muscle;
 using namespace std;
 
+/**
+ * This class acts as an RPC interface between the server and clients, using
+ * Muscle messages to pass data.
+ */
 class RFSConnection
 {
 public:
@@ -24,10 +28,17 @@ public:
 
     RFSConnection(int sid)
     {
-        String method("MethodName");
         this->sid = sid;
     }
 
+    /**
+     * openFile sends the method name OpenFile to the server, as well as the
+     * parameters necessary for the OpenFile function (filename and mode),
+     * and receives the server's response via muscle messages
+     * @param filename the name of the file to open
+     * @param mode read or write
+     * @return the file's FD (currently always returns 42)
+     */
     int openFile(String filename, String mode)
     {
         const String METHOD("MethodName");
@@ -81,6 +92,12 @@ public:
         return fd;
     }
 
+    /**
+     * closeFile sends the method name CloseFile with the parameter fd to the
+     * server, and receives the response (success or failure)
+     * @param fd the file descriptor of the file to close
+     * @return the result of closing the file
+     */
     int closeFile(int fd)
     {
         const String METHOD("MethodName");
@@ -139,6 +156,11 @@ public:
         return result;
     }
 
+    /**
+     * listDirectory sends method name ListDir to the server with no parameters,
+     * and receives the response from the server (the directory as a std::string)
+     * @return the directory as returned from the server
+     */
     string listDirectory()
     {
         const String METHOD("MethodName");
@@ -191,6 +213,13 @@ public:
         return dir;
     }
 
+    /**
+     * deleteFile sends the method name OpenMode to the server with the filename
+     * as a parameter, and receives the result of deleting the file from the server
+     * (success or failure)
+     * @param filename the filename of the file to close
+     * @return result of deleting the file as returned by the server
+     */
     int deleteFile(String filename)
     {
         const String METHOD("MethodName");
@@ -242,6 +271,10 @@ public:
         return result;
     }
 
+    /**
+     * quit sends the message quit to the server with no parameters.
+     * @return -1 if a failure in sending the message
+     */
     int quit()
     {
         const String METHOD("MethodName");
@@ -269,6 +302,11 @@ public:
         cout << "Sending message QUIT." << endl;
     }
 
+    /**
+     * handleRequest handles any muscle message received and sends the result
+     * back to the client
+     * @return -1 if failure in receiving or sending the message.
+     */
     int handleRequest()
     {
         const String METHOD("MethodName");
