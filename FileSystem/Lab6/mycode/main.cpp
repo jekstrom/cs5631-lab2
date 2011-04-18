@@ -260,17 +260,22 @@ int main(int argc, char** argv) {
             RFSConnection con(sid);
             int fd = 0;
             bool fileOpen = false;
+            bool displayMenu = true;
             cout << "\nEnter message to server: (type 'quit' to exit)\n" << endl;
 
             while(true)
             {
-                cout << "\nCS5631 Lab 6 Client" << endl;
-                cout << "0) Exit Program" << endl;
-                cout << "1) Open a file" << endl;
-                cout << "2) Close a file" << endl;
-                cout << "3) List directory" << endl;
-                cout << "4) Delete file" << endl;
-                cout << "Enter Command: ";
+                if(displayMenu)
+                {
+                    cout << "\nCS5631 Lab 6 Client" << endl;
+                    cout << "0) Exit Program" << endl;
+                    cout << "1) Open a file" << endl;
+                    cout << "2) Close a file" << endl;
+                    cout << "3) List directory" << endl;
+                    cout << "4) Delete file" << endl;
+                    cout << "Enter Command: ";
+                }
+                displayMenu = true;
 
                 // read user input
                 cin.getline(line, lineLen);
@@ -279,6 +284,7 @@ int main(int argc, char** argv) {
                 if(lineStr == "0")
                 {
                     con.quit();
+                    close(sid);                    
                     return EXIT_SUCCESS;
                 }
                 else if (lineStr == "1")
@@ -334,6 +340,8 @@ int main(int argc, char** argv) {
                     else
                         cout << "File deleted successfully." << endl;
                 }
+                else if(lineStr == "")
+                    displayMenu = false;
                 else
                     cout << "Invalid command." << endl;
             }

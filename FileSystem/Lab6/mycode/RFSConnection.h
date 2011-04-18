@@ -8,9 +8,9 @@
 #ifndef RFSCONNECTION_H
 #define	RFSCONNECTION_H
 
-#include "../muscle/system/SetupSystem.h"
-#include "../muscle/message/Message.h"
-#include "../muscle/util/String.h"
+#include "system/SetupSystem.h"
+#include "message/Message.h"
+#include "util/String.h"
 #include <iostream>
 #include "headerFiles.h"
 
@@ -46,11 +46,12 @@ public:
         const String MODE("OpenMode");
         const String FD("fd");
 
+        const String QUIT("quit");
         const String OPEN_FILE("OpenFile");
 
         Message msg;
 
-        msg.AddString(METHOD, OPEN_FILE);
+        msg.AddString(METHOD, OPEN_FILE);        
         msg.AddString(FILENAME, filename);
         msg.AddString(MODE, mode);
 
@@ -226,7 +227,7 @@ public:
         const String FILENAME("Filename");
         const String RESULT("result");        
 
-        const String DELETE_FILE("OpenMode");
+        const String DELETE_FILE("DeleteFile");
 
         Message msg;
 
@@ -320,7 +321,7 @@ public:
         const String OPEN_FILE("OpenFile");
         const String CLOSE_FILE("CloseFile");
         const String LIST_DIR("ListDir");
-        const String DELETE_FILE("OpenMode");
+        const String DELETE_FILE("DeleteFile");
 
         Message msg;
         int size = 0;
@@ -343,7 +344,7 @@ public:
 
         String methodStr("");
         msg.FindString(METHOD, methodStr);
-        cout << "Received message " << methodStr.Cstr() << endl;
+        cout << "Received request: " << methodStr.Cstr() << endl;
 
         if(methodStr == OPEN_FILE)
         {
