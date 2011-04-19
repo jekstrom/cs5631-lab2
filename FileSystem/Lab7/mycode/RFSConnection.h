@@ -34,11 +34,18 @@ public:
     RFSConnection(int sid)
     {
         this->sid = sid;
+        dirPtr = NULL;
     }
 
+    /**
+     * Creates a new RFSConnection linked to a file directory.
+     * @param sid The socket descriptor of the connection's socket
+     * @param dirPtr A pointer to the directory the connection will use
+     */
     RFSConnection(int sid, Directory* dirPtr)
     {
-
+        this->sid = sid;
+        this->dirPtr = dirPtr;
     }
 
     /**
@@ -307,10 +314,19 @@ public:
 
     /**
      * Handles client requests sent by using the other methods of RFSConnection.
-     * @return -1 in the case of an error, 0 for success, or 1 if a "quit" message was received.
+     * Will abort if the calling RFSConnection is not linked to a directory.
+     * @return -1 in the case of an error or if no directory is available,
+     *         0 for success, or 1 if a "quit" message was received.
      */
     int handleRequest()
     {
+        // Check that a directory is available.
+        if(dirPtr == NULL)
+        {
+            cout << "Error: handling requests requires directory access." << endl;
+            return -1;
+        }
+
         const String METHOD("MethodName");
         const String FILENAME("Filename");
         const String MODE("OpenMode");
@@ -468,6 +484,8 @@ public:
 private:
 
     int sid;
+
+    Directory* dirPtr;
 };
 
 #endif	/* RFSCONNECTION_H */

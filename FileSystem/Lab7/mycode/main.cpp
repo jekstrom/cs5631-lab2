@@ -10,6 +10,7 @@ using namespace muscle;
 using namespace std;
 
 void* connectionThread(void* dataPtr);
+void* inputThread(void* dataPtr);
 pthread_mutex_t cond_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  threadsFree = PTHREAD_COND_INITIALIZER;
 bool* threadDone;
@@ -47,6 +48,8 @@ int main(int argc, char** argv) {
         // read in additional command-line arguments for server
         char* port = "4242";
         int maxConnections = 3;
+        char* diskName = "testdisk";
+        bool formatDisk = false;
         while(cmd != NULL)
         {
             arg = string(cmd);
@@ -64,11 +67,13 @@ int main(int argc, char** argv) {
             }
             else if(arg == "-f")
             {
-                // format disk
+                formatDisk = true;
             }
             else if(arg == "--disk")
             {
-                // set file to use as disk
+                cmdIndex++;
+                cmd = argv[cmdIndex];
+                diskName = cmd;
             }
             else
                 cout << arg << " is not a valid command." << endl;
@@ -76,6 +81,10 @@ int main(int argc, char** argv) {
             cmdIndex++;
             cmd = argv[cmdIndex];
         }
+
+        // load directory and format disk if requested
+        Disk disk = Disk(diskName, FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
+        Directory directory(&disk, formatDisk);
 
         // create IPv4 TCP/IP socket
         int sid = socket(AF_INET, SOCK_STREAM, 0);
@@ -366,5 +375,10 @@ void* connectionThread(void* dataPtr)
         else if(-1 == result)
             cout << "Error: failed in handling client request." << endl;
     }
+}
+
+void* inputThread(void* dataPtr)
+{
+    // read and handle input from command line
 }
 

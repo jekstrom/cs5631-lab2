@@ -27,7 +27,7 @@ public:
 
     /**
      * Creates a new directory on disk, or loads an existing directory from a disk,
-     * based on the value of createNew.
+     * based on the value of createNew. Creating a new directory formats the disk.
      * @param disk The disk to be used by this directory
      * @param createNew true to create a new directory, false to load an existing one
      */
