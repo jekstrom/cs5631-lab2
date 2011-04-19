@@ -4,6 +4,7 @@
 #include "headerFiles.h"
 #include <pthread.h>
 #include "RFSConnection.h"
+#include "FileSystemHeaders.h"
 
 using namespace muscle;
 using namespace std;
@@ -60,6 +61,14 @@ int main(int argc, char** argv) {
                 cmdIndex++;
                 cmd = argv[cmdIndex];
                 maxConnections = atoi((const char*) cmd);
+            }
+            else if(arg == "-f")
+            {
+                // format disk
+            }
+            else if(arg == "--disk")
+            {
+                // set file to use as disk
             }
             else
                 cout << arg << " is not a valid command." << endl;
@@ -163,20 +172,7 @@ int main(int argc, char** argv) {
             }
             else
             {
-//                // join any threads that have completed
-//                for(int i = 0; i < maxThreads; i++)
-//                    if(threadDone[i])
-//                    {
-//                        pthread_join(threads[i], NULL);
-//                        freeThreads++;
-//                        nextThread = i;
-//                    }
-//
-//                // return to accepting if any threads were joined
-//                if(freeThreads > 0)
-//                    continue;
-
-                // wait for a client to disconnect
+                // max connections reached, wait for a client to disconnect
                 cout << "Maximum number of connections reached. ";
                 cout << "Waiting for a client to disconnect." << endl;
                 pthread_cond_wait(&threadsFree, &cond_mutex);

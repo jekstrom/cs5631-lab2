@@ -13,6 +13,7 @@
 #include "util/String.h"
 #include <iostream>
 #include "headerFiles.h"
+#include "FileSystemHeaders.h"
 
 using namespace muscle;
 using namespace std;
@@ -33,6 +34,11 @@ public:
     RFSConnection(int sid)
     {
         this->sid = sid;
+    }
+
+    RFSConnection(int sid, Directory* dirPtr)
+    {
+
     }
 
     /**
