@@ -14,11 +14,13 @@ void* inputThread(void* dataPtr);
 pthread_mutex_t cond_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  threadsFree = PTHREAD_COND_INITIALIZER;
 bool* threadDone;
+bool serverDone;
 
 struct threadParameter
 {
     int socID;
     int threadNumber;
+    Directory* dirPtr;
 };
 
 int main(int argc, char** argv) {
@@ -145,7 +147,18 @@ int main(int argc, char** argv) {
             threadDone[i] = true;
         int nextThread = 0;
         int freeThreads = maxThreads;
-        while(true)
+        serverDone = false;
+        
+        // establish thread to read user input
+        pthread_t cinThread;
+        int rtn_status = pthread_create(&cinThread, 0, inputThread, NULL);
+        if (rtn_status)
+        {
+            cerr << "pthread creation failed: " << strerror(rtn_status) << endl;
+            exit(-1);
+        }
+
+        while(!serverDone)
         {
             if(freeThreads > 0)
             {
@@ -159,6 +172,7 @@ int main(int argc, char** argv) {
                 else
                     cout << "Client number " << (nextThread+1) << " connected." << endl;
                 tParam[nextThread].threadNumber = nextThread;
+                tParam[nextThread].dirPtr = &directory;
 
                 // create handler thread
                 int rtn_status = pthread_create(&threads[nextThread], 0, connectionThread, (void*) &tParam[nextThread]);
@@ -194,6 +208,10 @@ int main(int argc, char** argv) {
                     }
             }
         } // end while
+
+        pthread_join(cinThread, NULL);
+        close(sid);
+        return EXIT_SUCCESS;
     }
     else
     {
@@ -357,7 +375,7 @@ int main(int argc, char** argv) {
 void* connectionThread(void* dataPtr)
 {
     threadParameter* param = (threadParameter*) dataPtr;
-    RFSConnection clientCon(param->socID);
+    RFSConnection clientCon(param->socID, param->dirPtr);
 
     while(true)
     {
@@ -379,6 +397,30 @@ void* connectionThread(void* dataPtr)
 
 void* inputThread(void* dataPtr)
 {
-    // read and handle input from command line
+    string lineStr = "";
+
+    while(!serverDone)
+    {
+        // read user input
+        cin >> lineStr;
+
+        // handle user input
+        if(lineStr == "quit")
+        {
+            serverDone = true;
+        }
+        else if(lineStr == "freeList")
+        {
+
+        }
+        else if(lineStr == "blockGroup")
+        {
+
+        }
+        else
+            cout << "Unrecognized server command." << endl;
+    }
+
+    pthread_exit(NULL);
 }
 
