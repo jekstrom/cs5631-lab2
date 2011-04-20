@@ -258,7 +258,6 @@ int main(int argc, char** argv) {
             int lineLen = 64;
             char line[lineLen];
             string lineStr = "";
-            Message msg;
             RFSConnection con(sid);
             int fd = 0;
             bool fileOpen = false;
