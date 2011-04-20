@@ -300,7 +300,7 @@ int lab2Test() {
     bool showMenu = true;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
 
-    Directory* dirPtr = NULL;
+    FileDirectory* dirPtr = NULL;
     bool dirOpen = false;
 
     while (true) {
@@ -330,7 +330,7 @@ int lab2Test() {
                     break;
                 case 1:
                     if (!dirOpen) {
-                        dirPtr = new Directory(&testDisk, true);
+                        dirPtr = new FileDirectory(&testDisk, true);
                         dirOpen = true;
                         cout << "Directory created.\n";
                     } else
@@ -338,7 +338,7 @@ int lab2Test() {
                     break;
                 case 2:
                     if (!dirOpen) {
-                        dirPtr = new Directory(&testDisk, false);
+                        dirPtr = new FileDirectory(&testDisk, false);
                         dirOpen = true;
                         cout << "Directory opened.\n";
                     } else
@@ -463,7 +463,7 @@ int lab3Test() {
     list<File>::iterator i;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
     File *f;
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
     string name, writeData;
     list<Entry> entries;
 
@@ -762,7 +762,7 @@ void lab3test1() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test1" << endl;
@@ -875,7 +875,7 @@ void lab3test2a() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for writing
     cout << "Creating file test2" << endl;
@@ -1012,7 +1012,7 @@ void lab3test2b() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for writing
     cout << "Creating file test2b" << endl;
@@ -1134,7 +1134,7 @@ void lab3test3() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for writing
     cout << "Creating file test3" << endl;
@@ -1259,7 +1259,7 @@ void lab3test4a() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for writing
     cout << "Creating file test4" << endl;
@@ -1325,7 +1325,7 @@ void lab3test4b() {
     bool creat = false;
     bool readAccess = true;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, creat);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, creat);
 
     //after restarting program...
     cout << "Program starting back up..." << endl;
@@ -1406,7 +1406,7 @@ void createSource() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for writing
     cout << "Creating file SOURCE" << endl;
@@ -1467,7 +1467,7 @@ void lab3test5a() {
     bool creat = false;
     bool readAccess = true;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, creat);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, creat);
     list<Entry> entries;
 
     //after restarting program...
@@ -1605,7 +1605,7 @@ void lab3test5b() {
     bool creat = true;
     bool readAccess = false;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, creat);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, creat);
 
     //create a new file, x, open it for writing
     cout << "Creating file X" << endl;
@@ -1905,7 +1905,7 @@ void lab3test6() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test6" << endl;
@@ -2042,7 +2042,7 @@ void lab3test7Before() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test7" << endl;
@@ -2092,7 +2092,7 @@ void lab3test7After() {
     outFile.open("test7after.txt");
 
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, false);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, false);
 
     File *f = new File("test7", false, false, &testDisk, dirPtr);
 
@@ -2184,7 +2184,7 @@ void lab3test8() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test8" << endl;
@@ -2256,7 +2256,7 @@ void lab3test9() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test9" << endl;
@@ -2349,7 +2349,7 @@ void lab3test10a() {
     bool creat;
     bool readAccess;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, true);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, true);
 
     //create a new file, open it for reading
     cout << "Creating file test10" << endl;
@@ -2397,7 +2397,7 @@ void lab3test10b() {
 
     bool creat = false;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, creat);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, creat);
 
     cout << "Restarting program..." << endl;
     outFile << "Restarting program..." << endl;
@@ -2451,7 +2451,7 @@ void lab3test10c() {
 
     bool creat = false;
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory* dirPtr = new Directory(&testDisk, creat);
+    FileDirectory* dirPtr = new FileDirectory(&testDisk, creat);
 
     cout << "Restarting program..." << endl;
     outFile << "Restarting program..." << endl;
@@ -2473,7 +2473,7 @@ void lab3test10c() {
 
 void lab3test11() {
     Disk testDisk = Disk("testDisk", FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-    Directory dir(&testDisk, false);
+    FileDirectory dir(&testDisk, false);
 
     ofstream fout;
     fout.open("test11.txt");

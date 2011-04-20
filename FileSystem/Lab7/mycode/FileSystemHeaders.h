@@ -16,7 +16,7 @@
 #include "CannotReadException.h"
 #include "Disk.h"
 #include "FreeList.h"
-#include "Directory.h"
+#include "FileDirectory.h"
 #include "Entry.h"
 #include "File.h"
 #include "FileNotFoundException.h"

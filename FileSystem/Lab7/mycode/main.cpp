@@ -11,16 +11,23 @@ using namespace std;
 
 void* connectionThread(void* dataPtr);
 void* inputThread(void* dataPtr);
+void* acceptThread(void* dataPtr);
 pthread_mutex_t cond_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  threadsFree = PTHREAD_COND_INITIALIZER;
 bool* threadDone;
 bool serverDone;
 
-struct threadParameter
+struct connectionThreadParameter
 {
     int socID;
     int threadNumber;
-    Directory* dirPtr;
+    FileDirectory* dirPtr;
+};
+struct acceptThreadParameter
+{
+    int maxConnections;
+    int listenerID;
+    FileDirectory* dirPtr;
 };
 
 int main(int argc, char** argv) {
@@ -86,7 +93,7 @@ int main(int argc, char** argv) {
 
         // load directory and format disk if requested
         Disk disk = Disk(diskName, FreeList::DEFAULT_NUMBER_OF_BLOCKS, Disk::DEFAULT_BLOCK_SIZE);
-        Directory directory(&disk, formatDisk);
+        FileDirectory directory(&disk, formatDisk);
 
         // create IPv4 TCP/IP socket
         int sid = socket(AF_INET, SOCK_STREAM, 0);
@@ -141,7 +148,7 @@ int main(int argc, char** argv) {
         struct sockaddr_in clientAddr;
         int maxThreads = maxConnections;
         pthread_t* threads = new pthread_t[maxThreads];
-        threadParameter tParam[maxThreads];
+        connectionThreadParameter tParam[maxThreads];
         threadDone = new bool[maxThreads];
         for(int i = 0; i < maxThreads; i++)
             threadDone[i] = true;
@@ -151,7 +158,7 @@ int main(int argc, char** argv) {
         
         // establish thread to read user input
         pthread_t cinThread;
-        int rtn_status = pthread_create(&cinThread, 0, inputThread, NULL);
+        int rtn_status = pthread_create(&cinThread, 0, inputThread, (void*) &disk);
         if (rtn_status)
         {
             cerr << "pthread creation failed: " << strerror(rtn_status) << endl;
@@ -374,7 +381,7 @@ int main(int argc, char** argv) {
 
 void* connectionThread(void* dataPtr)
 {
-    threadParameter* param = (threadParameter*) dataPtr;
+    connectionThreadParameter* param = (connectionThreadParameter*) dataPtr;
     RFSConnection clientCon(param->socID, param->dirPtr);
 
     while(true)
@@ -392,30 +399,48 @@ void* connectionThread(void* dataPtr)
         }
         else if(-1 == result)
             cout << "Error: failed in handling client request." << endl;
+
+        // else, request was handled successfully
     }
 }
 
 void* inputThread(void* dataPtr)
 {
-    string lineStr = "";
+    // initialize variables
+    Disk* diskPtr = (Disk*) dataPtr;    
+    string command = "";
+    int startBlock = 0;
+    int endBlock = 0;
+    int numberOfBlocks = 0;
 
     while(!serverDone)
     {
         // read user input
-        cin >> lineStr;
+        cin >> command;
 
         // handle user input
-        if(lineStr == "quit")
+        if(command == "quit")
         {
             serverDone = true;
         }
-        else if(lineStr == "freeList")
+        else if(command == "freeList")
         {
+            // get freeList from disk
+            FreeList freeList(diskPtr, false);
 
+            // output free list
+            freeList.output();
         }
-        else if(lineStr == "blockGroup")
+        else if(command == "blockGroup")
         {
+            // read block group information from user
+            cin >> startBlock >> endBlock >> numberOfBlocks;
+            
+            // read block group from disk
+            BlockGroup blkGroup(startBlock, endBlock, numberOfBlocks, NULL);
 
+            // output block group
+            blkGroup.output();
         }
         else
             cout << "Unrecognized server command." << endl;
@@ -424,3 +449,81 @@ void* inputThread(void* dataPtr)
     pthread_exit(NULL);
 }
 
+void* acceptThread(void* dataPtr)
+{
+    // connection acceptance loop
+    struct sockaddr_in clientAddr;
+    int maxThreads = maxConnections;
+    pthread_t* threads = new pthread_t[maxThreads];
+    connectionThreadParameter tParam[maxThreads];
+    threadDone = new bool[maxThreads];
+    for(int i = 0; i < maxThreads; i++)
+        threadDone[i] = true;
+    int nextThread = 0;
+    int freeThreads = maxThreads;
+    serverDone = false;
+
+    // establish thread to read user input
+    pthread_t cinThread;
+    int rtn_status = pthread_create(&cinThread, 0, inputThread, (void*) &disk);
+    if (rtn_status)
+    {
+        cerr << "pthread creation failed: " << strerror(rtn_status) << endl;
+        exit(-1);
+    }
+
+    while(!serverDone)
+    {
+        if(freeThreads > 0)
+        {
+            socklen_t len = (socklen_t) sizeof(struct sockaddr_in);
+            tParam[nextThread].socID = accept(sid, (struct sockaddr *) &clientAddr, &len);
+            if(tParam[nextThread].socID == -1)
+            {
+                cout << "Error: failed to connect with a client.\n";
+                continue;
+            }
+            else
+                cout << "Client number " << (nextThread+1) << " connected." << endl;
+            tParam[nextThread].threadNumber = nextThread;
+            tParam[nextThread].dirPtr = &directory;
+
+            // create handler thread
+            int rtn_status = pthread_create(&threads[nextThread], 0, connectionThread, (void*) &tParam[nextThread]);
+            if (rtn_status)
+            {
+                cerr << "pthread creation failed: " << strerror(rtn_status) << endl;
+                exit(-1);
+            }
+
+            threadDone[nextThread] = false;
+            freeThreads--;
+            for(int i = 0; i < maxThreads; i++)
+                if(threadDone[i])
+                {
+                    pthread_join(threads[i], NULL);
+                    nextThread = i;
+                    freeThreads++;
+                    break;
+                }
+        }
+        else
+        {
+            // max connections reached, wait for a client to disconnect
+            cout << "Maximum number of connections reached. ";
+            cout << "Waiting for a client to disconnect." << endl;
+            pthread_cond_wait(&threadsFree, &cond_mutex);
+            for(int i = 0; i < maxThreads; i++)
+                if(threadDone[i])
+                {
+                    pthread_join(threads[i], NULL);
+                    freeThreads++;
+                    nextThread = i;
+                }
+        }
+    } // end while
+
+    pthread_join(cinThread, NULL);
+    close(sid);
+    pthread_exit(NULL);
+}

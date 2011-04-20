@@ -26,7 +26,7 @@ DEFINES += -DMUSCLE_AVOID_SIGNAL_HANDLING
 #DEFINES += -DMUSCLE_POOL_SLAB_SIZE=0
 
 CFLAGS = -I.. -I../muscle -I../zlib/zlib -g
-GCCFLAGS = -fno-exceptions -DMUSCLE_NO_EXCEPTIONS -W -Wall -Wno-multichar
+GCCFLAGS = -fno-exceptions -DMUSCLE_NO_EXCEPTIONS -W -Wall -Wno-multichar -fexceptions
 CXXFLAGS = $(CFLAGS) -O3 $(DEFINES)
 LFLAGS =  
 LIBS =  -lpthread
@@ -40,7 +40,7 @@ EXECUTABLE = main
 
 # CS5631 NOTE2: Add your other files here
 # e.g., if you have X.cpp, add in X.o here
-STDOBJS = $(ZLIBOBJS) Directory.o StringMatcher.o
+STDOBJS = $(ZLIBOBJS) Directory.o StringMatcher.o Block.o BlockLinkedList.o FreeList.o BlockGroup.o File.o FileDirectory.o
 
 VPATH = ../muscle/hashtable ../muscle/message ../muscle/iogateway ../muscle/reflector ../muscle/regex ../muscle/util ../muscle/syslog ../muscle/system ../muscle/dataio ../muscle/zlib ../muscle/zlib/zlib ../muscle/zlib/zlib/contrib/minizip ../muscle/minimessage
 

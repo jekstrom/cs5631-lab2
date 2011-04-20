@@ -24,7 +24,7 @@ public:
      * @throws BlockGroupException if a BlockGroup couldn't be created for a new file
      */
     File(string filename, bool create, bool readAccess,
-            Disk *disk, Directory *directory);
+            Disk *disk, FileDirectory *directory);
 
     /**
      * Destructor for the File class.
@@ -143,7 +143,7 @@ private:
      * A pointer to the directory where files should be retrieved from or
      * created in.
      */
-    Directory *directoryPtr;
+    FileDirectory *directoryPtr;
 
     /**
      * A pointer to the disk to read and write data from.

@@ -42,7 +42,7 @@ public:
      * @param sid The socket descriptor of the connection's socket
      * @param dirPtr A pointer to the directory the connection will use
      */
-    RFSConnection(int sid, Directory* dirPtr)
+    RFSConnection(int sid, FileDirectory* dirPtr)
     {
         this->sid = sid;
         this->dirPtr = dirPtr;
@@ -422,7 +422,7 @@ public:
         }
         else if(methodStr == LIST_DIR)
         {
-            String dirList("Start of Directory\nEnd of Directory");
+            String dirList("Start of FileDirectory\nEnd of FileDirectory");
 
             msg.AddString(DIR, dirList);
 
@@ -485,7 +485,7 @@ private:
 
     int sid;
 
-    Directory* dirPtr;
+    FileDirectory* dirPtr;
 };
 
 #endif	/* RFSCONNECTION_H */

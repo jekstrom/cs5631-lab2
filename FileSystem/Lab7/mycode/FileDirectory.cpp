@@ -1,6 +1,6 @@
 // Kaleb Jungclaus, James Ekstrom, Matt Fischer
 
-#include "Directory.h"
+#include "FileDirectory.h"
 #include "FreeList.h"
 #include "BlockGroup.h"
 #include "CannotReadException.h"
@@ -9,8 +9,7 @@
 using namespace std;
 
 FileDirectory::FileDirectory(Disk* disk, bool createNew) throw (CannotReadException) {
-    this->disk = disk;
-    Block masterBlock = Block(0, disk);
+    this->disk = disk;    
 
     if (createNew) {
         try{
@@ -19,6 +18,7 @@ FileDirectory::FileDirectory(Disk* disk, bool createNew) throw (CannotReadExcept
         catch(CannotReadException e){
             throw e;
         }
+        Block masterBlock = Block(0, disk);
         directory = BlockGroup(&freeList);
         if(!directory.addBlock())
             cout << "Error: Failed in creating new Directory.\n";
@@ -38,6 +38,7 @@ FileDirectory::FileDirectory(Disk* disk, bool createNew) throw (CannotReadExcept
             throw e;
         }
 
+        Block masterBlock = Block(0, disk);
         directory = BlockGroup(masterBlock.getPointer(3)
                 , masterBlock.getPointer(4),
                 masterBlock.getPointer(5),
