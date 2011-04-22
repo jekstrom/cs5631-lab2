@@ -69,32 +69,8 @@ public:
         msg.AddString(FILENAME, filename);
         msg.AddString(MODE, mode);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
+        if(-1 == sendRecv(msg))
             return -1;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return -1;
-        }
-        cout << "Sending message OPEN_FILE." << endl;
-
-        if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return -1;
-        }
-
-        if (0 > recv(sid, (char*) buffer, size, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return -1;
-        }
-
-        msg.Unflatten((const uint8*) buffer, size);
 
         int fd = 0;
         msg.FindInt32(FD, 0, (int32*) & fd);
@@ -120,32 +96,8 @@ public:
         msg.AddString(METHOD, CLOSE_FILE);
         msg.AddInt32(FD, fd);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
+        if(-1 == sendRecv(msg))
             return -1;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return -1;
-        }
-        cout << "Sending message CLOSE_FILE." << endl;
-
-        if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return -1;
-        }
-
-        if (0 > recv(sid, (char*) buffer, size, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return -1;
-        }
-
-        msg.Unflatten(buffer, size);
 
         int result = 0;
         msg.FindInt32(RESULT, 0, (int32*) & result);
@@ -223,32 +175,8 @@ public:
         msg.AddString(METHOD, DELETE_FILE);
         msg.AddString(FILENAME, filename);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
+        if(-1 == sendRecv(msg))
             return -1;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return -1;
-        }
-        cout << "Sending message DELETE_FILE." << endl;
-
-        if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return -1;
-        }
-
-        if (0 > recv(sid, (char*) buffer, size, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return -1;
-        }
-
-        msg.Unflatten(buffer, size);
 
         int result = 0;
         msg.FindInt32(RESULT, 0, (int32*) & result);
@@ -258,10 +186,10 @@ public:
     }
 
     /**
-     * this function reads (readAmt) bytes data from disk into buf.
-     * @param fd the filedescriptor of the file to read from.
-     * @param readAmt the amount of bytes to read.
-     * @param buf the data read.
+     * Reads readAmt bytes of data from a file into buf.
+     * @param fd The file descriptor of the file to read from
+     * @param readAmt The number of bytes to read
+     * @param buf A buffer for the read data
      * @return number of bytes read.
      */
     int readFile(int fd, int readAmt, void* buf) {
@@ -270,42 +198,15 @@ public:
         const String DATA("Data");
         const String BYTESREAD("bytesread");
 
-        const String READ("Read");
+        const String READ("Read");        
 
         Message msg;
-
         msg.AddString(METHOD, READ);
         msg.AddInt32(FD, fd);
         msg.AddInt32(BYTESREAD, readAmt);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
+        if(-1 == sendRecv(msg))
             return -1;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return -1;
-        }
-        cout << "Sending message READ." << endl;
-
-        int size2 = 0;
-        if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return -1;
-        }
-
-        uint8 buffer2[size2];
-        if (0 > recv(sid, (char*) buffer2, size2, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return -1;
-        }
-
-        msg.Unflatten(buffer2, size2);
 
         int bytesRead = 0;
         int result = 0;
@@ -317,11 +218,11 @@ public:
     }
 
     /**
-     * this function writes (writeAmt) bytes of buf to disk
-     * @param fd the file descriptor of the file to write to.
-     * @param writeAmt the amount of bytes to write.
-     * @param buf the data to write to the file.
-     * @return number of bytes written.
+     * Writes writeAmt bytes of buf to a file.
+     * @param fd The file descriptor of the file to write to
+     * @param writeAmt The amount of bytes to write
+     * @param buf The data to write to the file
+     * @return The number of bytes written
      */
     int writeFile(int fd, int writeAmt, void* buf) {
         const String METHOD("MethodName");
@@ -338,34 +239,8 @@ public:
         msg.AddInt32(BYTESWRITTEN, writeAmt);
         msg.AddData(DATA, B_ANY_TYPE, buf, writeAmt);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
+        if(-1 == sendRecv(msg))
             return -1;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return -1;
-        }
-        cout << "Sending message WRITE." << endl;
-
-        int size2 = 0;
-        if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return -1;
-        }
-
-        uint8 buffer2[size2];
-        if (0 > recv(sid, (char*) buffer2, size2, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return -1;
-        }
-
-        msg.Unflatten(buffer2, size2);
 
         int bytesWritten = 0;
         int result = 0;
@@ -375,7 +250,12 @@ public:
         return bytesWritten;
     }
 
-    bool fileExists(string filename) {
+    /**
+     * Determines if a file exists.
+     * @param filename The name of the file to search for
+     * @return 1 if the file exists, 0 if it does not, -1 in case of error
+     */
+    int fileExists(string filename) {
         const String METHOD("MethodName");
         const String FILENAME("Filename");
         const String FILE_EXISTS("file_exists");
@@ -387,37 +267,16 @@ public:
         msg.AddString(METHOD, FILE_EXISTS);
         msg.AddString(FILENAME, filename);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
-            return false;
-        }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return false;
-        }
-        cout << "Sending message FILE_EXISTS." << endl;
-
-        int size2 = 0;
-        if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return false;
-        }
-
-        uint8 buffer2[size2];
-        if (0 > recv(sid, (char*) buffer2, size2, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return false;
-        }
+        if(-1 == sendRecv(msg))
+            return -1;
 
         int result = 0;
         msg.FindInt32(RESULT, (uint32*) &result);
 
-        return (result >= 0);
+        if(-1 == result)
+            return 0;
+        else
+            return 1;
     }
 
     /**
@@ -516,7 +375,7 @@ public:
 
             File *file = NULL;
 
-            int fcb = dirPtr->findFile(string(filename.Cstr());
+            int fcb = dirPtr->findFile(string(filename.Cstr()));
 
             if (fcb < 0) { //create the file because it was not found in directory
                 file = new File(string(filename.Cstr()), true, mode, diskPtr, dirPtr);
@@ -577,7 +436,9 @@ public:
             String dirList("Start of FileDirectory\n\n");
 
             list<Entry> entryList = dirPtr->listEntries();
+            Entry curEntry;
             for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+
                 //dirList += i->fcb;
                 //dirList += " ";
                 //dirList += i->name;
@@ -587,7 +448,8 @@ public:
 
             dirList += "\n End of Directory \n";
 
-            msg.AddString(DIR, dirList);
+            msg.AddInt32()
+//            msg.AddString(DIR, dirList);
 
             uint8 buffer[msg.FlattenedSize()];
             msg.Flatten(buffer);
@@ -761,6 +623,43 @@ private:
     Disk* diskPtr;
 
     OpenFileTable oft;
+
+    /**
+     * Sends msg and receives a response into msg.
+     * @param msg A message that has its content set
+     * @return -1 in case of error, 0 otherwise
+     */
+    int sendRecv(Message msg)
+    {
+        uint8 buffer[msg.FlattenedSize()];
+        msg.Flatten(buffer);
+
+        int size = sizeof (buffer);
+        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
+            cout << "Error: could not send message size. errno = " << errno << endl;
+            return -1;
+        }
+
+        if (0 > send(sid, (const char*) buffer, size, 0)) {
+            cout << "Error: could not send message. errno = " << errno << endl;
+            return -1;
+        }
+
+        int size2 = 0;
+        if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
+            cout << "Error: could not receive response size. errno = " << errno << endl;
+            return -1;
+        }
+
+        uint8 buffer2[size2];
+        if (0 > recv(sid, (char*) buffer2, size2, 0)) {
+            cout << "Error: could not receive response. errno = " << errno << endl;
+            return -1;
+        }
+
+        msg.Unflatten(buffer2, size2);
+        return 0;
+    }
 };
 
 #endif	/* RFSCONNECTION_H */
