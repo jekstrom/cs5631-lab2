@@ -14,6 +14,7 @@
 #include <iostream>
 #include "headerFiles.h"
 #include "FileSystemHeaders.h"
+#include "OpenFileTable.h"
 
 using namespace muscle;
 using namespace std;
