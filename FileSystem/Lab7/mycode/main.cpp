@@ -1,5 +1,5 @@
-#include "system/SetupSystem.h"
-#include "message/Message.h"
+#include "../muscle/system/SetupSystem.h"
+#include "../muscle/message/Message.h"
 #include <iostream>
 #include "headerFiles.h"
 #include <pthread.h>
@@ -22,6 +22,7 @@ struct connectionThreadParameter
     int socID;
     int threadNumber;
     FileDirectory* dirPtr;
+    Disk* diskPtr;
 };
 
 int main(int argc, char** argv) {
@@ -145,7 +146,7 @@ int main(int argc, char** argv) {
         connectionThreadParameter tParam[maxThreads];
         threadDone = new bool[maxThreads];
         for(int i = 0; i < maxThreads; i++)
-            threadDone[i] = true;
+            threadDone[i] = false;
         int nextThread = 0;
         int freeThreads = maxThreads;
         
@@ -173,6 +174,7 @@ int main(int argc, char** argv) {
                     cout << "Client number " << (nextThread+1) << " connected." << endl;
                 tParam[nextThread].threadNumber = nextThread;
                 tParam[nextThread].dirPtr = dirPtr;
+                tParam[nextThread].diskPtr = &disk;
 
                 // create handler thread
                 int rtn_status = pthread_create(&threads[nextThread], 0, connectionThread, (void*) &tParam[nextThread]);
@@ -184,6 +186,7 @@ int main(int argc, char** argv) {
 
                 threadDone[nextThread] = false;
                 freeThreads--;
+                nextThread++;
                 for(int i = 0; i < maxThreads; i++)
                     if(threadDone[i])
                     {
@@ -371,7 +374,7 @@ int main(int argc, char** argv) {
 void* connectionThread(void* dataPtr)
 {
     connectionThreadParameter* param = (connectionThreadParameter*) dataPtr;
-    RFSConnection clientCon(param->socID, param->dirPtr);
+    RFSConnection clientCon(param->socID, param->dirPtr, param->diskPtr);
 
     while(true)
     {
