@@ -11,7 +11,7 @@
 #include "../muscle/system/SetupSystem.h"
 #include "../muscle/message/Message.h"
 #include "../muscle/util/String.h"
-#include "../muscle/besupport/support/MuscleSupport.h"
+#include "../muscle/support/MuscleSupport.h"
 #include <iostream>
 #include "headerFiles.h"
 #include "FileSystemHeaders.h"
@@ -284,25 +284,25 @@ public:
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
-            return "";
+            return -1;
         }
         cout << "Sending message READ." << endl;
 
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         msg.Unflatten(buffer2, size2);
@@ -311,7 +311,7 @@ public:
         int result = 0;
 
         msg.FindInt32(BYTESREAD, bytesRead);
-        msg.FindData(DATA, B_ANY_TYPE, buf, &result);
+        msg.FindData(DATA, B_ANY_TYPE, &buf, (uint32*) &result);
 
         return bytesRead;
     }
@@ -344,25 +344,25 @@ public:
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
-            return "";
+            return -1;
         }
         cout << "Sending message WRITE." << endl;
 
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
-            return "";
+            return -1;
         }
 
         msg.Unflatten(buffer2, size2);
@@ -393,29 +393,29 @@ public:
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
-            return "";
+            return false;
         }
 
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
-            return "";
+            return false;
         }
         cout << "Sending message FILE_EXISTS." << endl;
 
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
-            return "";
+            return false;
         }
 
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
-            return "";
+            return false;
         }
 
         int result = 0;
-        msg.FindInt32(RESULT, result);
+        msg.FindInt32(RESULT, (uint32*) &result);
 
         return (result >= 0);
     }
@@ -516,12 +516,12 @@ public:
 
             File *file = NULL;
 
-            int fcb = dirPtr->findFile(filename);
+            int fcb = dirPtr->findFile(string(filename.Cstr());
 
             if (fcb < 0) { //create the file because it was not found in directory
-                file = new File(filename, true, mode, diskPtr, dirPtr);
+                file = new File(string(filename.Cstr()), true, mode, diskPtr, dirPtr);
             } else { //found file, open it
-                file = new File(filename, false, mode, diskPtr, dirPtr);
+                file = new File(string(filename.Cstr()), false, mode, diskPtr, dirPtr);
             }
 
             //add file to open file table
@@ -578,11 +578,11 @@ public:
 
             list<Entry> entryList = dirPtr->listEntries();
             for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
-                dirList += i->fcbNum;
-                dirList += " ";
-                dirList += i->name;
+                //dirList += i->fcb;
+                //dirList += " ";
+                //dirList += i->name;
                 
-                dirList += "\n";
+                //dirList += "\n";
             }
 
             dirList += "\n End of Directory \n";
@@ -614,7 +614,7 @@ public:
             int fcb = dirPtr->findFile(filename);
             if (fcb < 0) { //couldn't find file, doesn't exist
                 result = -1;
-                cout << "Error: Could not find file " << filename << endl;
+                cout << "Error: Could not find file " << string(filename.Cstr()) << endl;
             } else { //found file, delete it
                 File *file = new File(filename, false, false, diskPtr, dirPtr);
 
@@ -688,7 +688,7 @@ public:
 
             msg.FindInt32(FD, fd);
             msg.FindInt32(BYTESWRITTEN, bytesToWrite);
-            msg.FindData(DATA, B_ANY_TYPE, buf, &result); //put data from write into buf
+            msg.FindData(DATA, B_ANY_TYPE, &buf, &result); //put data from write into buf
 
             cout << "FD: " << fd << endl;
 
