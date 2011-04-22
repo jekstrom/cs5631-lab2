@@ -16,9 +16,19 @@
 #include "headerFiles.h"
 #include "FileSystemHeaders.h"
 #include "OpenFileTable.h"
+#include <list>
 
 using namespace muscle;
 using namespace std;
+
+struct dirEntry
+{
+    string filename;
+    int fcbNum;
+    int startBlock;
+    int endBlock;
+    int numBlocks;
+};
 
 /**
  * This class acts as an RPC interface between the server and clients, using
@@ -107,13 +117,13 @@ public:
     }
 
     /**
-     * Sends a request for a listing of the file directory,
-     * and receives the response from the server (the directory as a std::string)
-     * @return A string representing the directory
+     * Gets information about the contents of the remote file directory.
+     * @return A list of structures containing information about directory entries
      */
-    string listDirectory() {
+    List<dirEntry> listDirectory() {
         const String METHOD("MethodName");
         const String DIR("dir");
+        const String RESULT("result");
 
         const String LIST_DIR("ListDir");
 
@@ -121,41 +131,37 @@ public:
 
         msg.AddString(METHOD, LIST_DIR);
 
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
+        sendRecv(msg);
 
-        int size = sizeof (buffer);
-        if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
-            cout << "Error: could not send message size. errno = " << errno << endl;
-            return "";
+        // response contains number of entries in directory
+        int numEntries = 0;
+        msg.FindInt32(RESULT, (int32*) &numEntries);
+
+        list<dirEntry> entryList;
+        for(int i = 0; i < numEntries; i++)
+        {
+            // receive message containing entry information
+            int size = 0;
+            if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
+                cout << "Error: could not receive response size. errno = " << errno << endl;
+                return -1;
+            }
+
+            uint8 buffer[size];
+            if (0 > recv(sid, (char*) buffer, size, 0)) {
+                cout << "Error: could not receive response. errno = " << errno << endl;
+                return -1;
+            }
+
+            msg.Unflatten(buffer, size);
+            
+            dirEntry curEntry;
+            // TODO: store information in fileds of curEntry
+
+            entryList.push_back(curEntry);
         }
-
-        if (0 > send(sid, (const char*) buffer, size, 0)) {
-            cout << "Error: could not send message. errno = " << errno << endl;
-            return "";
-        }
-        cout << "Sending message LIST_DIR." << endl;
-
-        int size2 = 0;
-        if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
-            cout << "Error: could not receive response size. errno = " << errno << endl;
-            return "";
-        }
-
-        uint8 buffer2[size2];
-        if (0 > recv(sid, (char*) buffer2, size2, 0)) {
-            cout << "Error: could not receive response. errno = " << errno << endl;
-            return "";
-        }
-
-
-        msg.Unflatten(buffer2, size2);
-
-        String dirStr("");
-        msg.FindString(DIR, dirStr);
-
-        string dir = dirStr.Cstr();
-        return dir;
+        
+        return entryList;
     }
 
     /**
@@ -435,21 +441,10 @@ public:
         } else if (methodStr == LIST_DIR) {
             String dirList("Start of FileDirectory\n\n");
 
-            list<Entry> entryList = dirPtr->listEntries();
-            Entry curEntry;
-            for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
+            list<Entry> entryList = dirPtr->listEntries();           
 
-                //dirList += i->fcb;
-                //dirList += " ";
-                //dirList += i->name;
-                
-                //dirList += "\n";
-            }
-
-            dirList += "\n End of Directory \n";
-
-            msg.AddInt32()
-//            msg.AddString(DIR, dirList);
+            int numEntries = entryList.size();
+            msg.AddInt32(RESULT, numEntries)
 
             uint8 buffer[msg.FlattenedSize()];
             msg.Flatten(buffer);
@@ -464,7 +459,27 @@ public:
                 cout << "Error: could not send message. errno = " << errno << endl;
                 return -1;
             }
-            cout << "Message sent to client" << endl;
+            cout << "Directory size sent to client." << endl;
+
+            Entry curEntry;
+            for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++)
+            {
+                // TODO: add information from directory entry to msg
+
+                uint8 buffer2[msg.FlattenedSize()];
+                msg.Flatten(buffer2);
+
+                int size2 = sizeof (buffer2);
+                if (0 > send(sid, (const char*) &size2, sizeof (int), 0)) {
+                    cout << "Error: could not send message size. errno = " << errno << endl;
+                    return -1;
+                }
+
+                if (0 > send(sid, (const char*) buffer2, size2, 0)) {
+                    cout << "Error: could not send message. errno = " << errno << endl;
+                    return -1;
+                }
+            }
 
         } else if (methodStr == DELETE_FILE) {
             int result = 0;
