@@ -75,7 +75,7 @@ public:
             if(it->fileDescriptor == fd)
             {
                 filePtr = it->filePtr;
-                table.remove(*it);
+                table.erase(it);
                 break;
             }
         }

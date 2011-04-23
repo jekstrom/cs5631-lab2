@@ -566,8 +566,8 @@ public:
             int fd = 0;
             int bytesToRead = 0;
 
-            msg.FindInt32(FD, fd);
-            msg.FindInt32(BYTESREAD, bytesToRead);
+            msg.FindInt32(FD, (int32*) &fd);
+            msg.FindInt32(BYTESREAD, (int32*) &bytesToRead);
 
             cout << "FD: " << fd << endl;
 
@@ -577,7 +577,7 @@ public:
             int bytesRead = file->read(buf, bytesToRead);
 
             msg.Clear(true);
-            msg.AddInt32(BYTESREAD, (int32*) bytesRead);
+            msg.AddInt32(BYTESREAD, (int32) &bytesRead);
             msg.AddData(DATA, B_ANY_TYPE, buf, bytesRead);
 
             if(-1 == sendMsg(msg))
@@ -591,9 +591,9 @@ public:
             int result = 0;
             void* buf = NULL; //buffer to hold data from write method
 
-            msg.FindInt32(FD, fd);
-            msg.FindInt32(BYTESWRITTEN, bytesToWrite);
-            msg.FindData(DATA, B_ANY_TYPE, &buf, &result); //put data from write into buf
+            msg.FindInt32(FD, (int32*) &fd);
+            msg.FindInt32(BYTESWRITTEN, (int32*) &bytesToWrite);
+            msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result); //put data from write into buf
 
             cout << "FD: " << fd << endl;
 
@@ -603,7 +603,7 @@ public:
 
             msg.Clear(true);
             msg.AddInt32(BYTESWRITTEN, bytesWritten);
-            msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32*) &bytesWritten);
+            msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32) &bytesWritten);
 
             if(-1 == sendMsg(msg))
                 return -1;

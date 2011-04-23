@@ -26,7 +26,7 @@ DEFINES += -DMUSCLE_AVOID_SIGNAL_HANDLING
 #DEFINES += -DMUSCLE_POOL_SLAB_SIZE=0
 
 CFLAGS = -I.. -I../muscle -I../zlib/zlib -g
-GCCFLAGS = -fno-exceptions -DMUSCLE_NO_EXCEPTIONS -W -Wall -Wno-multichar -fexceptions
+GCCFLAGS = -DMUSCLE_NO_EXCEPTIONS -W -Wall -Wno-multichar
 CXXFLAGS = $(CFLAGS) -O3 $(DEFINES)
 LFLAGS =  
 LIBS =  -lpthread
