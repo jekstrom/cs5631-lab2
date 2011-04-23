@@ -50,10 +50,10 @@ private:
      * @param msg A message that has its content set
      * @return -1 in case of error, 0 otherwise
      */
-    int sendMsg(Message msg)
+    int sendMsg(Message *msg)
     {
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
+        uint8 buffer[msg->FlattenedSize()];
+        msg->Flatten(buffer);
 
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
@@ -74,8 +74,10 @@ private:
      * @param msg A message with unimportant content
      * @return -1 in case of error, 0 otherwise
      */
-    int recvMsg(Message msg)
+    int recvMsg(Message *msg)
     {
+        cout << "RecvMsg " << endl;
+        
         int size = 0;
         if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
@@ -88,7 +90,8 @@ private:
             return -1;
         }
 
-        msg.Unflatten(buffer, size);
+        msg->Unflatten(buffer, size);
+        cout << "RecvMsg: " <<msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() << endl;
         return 0;
     }
 
@@ -97,35 +100,38 @@ private:
      * @param msg A message that has its content set
      * @return -1 in case of error, 0 otherwise
      */
-    int sendRecv(Message msg)
+    int sendRecv(Message *msg)
     {
-        uint8 buffer[msg.FlattenedSize()];
-        msg.Flatten(buffer);
-
+        cout << "IN SEND RCV" <<endl;
+        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+        uint8 buffer[msg->FlattenedSize()];
+        msg->Flatten(buffer);
+        cout << "here" <<endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
             return -1;
         }
-
+        cout << "here2" <<endl;
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-
+        cout << "here3" <<endl;
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return -1;
         }
-
+        cout << "here4" <<endl;
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return -1;
         }
-
-        msg.Unflatten(buffer2, size2);
+        cout << "here5" <<endl;
+        msg->Unflatten(buffer2, size2);
+        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         return 0;
     }
 
@@ -184,9 +190,10 @@ public:
             return -1;
         }
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
+        cout << "Message in openFile: " << msg.GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         int fd = 0;
         msg.FindInt32(FD, 0, (int32*) & fd);
         cout << "Received message \"" << fd << "\"." << endl;
@@ -211,7 +218,7 @@ public:
         msg.AddString(METHOD, CLOSE_FILE);
         msg.AddInt32(FD, fd);
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
@@ -242,7 +249,7 @@ public:
 
         msg.AddString(METHOD, LIST_DIR);
 
-        sendRecv(msg);
+        sendRecv(&msg);
 
         // response contains number of entries in directory
         int numEntries = 0;
@@ -253,7 +260,7 @@ public:
         for(int i = 0; i < numEntries; i++)
         {
             // receive message containing entry information
-            if(-1 == recvMsg(msg))
+            if(-1 == recvMsg(&msg))
                     return entryList;
 
             // store received information in a dirEntry
@@ -288,7 +295,7 @@ public:
         msg.AddString(METHOD, DELETE_FILE);
         msg.AddString(FILENAME, filename);
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
@@ -318,7 +325,7 @@ public:
         msg.AddInt32(FD, fd);
         msg.AddInt32(BYTESREAD, readAmt);
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
         int bytesRead = 0;
@@ -352,7 +359,7 @@ public:
         msg.AddInt32(BYTESWRITTEN, writeAmt);
         msg.AddData(DATA, B_ANY_TYPE, buf, writeAmt);
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
         int bytesWritten = 0;
@@ -379,7 +386,7 @@ public:
         msg.AddString(METHOD, FILE_EXISTS);
         msg.AddString(FILENAME, filename);
 
-        if(-1 == sendRecv(msg))
+        if(-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
@@ -403,7 +410,7 @@ public:
 
         msg.AddString(METHOD, QUIT);
 
-        if(-1 == sendMsg(msg))
+        if(-1 == sendMsg(&msg))
             return -1;
 
         cout << "Message sent." << endl;
@@ -447,7 +454,7 @@ public:
         const String WRITE("Write");
 
         Message msg;
-        if(-1 == recvMsg(msg))
+        if(-1 == recvMsg(&msg))
                 return -1;
 
         String methodStr("");
@@ -483,7 +490,7 @@ public:
 
             msg.AddInt32(FD, fd);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
         } else if (methodStr == CLOSE_FILE) {
@@ -500,7 +507,7 @@ public:
 
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
         } else if (methodStr == LIST_DIR) {
@@ -509,7 +516,7 @@ public:
             int numEntries = entryList.size();
             msg.AddInt32(RESULT, numEntries);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Directory size sent to client." << endl;
@@ -525,7 +532,7 @@ public:
                 msg.AddInt32(END_BLOCK, fcb.getPointer(2));
                 msg.AddInt32(NUM_BLOCKS, fcb.getPointer(3));
 
-                if(-1 == sendMsg(msg))
+                if(-1 == sendMsg(&msg))
                     return -1;
             }
 
@@ -557,7 +564,7 @@ public:
 
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -580,7 +587,7 @@ public:
             msg.AddInt32(BYTESREAD, (int32) &bytesRead);
             msg.AddData(DATA, B_ANY_TYPE, buf, bytesRead);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -605,7 +612,7 @@ public:
             msg.AddInt32(BYTESWRITTEN, bytesWritten);
             msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32) &bytesWritten);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -623,7 +630,7 @@ public:
             msg.Clear(true);
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(msg))
+            if(-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;

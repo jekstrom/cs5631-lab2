@@ -389,7 +389,7 @@ void* connectionThread(void* dataPtr)
     while(true)
     {
         int result = clientCon.handleRequest();
-
+        cout << "Result = " <<result <<endl;
         // check for quit command
         if(1 == result)
         {
