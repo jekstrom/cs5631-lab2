@@ -348,7 +348,17 @@ int main(int argc, char** argv) {
                 }
                 else if (lineStr == "3")
                 {
-                    cout << con.listDirectory() << endl;
+                    list<dirEntry> dirList = con.listDirectory();
+                    cout << "Start of directory" << endl;
+                    for(list<dirEntry>::iterator it = dirList.begin(); it != dirList.end(); it++)
+                    {
+                        cout << "Filename: " << it->filename;
+                        cout << "; FCB number: " << it->fcbNum;
+                        cout << "; Start block: " << it->startBlock;
+                        cout << "; End block: " << it->endBlock;
+                        cout << "; Number of blocks: " << it->numBlocks << endl;
+                    }
+                    cout << "End of directory" << endl;
                 }
                 else if (lineStr == "4")
                 {
