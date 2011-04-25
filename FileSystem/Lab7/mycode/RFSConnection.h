@@ -76,8 +76,6 @@ private:
      */
     int recvMsg(Message *msg)
     {
-        cout << "RecvMsg " << endl;
-        
         int size = 0;
         if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
@@ -91,7 +89,6 @@ private:
         }
 
         msg->Unflatten(buffer, size);
-        cout << "RecvMsg: " <<msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() << endl;
         return 0;
     }
 
@@ -360,7 +357,7 @@ public:
         msg.AddInt32(FD, fd);
         msg.AddInt32(BYTESWRITTEN, writeAmt);
         msg.AddData(DATA, B_ANY_TYPE, buf, writeAmt);
-
+//        cout << "Buf in writeFile: " << (const char*) buf << endl;
         if(-1 == sendRecv(&msg))
             return -1;
 
@@ -525,9 +522,10 @@ public:
             
             for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++)
             {
+                msg.Clear(true);
+                
                 // TODO: add information from directory entry to msg
                 Block fcb = Block(i->fcb, diskPtr);
-
                 msg.AddString(FILENAME, i->name.c_str());
                 msg.AddInt32(FCB, i->fcb);
                 msg.AddInt32(START_BLOCK, fcb.getPointer(1)); // use named constants?
@@ -537,7 +535,7 @@ public:
                 if(-1 == sendMsg(&msg))
                     return -1;
             }
-
+            
         } else if (methodStr == DELETE_FILE) {
             int result = 0;
             String filename("");
@@ -615,28 +613,32 @@ public:
             msg.FindInt32(FD, (int32*) &fd);
             msg.FindInt32(BYTESWRITTEN, (int32*) &bytesToWrite);
             msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result); //put data from write into buf
-            msg.Clear(true);
-
+            cout << "Buffer after find data: " << (const char*) buf <<endl;
+            //msg.Clear(false);
+            
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
-
+            Message msg2;
             if(file != NULL)
             {
                 cout << "File found in table." << endl;
+                cout << "Buffer we are writing: " << (const char*) buf << endl;
                 int bytesWritten = file->write(buf, bytesToWrite);
-                
-                msg.AddInt32(BYTESWRITTEN, bytesWritten);
-                msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32) &bytesWritten);
+
+                msg2.AddInt32(BYTESWRITTEN, bytesWritten);
+                if (msg2.AddData(DATA, B_ANY_TYPE, buf, (uint32) bytesWritten)
+                        != B_NO_ERROR)
+                    cout << "SERVER: Error: Couldn't add data!" << endl;
             }
             else
             {
                 cout << "File not found in table." << endl;
                 int bytesWritten = -1;
-                msg.AddInt32(BYTESWRITTEN, bytesWritten);
+                msg2.AddInt32(BYTESWRITTEN, bytesWritten);
             }
 
-            if(-1 == sendMsg(&msg))
+            if(-1 == sendMsg(&msg2))
                     return -1;
 
             cout << "Message sent to client" << endl;
