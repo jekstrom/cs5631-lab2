@@ -342,7 +342,7 @@ public:
      * @param fd The file descriptor of the file to write to
      * @param writeAmt The amount of bytes to write
      * @param buf The data to write to the file
-     * @return The number of bytes written
+     * @return The number of bytes written, or -1 in case of error
      */
     int writeFile(int fd, int writeAmt, void* buf) {
         const String METHOD("MethodName");

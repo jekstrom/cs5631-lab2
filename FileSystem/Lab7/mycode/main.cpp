@@ -296,6 +296,9 @@ int main(int argc, char** argv) {
                     cout << "2) Close a file" << endl;
                     cout << "3) List directory" << endl;
                     cout << "4) Delete file" << endl;
+                    cout << "5) Check if file exists" << endl;
+                    cout << "6) Write to file" << endl;
+                    cout << "7) Read from file" << endl;
                     cout << "Enter Command: ";
                 }
                 displayMenu = true;
@@ -335,6 +338,9 @@ int main(int argc, char** argv) {
                 }
                 else if (lineStr == "2")
                 {
+                    cout << "File descriptor of file to close: ";
+                    cin.getline(line, lineLen);
+                    fd = atoi(line);
                     if(fileOpen)
                         if(-1 != con.closeFile(fd))
                         {
@@ -372,6 +378,54 @@ int main(int argc, char** argv) {
                         cout << "File not found or could not be deleted." << endl;
                     else
                         cout << "File deleted successfully." << endl;
+                }
+                else if (lineStr == "5")
+                {
+                    cout << "Name of file: ";
+                    string file;
+                    cin >> file;
+                    cin.ignore(); //ignore the \n
+
+                    String filename = file.c_str();
+                    int fe;
+                    fe == con.fileExists(filename);
+
+                    if(fe == 1)
+                        cout << file << " exists." << endl;
+                    else if(fe == 0)
+                        cout << file << " does not exist." << endl;
+                    else
+                        cout << "Error: could not determine file's existence." << endl;
+                }
+                else if (lineStr == "6")
+                {
+                    cout << "File descriptor of file to write to: ";
+                    cin.getline(line, lineLen);
+                    fd = atoi(line);
+                    cout << "Enter data to write to file: ";
+                    cin.getline(line, lineLen);
+
+                    int bytesWritten = con.writeFile(fd, string(line).length(), line);
+                    if(-1 == bytesWritten)
+                        cout << "Error: could not write to file." << endl;
+                    else
+                        cout << "Wrote " << bytesWritten << " bytes to file." << endl;
+                }
+                else if (lineStr == "7")
+                {
+                    cout << "File descriptor of file to read from: ";
+                    cin.getline(line, lineLen);
+                    fd = atoi(line);
+                    cout << "Number of bytes to read from file: ";
+                    int bytesToRead;
+                    cin >> bytesToRead;
+                    char readBuffer[bytesToRead];
+
+                    int bytesRead = con.readFile(fd, bytesToRead, readBuffer);
+                    if(-1 == bytesRead)
+                        cout << "Error: could not read from file." << endl;
+                    else
+                        cout << "Read " << bytesRead << " bytes: " << readBuffer << endl;
                 }
                 else if(lineStr == "")
                     displayMenu = false;
