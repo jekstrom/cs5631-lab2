@@ -163,7 +163,7 @@ public:
      * and receives the server's response via muscle messages
      * @param filename The name of the file to open
      * @param mode One of either "read" or "write"
-     * @return The now open file's FD (server currently returns 42)
+     * @return The now open file's FD
      */
     int openFile(String filename, String mode) {
         const String METHOD("MethodName");
@@ -333,6 +333,7 @@ public:
 
         msg.FindInt32(BYTESREAD, (int32*) &bytesRead);
         msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result);
+        cout << "readFile result = " << result << endl;
 
         return bytesRead;
     }
@@ -392,10 +393,10 @@ public:
         int result = 0;
         msg.FindInt32(RESULT, (int32*) &result);
 
-        if(-1 == result)
-            return 0;
-        else
-            return 1;
+        if(-1 == result)        
+            return 0;        
+        else        
+            return 1;        
     }
 
     /**
@@ -575,17 +576,29 @@ public:
 
             msg.FindInt32(FD, (int32*) &fd);
             msg.FindInt32(BYTESREAD, (int32*) &bytesToRead);
+            msg.Clear(true);
 
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
 
-            void* buf = NULL;
-            int bytesRead = file->read(buf, bytesToRead);
+            if(file != NULL)
+            {
+                cout << "File found in table." << endl;
+                char buf[bytesToRead];
+                int bytesRead = file->read(buf, bytesToRead);
+                cout << "Read " << bytesRead << " bytes from ";
+                cout << file->getName() << ": " << buf << endl;
 
-            msg.Clear(true);
-            msg.AddInt32(BYTESREAD, (int32) &bytesRead);
-            msg.AddData(DATA, B_ANY_TYPE, buf, bytesRead);
+                msg.AddInt32(BYTESREAD, (int32) &bytesRead);
+                msg.AddData(DATA, B_ANY_TYPE, buf, bytesRead);
+            }
+            else
+            {
+                cout << "File not found in table." << endl;
+                int bytesRead = -1;
+                msg.AddInt32(BYTESREAD, (int32) &bytesRead);
+            }
 
             if(-1 == sendMsg(&msg))
                 return -1;
@@ -601,19 +614,29 @@ public:
             msg.FindInt32(FD, (int32*) &fd);
             msg.FindInt32(BYTESWRITTEN, (int32*) &bytesToWrite);
             msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result); //put data from write into buf
+            msg.Clear(true);
 
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
 
-            int bytesWritten = file->write(buf, bytesToWrite);
-
-            msg.Clear(true);
-            msg.AddInt32(BYTESWRITTEN, bytesWritten);
-            msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32) &bytesWritten);
+            if(file != NULL)
+            {
+                cout << "File found in table." << endl;
+                int bytesWritten = file->write(buf, bytesToWrite);
+                
+                msg.AddInt32(BYTESWRITTEN, bytesWritten);
+                msg.AddData(DATA, B_ANY_TYPE, (const void **) &buf, (uint32) &bytesWritten);
+            }
+            else
+            {
+                cout << "File not found in table." << endl;
+                int bytesWritten = -1;
+                msg.AddInt32(BYTESWRITTEN, bytesWritten);
+            }
 
             if(-1 == sendMsg(&msg))
-                return -1;
+                    return -1;
 
             cout << "Message sent to client" << endl;
 
@@ -633,7 +656,7 @@ public:
             if(-1 == sendMsg(&msg))
                 return -1;
 
-            cout << "Message sent to client" << endl;
+            cout << "Message sent to client: " << result << endl;
 
         } else if (methodStr == QUIT) {
             return 1;
@@ -642,6 +665,8 @@ public:
             cout << "Received unrecognized request." << endl;
             return -1;
         }
+
+        return 0;
     }
 };
 

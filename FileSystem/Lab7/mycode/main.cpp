@@ -388,12 +388,12 @@ int main(int argc, char** argv) {
 
                     String filename = file.c_str();
                     int fe;
-                    fe == con.fileExists(filename);
+                    fe = con.fileExists(filename);
 
-                    if(fe == 1)
-                        cout << file << " exists." << endl;
-                    else if(fe == 0)
+                    if(fe == 0)
                         cout << file << " does not exist." << endl;
+                    else if(fe == 1)
+                        cout << file << " exists." << endl;                    
                     else
                         cout << "Error: could not determine file's existence." << endl;
                 }
