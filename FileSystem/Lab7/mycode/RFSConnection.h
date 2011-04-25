@@ -334,6 +334,7 @@ public:
         msg.FindInt32(BYTESREAD, (int32*) &bytesRead);
         msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result);
         cout << "readFile result = " << result << endl;
+        cout << "Read data: " << (char*) buf << endl;
 
         return bytesRead;
     }
@@ -590,8 +591,8 @@ public:
                 cout << "Read " << bytesRead << " bytes from ";
                 cout << file->getName() << ": " << buf << endl;
 
-                msg.AddInt32(BYTESREAD, (int32) &bytesRead);
-                msg.AddData(DATA, B_ANY_TYPE, buf, bytesRead);
+                msg.AddInt32(BYTESREAD, (int32) bytesRead);
+                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
             }
             else
             {
