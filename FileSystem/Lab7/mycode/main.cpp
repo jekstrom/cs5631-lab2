@@ -425,7 +425,11 @@ int main(int argc, char** argv) {
                     if(-1 == bytesRead)
                         cout << "Error: could not read from file." << endl;
                     else
-                        cout << "Read " << bytesRead << " bytes: " << readBuffer << endl;
+                    {
+                        char outputBuffer[bytesRead];
+                        memcpy(outputBuffer, readBuffer, bytesRead);
+                        cout << "Read " << bytesRead << " bytes: " << outputBuffer << endl;
+                    }
                 }
                 else if(lineStr == "")
                     displayMenu = false;

@@ -61,13 +61,10 @@ public:
     }
 
     /**
-     * Takes a file descriptor and removes its corresponding entry from
-     * the table, returning the coressponding File pointer.
+     * Takes a file descriptor and removes its corresponding entry from the table.
      * @param fd A file descriptor
-     * @return A File pointer corresponding to the given file descriptor,
-     *         or NULL if the file descriptor is not in the table.
      */
-    File* removeEntry(int fd)
+    void removeEntry(int fd)
     {
         File* filePtr = NULL;
         for(list<tableEntry>::iterator it = table.begin(); it != table.end(); it++)
@@ -79,8 +76,6 @@ public:
                 break;
             }
         }
-
-        return filePtr;
     }
 
 private:

@@ -99,36 +99,36 @@ private:
      */
     int sendRecv(Message *msg)
     {
-        cout << "IN SEND RCV" <<endl;
+//        cout << "IN SEND RCV" <<endl;
         cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-        cout << "here" <<endl;
+//        cout << "here" <<endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
             return -1;
         }
-        cout << "here2" <<endl;
+//        cout << "here2" <<endl;
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-        cout << "here3" <<endl;
+//        cout << "here3" <<endl;
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return -1;
         }
-        cout << "here4" <<endl;
+//        cout << "here4" <<endl;
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return -1;
         }
-        cout << "here5" <<endl;
+//        cout << "here5" <<endl;
         msg->Unflatten(buffer2, size2);
-        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+//        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         return 0;
     }
 
@@ -327,11 +327,11 @@ public:
 
         int bytesRead = 0;
         int result = 0;
+        void* dataBuf;
 
         msg.FindInt32(BYTESREAD, (int32*) &bytesRead);
-        msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result);
-        cout << "readFile result = " << result << endl;
-        cout << "Read data: " << (char*) buf << endl;
+        msg.FindData(DATA, B_ANY_TYPE, (const void**) &dataBuf, (uint32*) &result);
+        memcpy(buf, dataBuf, result);                
 
         return bytesRead;
     }
@@ -499,10 +499,8 @@ public:
             msg.FindInt32(FD, 0, (int32*) & fd);
             cout << "File desriptor: " << fd << endl;
 
-            //get file from open file table corresponding to given fd
-            File *file = oft.removeEntry(fd);
-
-            delete file;
+            //remove file from open file table corresponding to given fd
+            oft.removeEntry(fd);
 
             msg.AddInt32(RESULT, result);
 
