@@ -1,0 +1,116 @@
+Disk.Format: SUCCESS: Formatted disk with 100 blocks, each of size = 512 bytes.
+Socket created successfully.
+Server bound to port 4242.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: OpenFile
+Filename: test, mode: Write
+Result = 0
+Received request: Write
+FD: 0
+File found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 0
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: file2, mode: Write
+Result = 0
+Received request: Write
+FD: 0
+File found in table.
+Message sent to client
+Result = 0
+Received request: Write
+FD: 1
+File found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 0
+Result = 0
+Received request: quit
+Result = 1
+Client number 2 disconnected.
+Client number 1 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 100 bytes from file1: 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890≥i
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 0
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Result = 0
+Received request: OpenFile
+Filename: file2, mode: Read
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 100 bytes from file1: 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890≥i
+Message sent to client
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 190 bytes from file2: 0987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210987654321OL‘œo∂
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 0
+Result = 0
+Received request: quit
+Result = 1
+Client number 2 disconnected.
+Client number 1 connected.
+Received request: OpenFile
+Filename: file1, mode: Write
+Result = 0
+Received request: Write
+FD: 0
+File found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 0
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 200 bytes from file1: 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890abcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijkabcdefhijk
+Message sent to client
+Result = 0
+Received request: CloseFile
+File desriptor: 1
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Client number 2 connected.
+Received request: ListDir
+Directory size sent to client.
+Result = 0
+Received request: DeleteFile
+Filename: file1

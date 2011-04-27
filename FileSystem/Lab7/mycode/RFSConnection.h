@@ -103,30 +103,30 @@ private:
         cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-//        cout << "here" <<endl;
+
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here2" <<endl;
+        
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here3" <<endl;
+        
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here4" <<endl;
+        
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here5" <<endl;
+        
         msg->Unflatten(buffer2, size2);
 //        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         return 0;
@@ -573,31 +573,35 @@ public:
 
             msg.FindInt32(FD, (int32*) &fd);
             msg.FindInt32(BYTESREAD, (int32*) &bytesToRead);
-            msg.Clear(true);
+//            msg.Clear(true);
 
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
-
+            Message msg2;
             if(file != NULL)
             {
                 cout << "File found in table." << endl;
                 char buf[bytesToRead];
+
+                for (int i = 0; i < sizeof(buf); i++)
+                    buf[i] = 0;
+
                 int bytesRead = file->read(buf, bytesToRead);
                 cout << "Read " << bytesRead << " bytes from ";
                 cout << file->getName() << ": " << buf << endl;
 
-                msg.AddInt32(BYTESREAD, (int32) bytesRead);
-                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
+                msg2.AddInt32(BYTESREAD, (int32) bytesRead);
+                msg2.AddData(DATA, B_ANY_TYPE, (const char*) buf, bytesRead);
             }
             else
             {
                 cout << "File not found in table." << endl;
                 int bytesRead = -1;
-                msg.AddInt32(BYTESREAD, (int32) &bytesRead);
+                msg2.AddInt32(BYTESREAD, (int32) &bytesRead);
             }
 
-            if(-1 == sendMsg(&msg))
+            if(-1 == sendMsg(&msg2))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -611,7 +615,6 @@ public:
             msg.FindInt32(FD, (int32*) &fd);
             msg.FindInt32(BYTESWRITTEN, (int32*) &bytesToWrite);
             msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result); //put data from write into buf
-            cout << "Buffer after find data: " << (const char*) buf <<endl;
             //msg.Clear(false);
             
             cout << "FD: " << fd << endl;
@@ -621,7 +624,6 @@ public:
             if(file != NULL)
             {
                 cout << "File found in table." << endl;
-                cout << "Buffer we are writing: " << (const char*) buf << endl;
                 int bytesWritten = file->write(buf, bytesToWrite);
 
                 msg2.AddInt32(BYTESWRITTEN, bytesWritten);

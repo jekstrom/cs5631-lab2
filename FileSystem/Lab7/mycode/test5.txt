@@ -1,0 +1,56 @@
+Socket created successfully.
+Connected to 127.0.0.1 on port 4242
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Message in sendRecv: MethodName
+Start of directory
+Filename: testfile; FCB number: 2; Start block: 3; End block: 3; Number of blocks: 1
+Filename: testfile3; FCB number: 6; Start block: 7; End block: 7; Number of blocks: 1
+End of directory
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Name of file to delete: Message in sendRecv: MethodName
+Received message "-1".
+File not found or could not be deleted.
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Message in sendRecv: MethodName
+Start of directory
+Filename: testfile; FCB number: 2; Start block: 3; End block: 3; Number of blocks: 1
+Filename: testfile3; FCB number: 6; Start block: 7; End block: 7; Number of blocks: 1
+End of directory
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Message sent.

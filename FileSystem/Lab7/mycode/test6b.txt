@@ -1,0 +1,40 @@
+Socket created successfully.
+Connected to 127.0.0.1 on port 4242
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+8) Test 6 
+Enter Command: Message in sendRecv: MethodName
+Start of directory
+Filename: filea; FCB number: 2; Start block: 3; End block: 3; Number of blocks: 1
+Filename: fileaa; FCB number: 4; Start block: 5; End block: 5; Number of blocks: 1
+Filename: fileaaa; FCB number: 6; Start block: 7; End block: 7; Number of blocks: 1
+Filename: fileaaaa; FCB number: 8; Start block: 9; End block: 9; Number of blocks: 1
+Filename: fileaaaaa; FCB number: 10; Start block: 11; End block: 11; Number of blocks: 1
+Filename: fileaaaaaa; FCB number: 12; Start block: 13; End block: 13; Number of blocks: 1
+Filename: fileaaaaaaa; FCB number: 14; Start block: 15; End block: 15; Number of blocks: 1
+Filename: fileaaaaaaaa; FCB number: 16; Start block: 17; End block: 17; Number of blocks: 1
+Filename: fileaaaaaaaaa; FCB number: 18; Start block: 19; End block: 19; Number of blocks: 1
+Filename: fileaaaaaaaaaa; FCB number: 20; Start block: 21; End block: 21; Number of blocks: 1
+Filename: fileaaaaaaaaaaa; FCB number: 22; Start block: 23; End block: 23; Number of blocks: 1
+Filename: fileaaaaaaaaaaaa; FCB number: 24; Start block: 25; End block: 25; Number of blocks: 1
+End of directory
+
+CS5631 Lab 6 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+8) Test 6 
+Enter Command: Message sent.

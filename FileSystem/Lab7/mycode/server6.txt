@@ -1,0 +1,14 @@
+Socket created successfully.
+Server bound to port 4242.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: ListDir
+Directory size sent to client.
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Client number 2 connected.
+Received request: quit
+Result = 1
+Client number 2 disconnected.

@@ -1,0 +1,50 @@
+Disk.Format: SUCCESS: Formatted disk with 100 blocks, each of size = 512 bytes.
+Socket created successfully.
+Server bound to port 4242.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: OpenFile
+Filename: filea, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaaaaaa, mode: Write
+Result = 0
+Received request: OpenFile
+Filename: fileaaaaaaaaaaaa, mode: Write
+Result = 0
+Received request: ListDir
+Directory size sent to client.
+Result = 0
+Received request: ListDir
+Directory size sent to client.
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
