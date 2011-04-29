@@ -67,7 +67,7 @@ public:
      * @param fcbNum The FCB number of the file to remove a reference to
      */
     void removeReference(int fcbNum)
-    {
+    {        
         pthread_mutex_lock(&tableMutex);
 
         // search table
@@ -78,7 +78,7 @@ public:
                 it->refCount--;
 
                 // if there are no more references, remove entry
-                if(it->refCount == 0)
+                if(it->refCount <= 0)
                 {
                     pthread_mutex_destroy(&it->fileMutex);
                     entryList.erase(it);

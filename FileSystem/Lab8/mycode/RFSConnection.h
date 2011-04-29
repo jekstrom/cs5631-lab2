@@ -533,9 +533,10 @@ public:
                 }
 
                 //remove file from open file table corresponding to given fd
+                cout << "GFT remove" << endl;
+                gftPtr->removeReference(oft.getFilePtr(fd)->getFcbNumber());
                 cout << "OFT remove" << endl;
                 oft.removeEntry(fd);
-                cout << "GFT remove" << endl;
                 fdList.remove(fd);
                 cout << "Removed" << endl;
             }
@@ -586,9 +587,11 @@ public:
             }
             else
             {
+                cout << "File found" << endl;
                 int fd = oft.getFD(string(filename.Cstr()));
-                if(fd != -1) // if file is open, close it
+                if(fd >= 0) // if file is open, close it
                 {
+                    cout << "Closing file, fd = " << fd << endl;
                     // if file was open for writing, unlock
                     if(oft.getFilePtr(fd)->isOpenForWrite())
                         pthread_mutex_unlock(gftPtr->getMutex(fcb));

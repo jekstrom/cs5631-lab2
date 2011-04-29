@@ -73,6 +73,9 @@ public:
             if(it->filePtr->getName() == filename)
                 return it->fileDescriptor;
         }
+
+        // file not found
+        return -1;
     }
 
     /**
