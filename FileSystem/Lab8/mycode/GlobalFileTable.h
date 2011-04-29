@@ -23,6 +23,7 @@ public:
      */
     GlobalFileTable()
     {
+        pthread_mutex_init(&tableMutex, NULL);
     }
 
     /**
@@ -32,6 +33,8 @@ public:
      */
     void addReference(int fcbNum)
     {
+        pthread_mutex_lock(&tableMutex);
+
         // search table to see if file is already open
         bool found = false;
         for(list<tableEntry>::iterator it = entryList.begin(); it != entryList.end(); it++)
@@ -50,7 +53,11 @@ public:
             newEntry.fcb = fcbNum;
             newEntry.refCount = 1;
             pthread_mutex_init(&newEntry.fileMutex, NULL);
+
+            entryList.push_back(newEntry);
         }
+
+        ptherad_mutex_lock(&tableMutex);
     }
 
     /**
@@ -60,6 +67,8 @@ public:
      */
     void removeReference(int fcbNum)
     {
+        pthread_mutex_lock(&tableMutex);
+
         // search table
         for(list<tableEntry>::iterator it = entryList.begin(); it != entryList.end(); it++)
             if(it->fcb == fcbNum)
@@ -76,6 +85,8 @@ public:
 
                 break;
             }
+
+        pthread_mutex_unlock(&tableMutex);
     }
 
     /**
@@ -109,6 +120,8 @@ private:
     };
 
     list<tableEntry> entryList;
+
+    pthread_mutex_t tableMutex;
 };
 
 #endif	/* GLOBALFILETABLE_H */

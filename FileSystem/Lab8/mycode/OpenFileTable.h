@@ -61,7 +61,23 @@ public:
     }
 
     /**
+     * Searches the open file table for a file with a particular name, and returns
+     * its file descriptor.
+     * @param filename THe name of a file to search for
+     * @return The file descriptor of the file if it is found, -1 otherwise
+     */
+    int getFD(string filename)
+    {
+        for(list<tableEntry>::iterator it = table.begin(); it != table.end(); it++)
+        {
+            if(it->filePtr->getName() == filename)
+                return it->fileDescriptor;
+        }
+    }
+
+    /**
      * Takes a file descriptor and removes its corresponding entry from the table.
+     * This closes the corresponding file.
      * @param fd A file descriptor
      */
     void removeEntry(int fd)
@@ -71,7 +87,7 @@ public:
         {
             if(it->fileDescriptor == fd)
             {
-                filePtr = it->filePtr;
+                it->filePtr->close();
                 table.erase(it);
                 break;
             }

@@ -48,6 +48,10 @@ private:
 
     OpenFileTable oft;
 
+    list<int> fdList;
+
+    static pthread_mutex_t deletionMutex;
+
     /**
      * Sends a message stored in msg.
      * @param msg A message that has its content set
@@ -159,6 +163,7 @@ public:
         this->gftPtr = gftPtr;
         this->dirPtr = dirPtr;
         this->diskPtr = diskPtr;
+        pthread_mutex_init(&deletionMutex, NULL);
     }
 
     /**
@@ -478,6 +483,7 @@ public:
 
             File *file = NULL;
 
+            pthread_mutex_lock(&deletionMutex);
             int fcb = dirPtr->findFile(string(filename.Cstr()));
 
             bool readAccess = true;
@@ -490,8 +496,16 @@ public:
                 file = new File(string(filename.Cstr()), false, readAccess, diskPtr, dirPtr);
             }
 
+            gftPtr->addReference(file->getFcbNumber());
+            pthread_mutex_unlock(&deletionMutex);
+            
+            // if opening for writing, gain lock on a file
+            if(!readAccess)
+                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
+
             //add file to open file table
             fd = oft.addEntry(file);
+            fdList.push_back(fd);
 
             msg.AddInt32(FD, fd);
 
@@ -505,8 +519,13 @@ public:
             msg.FindInt32(FD, 0, (int32*) & fd);
             cout << "File desriptor: " << fd << endl;
 
+            // if file was open for writing, unlock
+            if(!oft.getFilePtr(fd)->isOpenForRead())
+                pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
+
             //remove file from open file table corresponding to given fd
             oft.removeEntry(fd);
+            fdList.remove(fd);
 
             msg.AddInt32(RESULT, result);
 
@@ -527,8 +546,7 @@ public:
             for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++)
             {
                 msg.Clear(true);
-                
-                // TODO: add information from directory entry to msg
+                                
                 Block fcb = Block(i->fcb, diskPtr);
                 msg.AddString(FILENAME, i->name.c_str());
                 msg.AddInt32(FCB, i->fcb);
@@ -548,22 +566,37 @@ public:
             cout << "Filename: " << filename.Cstr() << endl;
 
             int fcb = dirPtr->findFile(string(filename.Cstr()));
-            if (fcb < 0) { //couldn't find file, doesn't exist
+            if (fcb < 0) 
+            {   //couldn't find file, doesn't exist
                 result = -1;
                 cout << "Error: Could not find file " << string(filename.Cstr()) << endl;
-            } else { //found file, delete it
-                File *file = new File(string(filename.Cstr()), false, false, diskPtr, dirPtr);
+            }
+            else
+            {
+                int fd = oft.getFD(string(filename.Cstr()));
+                if(fd != -1) // if file is open, close it
+                {
+                    // if file was open for writing, unlock
+                    if(!oft.getFilePtr(fd)->isOpenForRead())
+                        pthread_mutex_unlock(gftPtr->getMutex(fcb));
 
-                if (!file->close()) {
-                    cout << "Error: Ejecting warp core!" << endl;
-                    result = -1;
+                    oft.removeEntry(fd);
+                    gftPtr->removeReference(fcb);
                 }
 
-                //remove from open file table
-
-                if (!file->deleteFile())
-                    cout << "Error: Could not delete file " << filename.Cstr() << endl;
-                result = 1;
+                pthread_mutex_lock(&deletionMutex);
+                if(gftPtr->getMutex(fcb) != NULL)
+                {
+                    // some client has the file open, do not delete
+                    result = -1;
+                }
+                else
+                { //found file, delete it                   
+                    if (!dirPtr->removeFile(string(filename.Cstr())))
+                        cout << "Error: Could not delete file " << filename.Cstr() << endl;
+                    result = 1;
+                }
+                pthread_mutex_unlock(&deletionMutex);
             }
 
             msg.AddInt32(RESULT, result);
@@ -587,9 +620,12 @@ public:
 
             if(file != NULL)
             {
+                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
+
                 cout << "File found in table." << endl;
                 char buf[bytesToRead];
                 int bytesRead = file->read(buf, bytesToRead);
+                pthread_mutex_unlock(gftPtr->getMutex(file->getFcbNumber()));
                 cout << "Read " << bytesRead << " bytes from ";
                 cout << file->getName() << ": " << buf << endl;
 
@@ -626,9 +662,12 @@ public:
             Message msg2;
             if(file != NULL)
             {
+                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
+
                 cout << "File found in table." << endl;
                 cout << "Buffer we are writing: " << (const char*) buf << endl;
                 int bytesWritten = file->write(buf, bytesToWrite);
+                pthread_mutex_unlock(gftPtr->getMutex(file->getFcbNumber()));
 
                 msg2.AddInt32(BYTESWRITTEN, bytesWritten);
                 if (msg2.AddData(DATA, B_ANY_TYPE, buf, (uint32) bytesWritten)
@@ -666,6 +705,16 @@ public:
             cout << "Message sent to client: " << result << endl;
 
         } else if (methodStr == QUIT) {
+            for(list<int>::iterator it = fdList.begin(); it != fdList.end(); it++)
+            {
+                File* curFilePtr = oft.getFilePtr(*it);
+                if(!curFilePtr->isOpenForRead())
+                    ptherad_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
+
+                oft.removeEntry(*it);
+                gftPtr->removeReference(curFilePtr->getFcbNumber());
+                fdList.erase(it);
+            }
             return 1;
 
         } else {
