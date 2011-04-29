@@ -18,6 +18,7 @@
 #include "OpenFileTable.h"
 #include "GlobalFileTable.h"
 #include <list>
+#include <pthread.h>
 
 using namespace muscle;
 using namespace std;
@@ -49,8 +50,6 @@ private:
     OpenFileTable oft;
 
     list<int> fdList;
-
-    static pthread_mutex_t deletionMutex;
 
     /**
      * Sends a message stored in msg.
@@ -163,7 +162,6 @@ public:
         this->gftPtr = gftPtr;
         this->dirPtr = dirPtr;
         this->diskPtr = diskPtr;
-        pthread_mutex_init(&deletionMutex, NULL);
     }
 
     /**
@@ -342,7 +340,8 @@ public:
 
         msg.FindInt32(BYTESREAD, (int32*) &bytesRead);
         msg.FindData(DATA, B_ANY_TYPE, (const void**) &dataBuf, (uint32*) &result);
-        memcpy(buf, dataBuf, result);                
+        if(bytesRead != -1)
+            memcpy(buf, dataBuf, result);
 
         return bytesRead;
     }
@@ -483,7 +482,9 @@ public:
 
             File *file = NULL;
 
-            pthread_mutex_lock(&deletionMutex);
+            cout << "Before lock..." << endl;
+            pthread_mutex_lock(gftPtr->getDeletionMutex());
+            cout << "...After lock" << endl;
             int fcb = dirPtr->findFile(string(filename.Cstr()));
 
             bool readAccess = true;
@@ -497,7 +498,7 @@ public:
             }
 
             gftPtr->addReference(file->getFcbNumber());
-            pthread_mutex_unlock(&deletionMutex);
+            pthread_mutex_unlock(gftPtr->getDeletionMutex());
             
             // if opening for writing, gain lock on a file
             if(!readAccess)
@@ -521,11 +522,18 @@ public:
 
             // if file was open for writing, unlock
             if(!oft.getFilePtr(fd)->isOpenForRead())
+            {
+                cout << "Before unlock" << endl;
                 pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
+                cout << "After unlock" << endl;
+            }
 
             //remove file from open file table corresponding to given fd
+            cout << "OFT remove" << endl;
             oft.removeEntry(fd);
+            cout << "GFT remove" << endl;
             fdList.remove(fd);
+            cout << "Removed" << endl;
 
             msg.AddInt32(RESULT, result);
 
@@ -584,7 +592,7 @@ public:
                     gftPtr->removeReference(fcb);
                 }
 
-                pthread_mutex_lock(&deletionMutex);
+                pthread_mutex_lock(gftPtr->getDeletionMutex());
                 if(gftPtr->getMutex(fcb) != NULL)
                 {
                     // some client has the file open, do not delete
@@ -596,7 +604,7 @@ public:
                         cout << "Error: Could not delete file " << filename.Cstr() << endl;
                     result = 1;
                 }
-                pthread_mutex_unlock(&deletionMutex);
+                pthread_mutex_unlock(gftPtr->getDeletionMutex());
             }
 
             msg.AddInt32(RESULT, result);
@@ -637,6 +645,8 @@ public:
                 cout << "File not found in table." << endl;
                 int bytesRead = -1;
                 msg.AddInt32(BYTESREAD, (int32) &bytesRead);
+                char buf[bytesToRead];
+                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
             }
 
             if(-1 == sendMsg(&msg))
@@ -662,12 +672,10 @@ public:
             Message msg2;
             if(file != NULL)
             {
-                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
 
                 cout << "File found in table." << endl;
                 cout << "Buffer we are writing: " << (const char*) buf << endl;
                 int bytesWritten = file->write(buf, bytesToWrite);
-                pthread_mutex_unlock(gftPtr->getMutex(file->getFcbNumber()));
 
                 msg2.AddInt32(BYTESWRITTEN, bytesWritten);
                 if (msg2.AddData(DATA, B_ANY_TYPE, buf, (uint32) bytesWritten)
@@ -709,11 +717,11 @@ public:
             {
                 File* curFilePtr = oft.getFilePtr(*it);
                 if(!curFilePtr->isOpenForRead())
-                    ptherad_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
+                    pthread_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
 
                 oft.removeEntry(*it);
                 gftPtr->removeReference(curFilePtr->getFcbNumber());
-                fdList.erase(it);
+                fdList.remove(*it);
             }
             return 1;
 

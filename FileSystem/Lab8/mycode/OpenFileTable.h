@@ -81,8 +81,7 @@ public:
      * @param fd A file descriptor
      */
     void removeEntry(int fd)
-    {
-        File* filePtr = NULL;
+    {        
         for(list<tableEntry>::iterator it = table.begin(); it != table.end(); it++)
         {
             if(it->fileDescriptor == fd)

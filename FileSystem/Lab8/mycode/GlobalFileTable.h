@@ -24,6 +24,7 @@ public:
     GlobalFileTable()
     {
         pthread_mutex_init(&tableMutex, NULL);
+        pthread_mutex_init(&deletionMutex, NULL);
     }
 
     /**
@@ -57,7 +58,7 @@ public:
             entryList.push_back(newEntry);
         }
 
-        ptherad_mutex_lock(&tableMutex);
+        pthread_mutex_unlock(&tableMutex);
     }
 
     /**
@@ -79,7 +80,7 @@ public:
                 // if there are no more references, remove entry
                 if(it->refCount == 0)
                 {
-                    ptherad_mutex_destroy(it->fileMutex);
+                    pthread_mutex_destroy(&it->fileMutex);
                     entryList.erase(it);
                 }
 
@@ -108,6 +109,16 @@ public:
         return NULL;
     }
 
+    /**
+     * Retrieves a pointer to a mutex which can be used to ensure deletion of a
+     * file is not interrupted by another thread.
+     * @return A pointer to a mutex
+     */
+    pthread_mutex_t* getDeletionMutex()
+    {
+        return &deletionMutex;
+    }
+
 private:
 
     struct tableEntry
@@ -122,6 +133,8 @@ private:
     list<tableEntry> entryList;
 
     pthread_mutex_t tableMutex;
+
+    pthread_mutex_t deletionMutex;
 };
 
 #endif	/* GLOBALFILETABLE_H */
