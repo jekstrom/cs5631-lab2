@@ -608,8 +608,10 @@ public:
                     result = -1;
                 }
                 else
-                { //found file, delete it                   
-                    if (!dirPtr->removeFile(string(filename.Cstr())))
+                { //found file, delete it
+                    File condemned(string(filename.Cstr()), false, false, diskPtr, dirPtr);
+                    cout << "Deleting file" << endl;
+                    if (!condemned.deleteFile())
                     {
                         cout << "Error: Could not delete file " << filename.Cstr() << endl;
                         result = -1;
