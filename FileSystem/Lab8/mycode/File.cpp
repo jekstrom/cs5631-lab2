@@ -146,13 +146,13 @@ int File::read(void* buf, int len) {
         readBuf[bytesRead] = blockBuf[currentByte + sizeof (int) + 1];
 
         //check null-termination
-        if (readBuf[bytesRead] == 0 && endBlockNumber == currentBlockNumber) {
-            //get rid of NULL characters
-            for (int i = 0; i < bytesRead; i++)
-                if (readBuf[i] == 0 && readBuf[i + 1] != 0)
-                    readBuf[i] = readBuf[i + 1];
-            return bytesRead;
-        }
+//        if (readBuf[bytesRead] == 0 && endBlockNumber == currentBlockNumber) {
+//            //get rid of NULL characters
+//            for (int i = 0; i < bytesRead; i++)
+//                if (readBuf[i] == 0 && readBuf[i + 1] != 0)
+//                    readBuf[i] = readBuf[i + 1];
+//            return bytesRead;
+//        }
 
         if (currentByte == lastByteIndex) {
             // advance to next block
