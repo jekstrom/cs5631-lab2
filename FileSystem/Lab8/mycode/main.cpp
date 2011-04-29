@@ -423,7 +423,7 @@ int main(int argc, char** argv) {
                     char readBuffer[bytesToRead];
 
                     int bytesRead = con.readFile(fd, bytesToRead, readBuffer);
-                    if(-1 == bytesRead)
+                    if(0 > bytesRead)
                         cout << "Error: could not read from file." << endl;
                     else
                     {

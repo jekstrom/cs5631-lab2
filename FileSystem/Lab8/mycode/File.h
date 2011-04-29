@@ -53,6 +53,12 @@ public:
     bool isOpenForRead();
 
     /**
+     * Check if the file is opened for writing
+     * @return True iff the file is open for writing
+     */
+    bool isOpenForWrite();
+
+    /**
      * Closes current file access, can be reopened later.
      * @return true iff file closed successfully
      */

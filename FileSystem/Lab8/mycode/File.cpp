@@ -255,3 +255,7 @@ string File::getName() {
 bool File::isOpenForRead() {
     return readOpen;
 }
+
+bool File::isOpenForWrite() {
+    return writeOpen;
+}

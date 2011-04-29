@@ -371,8 +371,7 @@ public:
         if(-1 == sendRecv(&msg))
             return -1;
 
-        int bytesWritten = 0;
-        int result = 0;
+        int bytesWritten = 0;        
 
         msg.FindInt32(BYTESWRITTEN, (int32*) &bytesWritten);
 
@@ -520,20 +519,26 @@ public:
             msg.FindInt32(FD, 0, (int32*) & fd);
             cout << "File desriptor: " << fd << endl;
 
-            // if file was open for writing, unlock
-            if(!oft.getFilePtr(fd)->isOpenForRead())
+            // check if file is open
+            if(oft.getFilePtr(fd) == NULL)
+                result = -1;
+            else
             {
-                cout << "Before unlock" << endl;
-                pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
-                cout << "After unlock" << endl;
-            }
+                // if file was open for writing, unlock
+                if(oft.getFilePtr(fd)->isOpenForWrite())
+                {
+                    cout << "Before unlock" << endl;
+                    pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
+                    cout << "After unlock" << endl;
+                }
 
-            //remove file from open file table corresponding to given fd
-            cout << "OFT remove" << endl;
-            oft.removeEntry(fd);
-            cout << "GFT remove" << endl;
-            fdList.remove(fd);
-            cout << "Removed" << endl;
+                //remove file from open file table corresponding to given fd
+                cout << "OFT remove" << endl;
+                oft.removeEntry(fd);
+                cout << "GFT remove" << endl;
+                fdList.remove(fd);
+                cout << "Removed" << endl;
+            }
 
             msg.AddInt32(RESULT, result);
 
@@ -585,7 +590,7 @@ public:
                 if(fd != -1) // if file is open, close it
                 {
                     // if file was open for writing, unlock
-                    if(!oft.getFilePtr(fd)->isOpenForRead())
+                    if(oft.getFilePtr(fd)->isOpenForWrite())
                         pthread_mutex_unlock(gftPtr->getMutex(fcb));
 
                     oft.removeEntry(fd);
@@ -596,13 +601,21 @@ public:
                 if(gftPtr->getMutex(fcb) != NULL)
                 {
                     // some client has the file open, do not delete
+                    cout << "File is open, cannot delete." << endl;
                     result = -1;
                 }
                 else
                 { //found file, delete it                   
                     if (!dirPtr->removeFile(string(filename.Cstr())))
+                    {
                         cout << "Error: Could not delete file " << filename.Cstr() << endl;
-                    result = 1;
+                        result = -1;
+                    }
+                    else
+                    {
+                        cout << "File deleted successfully." << endl;
+                        result = 1;
+                    }
                 }
                 pthread_mutex_unlock(gftPtr->getDeletionMutex());
             }
@@ -645,8 +658,8 @@ public:
                 cout << "File not found in table." << endl;
                 int bytesRead = -1;
                 msg.AddInt32(BYTESREAD, (int32) &bytesRead);
-                char buf[bytesToRead];
-                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
+//                char buf[bytesToRead];
+//                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
             }
 
             if(-1 == sendMsg(&msg))
