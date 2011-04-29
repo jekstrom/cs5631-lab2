@@ -177,16 +177,13 @@ bool FileDirectory::addFile(string filename, int fcbNum) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-    pthread_mutex_lock (&dirMutex);
     if(findEntry(filename) == NULL)
     {
         Entry newEntry(fcbNum, filename);
         entryList.push_back(newEntry);
-        pthread_mutex_unlock (&dirMutex);
         return true;
     }
     else {
-        pthread_mutex_unlock (&dirMutex);
         return false;
     }
 }
@@ -195,15 +192,12 @@ int FileDirectory::findFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-    pthread_mutex_lock (&dirMutex);
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL) {
         int f = entPtr->fcb;
-        pthread_mutex_unlock (&dirMutex);
         return f;
     }
     else {
-        pthread_mutex_unlock (&dirMutex);
         return -1; //file not found
     }
 }
@@ -212,16 +206,14 @@ bool FileDirectory::renameFile(string filename, string newName) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
-    pthread_mutex_lock (&dirMutex);
+    
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL)
     {
         entPtr->name = newName;
-        pthread_mutex_unlock (&dirMutex);
         return true;
     }
     else {
-        pthread_mutex_unlock (&dirMutex);
         return false; //file not found
     }
 
