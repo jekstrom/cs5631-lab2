@@ -9,6 +9,8 @@
 using namespace std;
 
 FileDirectory::FileDirectory(Disk* disk, bool createNew) throw (CannotReadException) {
+    pthread_mutex_init(&dirMutex, NULL);
+    pthread_mutex_lock (&dirMutex);
     this->disk = disk;    
 
     if (createNew) {
@@ -82,13 +84,15 @@ FileDirectory::FileDirectory(Disk* disk, bool createNew) throw (CannotReadExcept
 
     }
 
+    pthread_mutex_unlock (&dirMutex);
+
 }
 
 bool FileDirectory::flush() {
     //search through list
     //construct blocks
     //write to disk
-    
+    pthread_mutex_lock (&dirMutex);
     Block masterBlock(Disk::DEFAULT_BLOCK_SIZE);
     try{
         masterBlock = Block(0, disk);
@@ -163,57 +167,81 @@ bool FileDirectory::flush() {
     masterBlock.setPointer(directory.getEndBlockNumber(), 4);
     masterBlock.setPointer(directory.getNumberOfBlocks(), 5);
     masterBlock.setPointer(entryList.size(), 6);
-    return (masterBlock.write(disk) && freeList.flush());
+
+    bool success = masterBlock.write(disk) && freeList.flush();
+    pthread_mutex_unlock (&dirMutex);
+    return success;
 }
 
 bool FileDirectory::addFile(string filename, int fcbNum) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
+
+    pthread_mutex_lock (&dirMutex);
     if(findEntry(filename) == NULL)
     {
         Entry newEntry(fcbNum, filename);
         entryList.push_back(newEntry);
+        pthread_mutex_unlock (&dirMutex);
         return true;
     }
-    else // Already an entry with that name
+    else {
+        pthread_mutex_unlock (&dirMutex);
         return false;
+    }
 }
 
 int FileDirectory::findFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
+    pthread_mutex_lock (&dirMutex);
     Entry* entPtr = findEntry(filename);
-    if(entPtr != NULL)
-        return entPtr->fcb;
-    else
+    if(entPtr != NULL) {
+        int f = entPtr->fcb;
+        pthread_mutex_unlock (&dirMutex);
+        return f;
+    }
+    else {
+        pthread_mutex_unlock (&dirMutex);
         return -1; //file not found
+    }
 }
 
 bool FileDirectory::renameFile(string filename, string newName) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
+    pthread_mutex_lock (&dirMutex);
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL)
     {
         entPtr->name = newName;
+        pthread_mutex_unlock (&dirMutex);
         return true;
     }
-    else
+    else {
+        pthread_mutex_unlock (&dirMutex);
         return false; //file not found
+    }
+
 }
 
 bool FileDirectory::removeFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
 
+    pthread_mutex_lock (&dirMutex);
     for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
         if (!i->name.compare(filename)) {//returns 0 if strings are equal
             entryList.erase(i);
+            pthread_mutex_unlock (&dirMutex);
             return true;
         }
     }
+    pthread_mutex_unlock (&dirMutex);
+
+    return false;
 }
 
 list<Entry> FileDirectory::listEntries() {
@@ -228,7 +256,6 @@ Entry* FileDirectory::findEntry(string newName)
             return &(*i);
         }
     }
-
     // Entry not found
     return NULL;
 }

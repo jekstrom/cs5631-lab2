@@ -88,7 +88,12 @@ private:
      * Block number used for the master block.
      */
     const static int MASTER_BLOCK_NUM = 0;
+
+    pthread_mutex_t freeListMutex;
 };
+
+
+
 
 #endif	/* FREELIST_H */
 

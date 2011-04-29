@@ -13,6 +13,7 @@
 #include "BlockGroup.h"
 #include <string>
 #include <list>
+#include <pthread.h>
 
 using namespace std;
 
@@ -82,6 +83,8 @@ public:
 
 
 private:
+    
+    pthread_mutex_t dirMutex;
     list<Entry> entryList;
 
     Disk* disk;

@@ -9,6 +9,7 @@
 using namespace std;
 
 FreeList::FreeList(char* fileName, bool createFreeList){
+    pthread_mutex_init(&freeListMutex, NULL);
     // Block size is the number of "usable" bytes in each block
     blockSize = Disk::DEFAULT_BLOCK_SIZE - 4;
 
@@ -42,6 +43,7 @@ FreeList::FreeList(char* fileName, bool createFreeList){
         numBlocks = DEFAULT_NUMBER_OF_BLOCKS - 1;
         currentBlockNum = startBlockNum;
 
+        pthread_mutex_lock (&freeListMutex);
         // Create and write new master block
         Block newMaster(diskPtr->blockSize());
         newMaster.setPointer(startBlockNum, 0);
@@ -62,10 +64,12 @@ FreeList::FreeList(char* fileName, bool createFreeList){
         Block lastBlock(endBlockNum, Disk::DEFAULT_BLOCK_SIZE);
         // Through constructor, m_buffer is all zeros, no need to change pointer
         lastBlock.write(diskPtr);
+        pthread_mutex_unlock (&freeListMutex);
     }
 }
 
 FreeList::FreeList(Disk* disk, bool createFreeList){
+    pthread_mutex_init(&freeListMutex, NULL);
     // Block size is the number of "usable" bytes in each block
     blockSize = Disk::DEFAULT_BLOCK_SIZE - 4;
 
@@ -98,6 +102,7 @@ FreeList::FreeList(Disk* disk, bool createFreeList){
         numBlocks = DEFAULT_NUMBER_OF_BLOCKS - 1;
         currentBlockNum = startBlockNum;
 
+        pthread_mutex_lock (&freeListMutex);
         // Create and write new master block
         Block newMaster(diskPtr->blockSize());
         newMaster.setPointer(startBlockNum, 0);
@@ -118,16 +123,18 @@ FreeList::FreeList(Disk* disk, bool createFreeList){
         Block lastBlock(endBlockNum, Disk::DEFAULT_BLOCK_SIZE);
         // Through constructor, m_buffer is all zeros, no need to change pointer
         lastBlock.write(diskPtr);
+        pthread_mutex_unlock (&freeListMutex);
     }
 }
 
 bool FreeList::close() {
+    pthread_mutex_lock (&freeListMutex);
     Block *mb;
 
     //get the master block
     mb = new Block(MASTER_BLOCK_NUM, diskPtr);
 
-    //changes the local varialbes of the master block
+    //changes the local variables of the master block
     mb->setPointer(startBlockNum, 0);
     mb->setPointer(endBlockNum, 1);
     mb->setPointer(numBlocks, 2);
@@ -136,21 +143,24 @@ bool FreeList::close() {
     if (!mb->write(diskPtr) || !diskPtr->Close()) {
         delete mb;
         cout << "Error: FreeList::close()\n" << endl;
+        pthread_mutex_unlock (&freeListMutex);
         return false;
     } else {
         delete mb;
+        pthread_mutex_unlock (&freeListMutex);
         return true;
     }
 }
 
 bool FreeList::flush()
 {
+    pthread_mutex_lock (&freeListMutex);
     Block *mb;
 
     //get the master block
     mb = new Block(MASTER_BLOCK_NUM, diskPtr);
 
-    //changes the local varialbes of the master block
+    //changes the local variables of the master block
     mb->setPointer(startBlockNum, 0);
     mb->setPointer(endBlockNum, 1);
     mb->setPointer(numBlocks, 2);
@@ -158,14 +168,17 @@ bool FreeList::flush()
     //attempts to write the master block back out
     if (!mb->write(diskPtr)) {
         delete mb;
+        pthread_mutex_unlock (&freeListMutex);
         return false;
     } else {
         delete mb;
+        pthread_mutex_unlock (&freeListMutex);
         return true;
     }
 }
 
 void FreeList::returnBlocks(BlockLinkedList* bll) {
+    pthread_mutex_lock (&freeListMutex);
     Block *b;
 
     while (bll->getNumberOfBlocks() != 0) {
@@ -181,14 +194,18 @@ void FreeList::returnBlocks(BlockLinkedList* bll) {
     if(!master.write(diskPtr)) {
         cout << "Error: could not update master block.\n";
     }
+    pthread_mutex_unlock (&freeListMutex);
 }
 
 BlockGroup* FreeList::createNew() {
+    pthread_mutex_lock (&freeListMutex);
+
     Block *b;
     BlockGroup *bGroup;
     int bNumber = 0;
 
     b = NULL;
+
     bGroup = new BlockGroup(this);
 
     //gets first block off freelist
@@ -211,9 +228,11 @@ BlockGroup* FreeList::createNew() {
     {
         cout << "Error: could not update master block.\n";
         delete b;
+        pthread_mutex_unlock (&freeListMutex);
         return NULL;
     }
     
     delete b;
+    pthread_mutex_unlock (&freeListMutex);
     return bGroup;
 }

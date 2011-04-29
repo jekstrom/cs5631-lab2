@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "BadNumberOfBlocksException.h"
 #include "CannotReadException.h"
@@ -54,6 +55,7 @@ public:
      * in a pre-existing file, you will want to delete the file first.
      */
     Disk(char *deviceName, int numberOfBlocks, int blockSize) {
+        pthread_mutex_init(&diskMutex, NULL);
         m_debugInfo = false;
         m_deviceName = deviceName;
         m_numberOfBlocks = numberOfBlocks;
@@ -94,11 +96,13 @@ public:
       * Return true iff the simulated disk could be formatted.
       */
     bool Format() {
+        pthread_mutex_lock (&diskMutex);
         // Format our file (simulated) device by writing out empty blocks.
 
         // First need to seek to the start.
         if (lseek(m_fd, 0, SEEK_SET) == -1) {
             printf("Disk.Format: ERROR: Could not seek into device.\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
         
@@ -115,6 +119,7 @@ public:
                 delete [] block;
                 printf("Disk.Format: ERROR: Could not write block to file\n");
                 printf("Disk.Format: ERROR: Problem writing block number: %d\n", i);
+                pthread_mutex_unlock (&diskMutex);
                 return false;
             }
         }
@@ -123,6 +128,7 @@ public:
         printf("Disk.Format: SUCCESS: Formatted disk with %d", m_numberOfBlocks);
         printf(" blocks, each of size = %d bytes.\n", m_blockSize);
         delete [] block;
+        pthread_mutex_unlock (&diskMutex);
         return true;
     }
 
@@ -148,8 +154,11 @@ public:
       * @return true iff block write succeeded.
       */
     bool WriteBlock(int blockNumber, unsigned char* block) {
+        pthread_mutex_lock (&diskMutex);
+
         if ((blockNumber < 0) || (blockNumber >= m_numberOfBlocks)) {
             printf("Disk.WriteBlock: ERROR: block number incorrect\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
@@ -159,11 +168,13 @@ public:
         // Seek into the device
         if (lseek(m_fd, offset, SEEK_SET) == -1) {
             printf("Disk.WriteBlock: ERROR: Could not seek into device.\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
         if (write(m_fd, (void *) block, m_blockSize) != m_blockSize) {
             printf("Disk.WriteBlock: ERROR: block write failed\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
@@ -171,6 +182,7 @@ public:
            printf("Disk.WriteBlock: SUCCESS: Wrote disk block to disk.\n");
         }
 
+        pthread_mutex_unlock (&diskMutex);
         return true;
     }
 
@@ -185,9 +197,11 @@ public:
       * have been modified if this call returns false.
       */
     bool ReadBlock(int blockNumber, unsigned char *block) {
+        pthread_mutex_lock (&diskMutex);
 
         if ((blockNumber < 0) || (blockNumber >= m_numberOfBlocks)) {
             printf("Disk.ReadBlock: ERROR: block number incorrect\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
@@ -201,6 +215,7 @@ public:
         // Seek into the device
         if (lseek(m_fd, offset, SEEK_SET) == -1) {
             printf("Disk.ReadBlock: ERROR: Could not seek into device.\n");
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
@@ -210,6 +225,7 @@ public:
         if (result != m_blockSize) {
             printf("Disk.ReadBlock: ERROR: block read failed; read result= %d\n", result);
             printf("Disk.ReadBlock: ERROR: attempting to read number of bytes= %d\n", m_blockSize);
+            pthread_mutex_unlock (&diskMutex);
             return false;
         }
 
@@ -219,6 +235,7 @@ public:
             printf("Disk.ReadBlock: read %d bytes\n.", m_blockSize);
         }
 
+        pthread_mutex_unlock (&diskMutex);
         return true;
     }
 
@@ -349,7 +366,10 @@ private:
 
     // whether or not to print out debugging info
     bool m_debugInfo;
+
+    pthread_mutex_t diskMutex;
  };
+
 
 
 
