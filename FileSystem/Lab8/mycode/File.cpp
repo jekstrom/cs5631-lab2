@@ -70,11 +70,6 @@ File::File(string filename, bool create, bool readAccess, Disk* disk, FileDirect
     }
 }
 
-File::~File() {
-    //    if (currentBlockPtr != NULL)
-    //        delete currentBlockPtr;
-}
-
 bool File::open(bool readAccess) {
     if (readOpen || writeOpen)
         return false; // file is already open

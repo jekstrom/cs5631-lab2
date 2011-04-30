@@ -488,20 +488,21 @@ public:
 
             bool readAccess = true;
             if(mode == WRITE)
-                readAccess = false;
+                readAccess = false;            
 
             if (fcb < 0) { //create the file because it was not found in directory
                 file = new File(string(filename.Cstr()), true, readAccess, diskPtr, dirPtr);
+                gftPtr->addReference(file->getFcbNumber());
+                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
             } else { //found file, open it
+                gftPtr->addReference(fcb);
+                // if opening for writing, gain lock on a file
+                if(!readAccess)
+                    pthread_mutex_lock(gftPtr->getMutex(fcb));
                 file = new File(string(filename.Cstr()), false, readAccess, diskPtr, dirPtr);
             }
-
-            gftPtr->addReference(file->getFcbNumber());
-            pthread_mutex_unlock(gftPtr->getDeletionMutex());
             
-            // if opening for writing, gain lock on a file
-            if(!readAccess)
-                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
+            pthread_mutex_unlock(gftPtr->getDeletionMutex());                        
 
             //add file to open file table
             fd = oft.addEntry(file);
@@ -609,10 +610,9 @@ public:
                 }
                 else
                 { //found file, delete it
-                    File *condemned = new File(string(filename.Cstr()), false, 
-                            false, diskPtr, dirPtr);
+                    File condemned(string(filename.Cstr()), false, true, diskPtr, dirPtr);
                     cout << "Deleting file" << endl;
-                    if (!condemned->deleteFile())
+                    if (!condemned.deleteFile())
                     {
                         cout << "Error: Could not delete file " << filename.Cstr() << endl;
                         result = -1;
@@ -735,7 +735,7 @@ public:
             for(list<int>::iterator it = fdList.begin(); it != fdList.end(); it++)
             {
                 File* curFilePtr = oft.getFilePtr(*it);
-                if(!curFilePtr->isOpenForRead())
+                if(!curFilePtr->isOpenForWrite())
                     pthread_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
 
                 oft.removeEntry(*it);

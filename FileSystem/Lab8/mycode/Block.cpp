@@ -6,6 +6,9 @@
  */
 
 #include "Block.h"
+//#include <iostream>
+//
+//using namespace std;
 
 Block::Block(int blockNumber, int length) {
     this->blockNumber = blockNumber;
@@ -26,6 +29,7 @@ Block::Block(int length) {
 
 Block::Block(int blockNumber, Disk* disk) throw (CannotReadException) {
     length = disk->blockSize() - sizeof (int);
+//    cout << blockNumber << ": disk->blockSize = " << disk->blockSize() << endl;
     m_buffer = new unsigned char[disk->blockSize()];
     this->blockNumber = blockNumber;
     if (!disk->ReadBlock(blockNumber, m_buffer))

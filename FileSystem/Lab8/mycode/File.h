@@ -26,10 +26,10 @@ public:
     File(string filename, bool create, bool readAccess,
             Disk *disk, FileDirectory *directory);
 
-    /**
-     * Destructor for the File class.
-     */
-    ~File();
+//    /**
+//     * Destructor for the File class.
+//     */
+//    ~File();
 
     /**
      * Accessor for the file name
