@@ -13,6 +13,7 @@ void* connectionThread(void* dataPtr);
 void* inputThread(void* dataPtr);
 pthread_mutex_t cond_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  threadsFree = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t test1a_mutex = PTHREAD_MUTEX_INITIALIZER;
 bool* threadDone;
 int sid;
 FileDirectory* dirPtr;
@@ -51,6 +52,7 @@ int main(int argc, char** argv) {
     if(isServer)
     {
         // read in additional command-line arguments for server
+        
         char* port = "4242";
         int maxConnections = 3;
         char* diskName = "testdisk";
@@ -291,7 +293,7 @@ int main(int argc, char** argv) {
             {
                 if(displayMenu)
                 {
-                    cout << "\nCS5631 Lab 6 Client" << endl;
+                    cout << "\nCS5631 Lab 8 Client" << endl;
                     cout << "0) Exit Program" << endl;
                     cout << "1) Open a file" << endl;
                     cout << "2) Close a file" << endl;
@@ -422,6 +424,83 @@ int main(int argc, char** argv) {
                     cin >> bytesToRead;
                     char readBuffer[bytesToRead];
 
+                    int bytesRead = con.readFile(fd, bytesToRead, readBuffer);
+                    if(0 > bytesRead)
+                        cout << "Error: could not read from file." << endl;
+                    else
+                    {
+                        char outputBuffer[bytesRead];
+                        memcpy(outputBuffer, readBuffer, bytesRead);
+                        cout << "Read " << bytesRead << " bytes: " << outputBuffer << endl;
+                    }
+                }
+                else if (lineStr == "test1a" ) {
+                    //need to lock until two or more clients connect
+                    string f;
+                    string m;
+                    cout << "Filename: ";
+                    cin >> f;
+                    cin.ignore(); //ignore the \n
+                    cout << "Open mode ('read' or 'write'): ";
+                    cin >> m;
+                    cin.ignore(); //ignore the \n
+
+
+                    String filename = f.c_str();
+                    String mode = m.c_str();
+                    
+                    //open file
+                    fd = con.openFile(filename, mode);
+                    if(fd > -1)
+                    {
+                        cout << "OpenFile: fd = " << fd << endl;
+                        fileOpen = true;
+                    }
+                    else
+                        cout << "Error: OpenFile failed." << endl;
+                    
+                    cout << "File descriptor of file to write to: ";
+                    cin.getline(line, lineLen);
+                    fd = atoi(line);
+                    cout << "Enter data to write to file: ";
+                    cin.getline(line, lineLen);
+
+                    //write to file
+                    usleep(1000);
+                    int bytesWritten = con.writeFile(fd, string(line).length(), line);
+                    if(-1 == bytesWritten)
+                        cout << "Error: could not write to file." << endl;
+                    else
+                        cout << "Wrote " << bytesWritten << " bytes to file." << endl;
+                    
+                    //close file
+                    if(fileOpen)
+                        if(-1 != con.closeFile(fd))
+                        {
+                            cout << "File closed successfully." << endl;
+                            fileOpen = false;
+                        }
+                        else
+                            cout << "Error: Failed to close file." << endl;
+                    else
+                        cout << "There is no file currently open." << endl;
+                    
+                    //open file for reading
+                    mode = "read";
+                    cout << "Opening file " <<filename.Cstr() << endl;
+                    fd = con.openFile(filename, mode);
+                    if(fd > -1)
+                    {
+                        cout << "OpenFile: fd = " << fd << endl;
+                        fileOpen = true;
+                    }
+                    else
+                        cout << "Error: OpenFile failed." << endl;
+                    
+                    //read from file
+                    int bytesToRead = string(line).length();
+                    char readBuffer[bytesToRead];
+                    
                     int bytesRead = con.readFile(fd, bytesToRead, readBuffer);
                     if(0 > bytesRead)
                         cout << "Error: could not read from file." << endl;

@@ -23,8 +23,7 @@
 using namespace muscle;
 using namespace std;
 
-struct dirEntry
-{
+struct dirEntry {
     string filename;
     int fcbNum;
     int startBlock;
@@ -56,11 +55,11 @@ private:
      * @param msg A message that has its content set
      * @return -1 in case of error, 0 otherwise
      */
-    int sendMsg(Message *msg)
-    {
+    int sendMsg(Message *msg) {
+        cout << "InSendMsg " << msg->GetFirstFieldNameString(B_ANY_TYPE) << endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-
+        cout << "after flatten " << msg->GetFirstFieldNameString(B_ANY_TYPE) << endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
@@ -71,6 +70,8 @@ private:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
+        cout << "After send " << endl;
+
 
         return 0;
     }
@@ -80,8 +81,7 @@ private:
      * @param msg A message with unimportant content
      * @return -1 in case of error, 0 otherwise
      */
-    int recvMsg(Message *msg)
-    {
+    int recvMsg(Message *msg) {
         int size = 0;
         if (0 > recv(sid, (char*) &size, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
@@ -103,38 +103,37 @@ private:
      * @param msg A message that has its content set
      * @return -1 in case of error, 0 otherwise
      */
-    int sendRecv(Message *msg)
-    {
-//        cout << "IN SEND RCV" <<endl;
-        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+    int sendRecv(Message *msg) {
+        //        cout << "IN SEND RCV" <<endl;
+        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() << endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-//        cout << "here" <<endl;
+        //        cout << "here" <<endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here2" <<endl;
+        //        cout << "here2" <<endl;
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here3" <<endl;
+        //        cout << "here3" <<endl;
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here4" <<endl;
+        //        cout << "here4" <<endl;
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return -1;
         }
-//        cout << "here5" <<endl;
+        //        cout << "here5" <<endl;
         msg->Unflatten(buffer2, size2);
-//        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+        //        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
         return 0;
     }
 
@@ -157,7 +156,7 @@ public:
      * @param dirPtr A pointer to the directory the connection will use
      * @param diskPtr A pointer to the disk
      */
-    RFSConnection(int sid, GlobalFileTable* gftPtr, FileDirectory* dirPtr, Disk* diskPtr) {
+    RFSConnection(int sid, GlobalFileTable* gftPtr, FileDirectory* dirPtr, Disk * diskPtr) {
         this->sid = sid;
         this->gftPtr = gftPtr;
         this->dirPtr = dirPtr;
@@ -186,20 +185,19 @@ public:
         msg.AddString(METHOD, OPEN_FILE);
         msg.AddString(FILENAME, filename);
 
-        if(string(mode.Cstr()) == "read")
+        if (string(mode.Cstr()) == "read")
             msg.AddString(MODE, READ);
-        else if(string(mode.Cstr()) == "write")
+        else if (string(mode.Cstr()) == "write")
             msg.AddString(MODE, WRITE);
-        else
-        {
+        else {
             cout << "Mode for opening a file must be either \"read\" or \"write\"." << endl;
             return -1;
         }
 
-        if(-1 == sendRecv(&msg))
+        if (-1 == sendRecv(&msg))
             return -1;
 
-        cout << "Message in openFile: " << msg.GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+        cout << "Message in openFile: " << msg.GetFirstFieldNameString(B_ANY_TYPE)->Cstr() << endl;
         int fd = 0;
         msg.FindInt32(FD, 0, (int32*) & fd);
         cout << "Received message \"" << fd << "\"." << endl;
@@ -224,7 +222,7 @@ public:
         msg.AddString(METHOD, CLOSE_FILE);
         msg.AddInt32(FD, fd);
 
-        if(-1 == sendRecv(&msg))
+        if (-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
@@ -259,24 +257,23 @@ public:
 
         // response contains number of entries in directory
         int numEntries = 0;
-        msg.FindInt32(RESULT, (int32*) &numEntries);
+        msg.FindInt32(RESULT, (int32*) & numEntries);
 
         list<dirEntry> entryList;
         String fileName("");
-        for(int i = 0; i < numEntries; i++)
-        {
+        for (int i = 0; i < numEntries; i++) {
             // receive message containing entry information
-            if(-1 == recvMsg(&msg))
-                    return entryList;
+            if (-1 == recvMsg(&msg))
+                return entryList;
 
             // store received information in a dirEntry
             dirEntry curEntry;
             msg.FindString(FILENAME, fileName);
             curEntry.filename = string(fileName.Cstr());
-            msg.FindInt32(FCB, 0, (int32*) &curEntry.fcbNum);
-            msg.FindInt32(START_BLOCK, 0, (int32*) &curEntry.startBlock);
-            msg.FindInt32(END_BLOCK, 0, (int32*) &curEntry.endBlock);
-            msg.FindInt32(NUM_BLOCKS, 0, (int32*) &curEntry.numBlocks);
+            msg.FindInt32(FCB, 0, (int32*) & curEntry.fcbNum);
+            msg.FindInt32(START_BLOCK, 0, (int32*) & curEntry.startBlock);
+            msg.FindInt32(END_BLOCK, 0, (int32*) & curEntry.endBlock);
+            msg.FindInt32(NUM_BLOCKS, 0, (int32*) & curEntry.numBlocks);
 
             entryList.push_back(curEntry);
         }
@@ -301,11 +298,11 @@ public:
         msg.AddString(METHOD, DELETE_FILE);
         msg.AddString(FILENAME, filename);
 
-        if(-1 == sendRecv(&msg))
+        if (-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
-        msg.FindInt32(RESULT, 0, (int32*) &result);
+        msg.FindInt32(RESULT, 0, (int32*) & result);
         cout << "Received message \"" << result << "\"." << endl;
 
         return result;
@@ -331,16 +328,16 @@ public:
         msg.AddInt32(FD, fd);
         msg.AddInt32(BYTESREAD, readAmt);
 
-        if(-1 == sendRecv(&msg))
+        if (-1 == sendRecv(&msg))
             return -1;
 
         int bytesRead = 0;
         int result = 0;
         void* dataBuf;
 
-        msg.FindInt32(BYTESREAD, (int32*) &bytesRead);
-        msg.FindData(DATA, B_ANY_TYPE, (const void**) &dataBuf, (uint32*) &result);
-        if(bytesRead != -1)
+        msg.FindInt32(BYTESREAD, (int32*) & bytesRead);
+        msg.FindData(DATA, B_ANY_TYPE, (const void**) &dataBuf, (uint32*) & result);
+        if (bytesRead != -1)
             memcpy(buf, dataBuf, result);
 
         return bytesRead;
@@ -367,13 +364,13 @@ public:
         msg.AddInt32(FD, fd);
         msg.AddInt32(BYTESWRITTEN, writeAmt);
         msg.AddData(DATA, B_ANY_TYPE, buf, writeAmt);
-//        cout << "Buf in writeFile: " << (const char*) buf << endl;
-        if(-1 == sendRecv(&msg))
+        //        cout << "Buf in writeFile: " << (const char*) buf << endl;
+        if (-1 == sendRecv(&msg))
             return -1;
 
-        int bytesWritten = 0;        
+        int bytesWritten = 0;
 
-        msg.FindInt32(BYTESWRITTEN, (int32*) &bytesWritten);
+        msg.FindInt32(BYTESWRITTEN, (int32*) & bytesWritten);
 
         return bytesWritten;
     }
@@ -387,23 +384,23 @@ public:
         const String METHOD("MethodName");
         const String FILENAME("Filename");
         const String FILE_EXISTS("file_exists");
-        const String RESULT("result");        
+        const String RESULT("result");
 
         Message msg;
 
         msg.AddString(METHOD, FILE_EXISTS);
         msg.AddString(FILENAME, filename);
 
-        if(-1 == sendRecv(&msg))
+        if (-1 == sendRecv(&msg))
             return -1;
 
         int result = 0;
-        msg.FindInt32(RESULT, (int32*) &result);
+        msg.FindInt32(RESULT, (int32*) & result);
 
-        if(-1 == result)        
-            return 0;        
-        else        
-            return 1;        
+        if (-1 == result)
+            return 0;
+        else
+            return 1;
     }
 
     /**
@@ -418,7 +415,7 @@ public:
 
         msg.AddString(METHOD, QUIT);
 
-        if(-1 == sendMsg(&msg))
+        if (-1 == sendMsg(&msg))
             return -1;
 
         cout << "Message sent." << endl;
@@ -462,8 +459,8 @@ public:
         const String WRITE("Write");
 
         Message msg;
-        if(-1 == recvMsg(&msg))
-                return -1;
+        if (-1 == recvMsg(&msg))
+            return -1;
 
         String methodStr("");
         msg.FindString(METHOD, methodStr);
@@ -487,8 +484,8 @@ public:
             int fcb = dirPtr->findFile(string(filename.Cstr()));
 
             bool readAccess = true;
-            if(mode == WRITE)
-                readAccess = false;            
+            if (mode == WRITE)
+                readAccess = false;
 
             if (fcb < 0) { //create the file because it was not found in directory
                 file = new File(string(filename.Cstr()), true, readAccess, diskPtr, dirPtr);
@@ -497,12 +494,12 @@ public:
             } else { //found file, open it
                 gftPtr->addReference(fcb);
                 // if opening for writing, gain lock on a file
-                if(!readAccess)
+                if (!readAccess)
                     pthread_mutex_lock(gftPtr->getMutex(fcb));
                 file = new File(string(filename.Cstr()), false, readAccess, diskPtr, dirPtr);
             }
-            
-            pthread_mutex_unlock(gftPtr->getDeletionMutex());                        
+
+            pthread_mutex_unlock(gftPtr->getDeletionMutex());
 
             //add file to open file table
             fd = oft.addEntry(file);
@@ -510,7 +507,7 @@ public:
 
             msg.AddInt32(FD, fd);
 
-            if(-1 == sendMsg(&msg))
+            if (-1 == sendMsg(&msg))
                 return -1;
 
         } else if (methodStr == CLOSE_FILE) {
@@ -518,16 +515,14 @@ public:
             int fd = 0;
 
             msg.FindInt32(FD, 0, (int32*) & fd);
-            cout << "File desriptor: " << fd << endl;
+            cout << "File descriptor: " << fd << endl;
 
             // check if file is open
-            if(oft.getFilePtr(fd) == NULL)
+            if (oft.getFilePtr(fd) == NULL)
                 result = -1;
-            else
-            {
+            else {
                 // if file was open for writing, unlock
-                if(oft.getFilePtr(fd)->isOpenForWrite())
-                {
+                if (oft.getFilePtr(fd)->isOpenForWrite()) {
                     cout << "Before unlock" << endl;
                     pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
                     cout << "After unlock" << endl;
@@ -544,7 +539,7 @@ public:
 
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(&msg))
+            if (-1 == sendMsg(&msg))
                 return -1;
 
         } else if (methodStr == LIST_DIR) {
@@ -553,15 +548,14 @@ public:
             int numEntries = entryList.size();
             msg.AddInt32(RESULT, numEntries);
 
-            if(-1 == sendMsg(&msg))
+            if (-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Directory size sent to client." << endl;
-            
-            for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++)
-            {
+
+            for (list<Entry>::iterator i = entryList.begin(); i != entryList.end(); i++) {
                 msg.Clear(true);
-                                
+
                 Block fcb = Block(i->fcb, diskPtr);
                 msg.AddString(FILENAME, i->name.c_str());
                 msg.AddInt32(FCB, i->fcb);
@@ -569,10 +563,10 @@ public:
                 msg.AddInt32(END_BLOCK, fcb.getPointer(2));
                 msg.AddInt32(NUM_BLOCKS, fcb.getPointer(3));
 
-                if(-1 == sendMsg(&msg))
+                if (-1 == sendMsg(&msg))
                     return -1;
             }
-            
+
         } else if (methodStr == DELETE_FILE) {
             int result = 0;
             String filename("");
@@ -581,20 +575,17 @@ public:
             cout << "Filename: " << filename.Cstr() << endl;
 
             int fcb = dirPtr->findFile(string(filename.Cstr()));
-            if (fcb < 0) 
-            {   //couldn't find file, doesn't exist
+            if (fcb < 0) { //couldn't find file, doesn't exist
                 result = -1;
                 cout << "Error: Could not find file " << string(filename.Cstr()) << endl;
-            }
-            else
-            {
+            } else {
                 cout << "File found" << endl;
                 int fd = oft.getFD(string(filename.Cstr()));
-                if(fd >= 0) // if file is open, close it
+                if (fd >= 0) // if file is open, close it
                 {
                     cout << "Closing file, fd = " << fd << endl;
                     // if file was open for writing, unlock
-                    if(oft.getFilePtr(fd)->isOpenForWrite())
+                    if (oft.getFilePtr(fd)->isOpenForWrite())
                         pthread_mutex_unlock(gftPtr->getMutex(fcb));
 
                     oft.removeEntry(fd);
@@ -602,23 +593,17 @@ public:
                 }
 
                 pthread_mutex_lock(gftPtr->getDeletionMutex());
-                if(gftPtr->getMutex(fcb) != NULL)
-                {
+                if (gftPtr->getMutex(fcb) != NULL) {
                     // some client has the file open, do not delete
                     cout << "File is open, cannot delete." << endl;
                     result = -1;
-                }
-                else
-                { //found file, delete it
+                } else { //found file, delete it
                     File condemned(string(filename.Cstr()), false, true, diskPtr, dirPtr);
                     cout << "Deleting file" << endl;
-                    if (!condemned.deleteFile())
-                    {
+                    if (!condemned.deleteFile()) {
                         cout << "Error: Could not delete file " << filename.Cstr() << endl;
                         result = -1;
-                    }
-                    else
-                    {
+                    } else {
                         cout << "File deleted successfully." << endl;
                         result = 1;
                     }
@@ -628,7 +613,8 @@ public:
 
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(&msg))
+
+            if (-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -637,16 +623,15 @@ public:
             int fd = 0;
             int bytesToRead = 0;
 
-            msg.FindInt32(FD, (int32*) &fd);
-            msg.FindInt32(BYTESREAD, (int32*) &bytesToRead);
+            msg.FindInt32(FD, (int32*) & fd);
+            msg.FindInt32(BYTESREAD, (int32*) & bytesToRead);
             msg.Clear(true);
 
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
 
-            if(file != NULL)
-            {
+            if (file != NULL) {
                 pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
 
                 cout << "File found in table." << endl;
@@ -658,17 +643,15 @@ public:
 
                 msg.AddInt32(BYTESREAD, (int32) bytesRead);
                 msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
-            }
-            else
-            {
+            } else {
                 cout << "File not found in table." << endl;
                 int bytesRead = -1;
-                msg.AddInt32(BYTESREAD, (int32) &bytesRead);
-//                char buf[bytesToRead];
-//                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
+                msg.AddInt32(BYTESREAD, (int32) & bytesRead);
+                //                char buf[bytesToRead];
+                //                msg.AddData(DATA, B_ANY_TYPE, (const void*) buf, bytesRead);
             }
 
-            if(-1 == sendMsg(&msg))
+            if (-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client" << endl;
@@ -679,18 +662,17 @@ public:
             int result = 0;
             void* buf = NULL; //buffer to hold data from write method
 
-            msg.FindInt32(FD, (int32*) &fd);
-            msg.FindInt32(BYTESWRITTEN, (int32*) &bytesToWrite);
-            msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) &result); //put data from write into buf
-            cout << "Buffer after find data: " << (const char*) buf <<endl;
+            msg.FindInt32(FD, (int32*) & fd);
+            msg.FindInt32(BYTESWRITTEN, (int32*) & bytesToWrite);
+            msg.FindData(DATA, B_ANY_TYPE, (const void**) &buf, (uint32*) & result); //put data from write into buf
+            cout << "Buffer after find data: " << (const char*) buf << endl;
             //msg.Clear(false);
-            
+
             cout << "FD: " << fd << endl;
 
             File *file = oft.getFilePtr(fd);
             Message msg2;
-            if(file != NULL)
-            {
+            if (file != NULL) {
 
                 cout << "File found in table." << endl;
                 cout << "Buffer we are writing: " << (const char*) buf << endl;
@@ -700,16 +682,14 @@ public:
                 if (msg2.AddData(DATA, B_ANY_TYPE, buf, (uint32) bytesWritten)
                         != B_NO_ERROR)
                     cout << "SERVER: Error: Couldn't add data!" << endl;
-            }
-            else
-            {
+            } else {
                 cout << "File not found in table." << endl;
                 int bytesWritten = -1;
                 msg2.AddInt32(BYTESWRITTEN, bytesWritten);
             }
 
-            if(-1 == sendMsg(&msg2))
-                    return -1;
+            if (-1 == sendMsg(&msg2))
+                return -1;
 
             cout << "Message sent to client" << endl;
 
@@ -726,16 +706,15 @@ public:
             msg.Clear(true);
             msg.AddInt32(RESULT, result);
 
-            if(-1 == sendMsg(&msg))
+            if (-1 == sendMsg(&msg))
                 return -1;
 
             cout << "Message sent to client: " << result << endl;
-
+            
         } else if (methodStr == QUIT) {
-            for(list<int>::iterator it = fdList.begin(); it != fdList.end(); it++)
-            {
+            for (list<int>::iterator it = fdList.begin(); it != fdList.end(); it++) {
                 File* curFilePtr = oft.getFilePtr(*it);
-                if(!curFilePtr->isOpenForWrite())
+                if (!curFilePtr->isOpenForWrite())
                     pthread_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
 
                 oft.removeEntry(*it);
