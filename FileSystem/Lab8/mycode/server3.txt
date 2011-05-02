@@ -1,0 +1,58 @@
+Disk.Format: SUCCESS: Formatted disk with 100 blocks, each of size = 512 bytes.
+Socket created successfully.
+Server bound to port 4040.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Write
+Before lock...
+...After lock
+Received request: Write
+Buffer after find data: 0123456789en
+FD: 0
+File found in table.
+Buffer we are writing: 0123456789en
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+Result = 0
+Result = 0
+Received request: Write
+Buffer after find data: abcdefghij
+FD: 0
+File found in table.
+Buffer we are writing: abcdefghij
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 20 bytes from file1: 0123456789abcdefghijm«
+Message sent to client
+Result = 0
+Received request: quit
