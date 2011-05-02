@@ -1,0 +1,60 @@
+Socket created successfully.
+Server bound to port 4141.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Received request: Write
+Buffer after find data: 0123456789en
+FD: 0
+File found in table.
+Buffer we are writing: 0123456789en
+BlockGroup::addBlock Failed, FreeList empty.SERVER: Error: Couldn't add data!
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Result = 0
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 10 bytes from file: 0123456789
+Message sent to client
+Result = 0
+Received request: Write
+Buffer after find data: abcdefghij
+FD: 0
+File found in table.
+Buffer we are writing: abcdefghij
+BlockGroup::addBlock Failed, FreeList empty.SERVER: Error: Couldn't add data!
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 10 bytes from file: 0123456789
+Message sent to client
+Result = 0
+Received request: quit
