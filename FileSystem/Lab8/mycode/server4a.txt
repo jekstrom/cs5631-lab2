@@ -1,0 +1,70 @@
+Socket created successfully.
+Server bound to port 4040.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Write
+Buffer after find data: 50Ñ
+FD: 0
+File found in table.
+Buffer we are writing: 50Ñ
+[C 05/02 14:10:42] ERROR--OUT OF MEMORY!  (../muscle/util/ByteBuffer.cpp:50)
+[C 05/02 14:10:42] ERROR--OUT OF MEMORY!  (../muscle/message/Message.cpp:1635)
+SERVER: Error: Couldn't add data!
+Message sent to client
+Result = 0
+Received request: Write
+Buffer after find data: 50ÍodName
+FD: 0
+File found in table.
+Buffer we are writing: 50ÍodName
+[C 05/02 14:10:44] ERROR--OUT OF MEMORY!  (../muscle/util/ByteBuffer.cpp:50)
+[C 05/02 14:10:44] ERROR--OUT OF MEMORY!  (../muscle/message/Message.cpp:1635)
+SERVER: Error: Couldn't add data!
+Message sent to client
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 50 bytes from file1: 12345678901234567890123456789012345678901234567890m«
+Message sent to client
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 50 bytes from file1: 12345678901234567890123456789012345678901234567890m«
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: quit
