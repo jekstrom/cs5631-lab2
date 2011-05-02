@@ -1,0 +1,101 @@
+./main -s -f
+Disk.Format: SUCCESS: Formatted disk with 100 blocks, each of size = 512 bytes.
+Socket created successfully.
+Server bound to port 4242.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: OpenFile
+Filename: file1, mode: Write
+Before lock...
+...After lock
+InSendMsg 0x86e4348
+after flatten 0x86e4348
+After send 
+Result = 0
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Write
+Before lock...
+...After lock
+Received request: Write
+Buffer after find data: 1234567890en
+FD: 0
+File found in table.
+Buffer we are writing: 1234567890en
+InSendMsg 0x86e7fa8
+after flatten 0x86e7fa8
+After send 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+InSendMsg 0x86e8050
+after flatten 0x86e8050
+InSendMsg 0x86e5aa0
+After send 
+Result = 0
+after flatten 0x86e5aa0
+After send 
+Result = 0
+Received request: Write
+Buffer after find data: 0987654321
+FD: 0
+File found in table.
+Buffer we are writing: 0987654321
+InSendMsg 0x86e59f8
+after flatten 0x86e59f8
+After send 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+InSendMsg 0x86e5aa0
+after flatten 0x86e5aa0
+After send 
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+InSendMsg 0x86e8050
+after flatten 0x86e8050
+After send 
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 20 bytes from file1: 12345678900987654321
+                                              
+
+InSendMsg 0x86e7fe0
+after flatten 0x86e7fe0
+After send 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 1
+GFT remove
+OFT remove
+Removed
+InSendMsg 0x86e5aa0
+after flatten 0x86e5aa0
+After send 
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Received request: quit
+Result = 1
+Client number 2 disconnected.
+quit
+

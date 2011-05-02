@@ -703,12 +703,19 @@ public:
         } else if (methodStr == QUIT) {
             for (list<int>::iterator it = fdList.begin(); it != fdList.end(); it++) {
                 File* curFilePtr = oft.getFilePtr(*it);
-                if (!curFilePtr->isOpenForWrite())
+                if (curFilePtr->isOpenForWrite())
+                {
+//                    cout << "Unlocking" << endl;
                     pthread_mutex_unlock(gftPtr->getMutex(curFilePtr->getFcbNumber()));
+                }
 
-                oft.removeEntry(*it);
+//                cout << "GFT remove" << endl;
                 gftPtr->removeReference(curFilePtr->getFcbNumber());
-                fdList.remove(*it);
+//                cout << "OFT remove" << endl;
+                oft.removeEntry(*it);//              
+//                cout << "Removed" << endl;
+                fdList.erase(it);
+//                cout << "FD erased" << endl;
             }
             return 1;
 

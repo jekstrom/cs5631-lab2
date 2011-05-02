@@ -1,0 +1,65 @@
+./main -c
+Socket created successfully.
+Connected to 127.0.0.1 on port 4242
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: 1
+Filename: file1
+Open mode ('read' or 'write'): read
+Message in sendRecv: MethodName
+Message in openFile: MethodName
+Received message "0".
+OpenFile: fd = 0
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: 7
+File descriptor of file to read from: 0
+Number of bytes to read from file: 60
+Message in sendRecv: MethodName
+Read 60 bytes: 123456789009876543211234567890098765432112345678900987654321
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: 2
+File descriptor of file to close: 0
+Message in sendRecv: MethodName
+Received message "0".
+File closed successfully.
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: 0
+InSendMsg 0x87e1168
+after flatten 0x87e1168
+After send 
+Message sent.

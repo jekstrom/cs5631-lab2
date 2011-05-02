@@ -1,0 +1,65 @@
+./main -s
+Socket created successfully.
+Server bound to port 4242.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+InSendMsg 0xa07e3a8
+after flatten 0xa07e3a8
+After send 
+Result = 0
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+InSendMsg 0xa07f640
+after flatten 0xa07f640
+After send 
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 60 bytes from file1: 123456789009876543211234567890098765432112345678900987654321
+InSendMsg 0xa07f5d0
+after flatten 0xa07f5d0
+After send 
+Message sent to client
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 60 bytes from file1: 123456789009876543211234567890098765432112345678900987654321
+InSendMsg 0xa07f5d0
+after flatten 0xa07f5d0
+After send 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+InSendMsg 0xa080b28
+after flatten 0xa080b28
+After send 
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+InSendMsg 0xa07f640
+after flatten 0xa07f640
+After send 
+Result = 0
+Received request: quit
+Result = 1
+Client number 1 disconnected.
+Received request: quit
+Result = 1
+Client number 2 disconnected.
+quit
