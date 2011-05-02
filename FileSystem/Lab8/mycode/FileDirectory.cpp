@@ -191,13 +191,16 @@ bool FileDirectory::addFile(string filename, int fcbNum) {
 int FileDirectory::findFile(string filename) {
     if(filename.length() > MAX_NAME_SIZE - 1)
         filename = filename.substr(0, MAX_NAME_SIZE - 1);
-
+    
+    pthread_mutex_lock(&dirMutex);
     Entry* entPtr = findEntry(filename);
     if(entPtr != NULL) {
         int f = entPtr->fcb;
+        pthread_mutex_unlock(&dirMutex);
         return f;
     }
     else {
+        pthread_mutex_unlock(&dirMutex);
         return -1; //file not found
     }
 }
@@ -231,8 +234,8 @@ bool FileDirectory::removeFile(string filename) {
             return true;
         }
     }
+    
     pthread_mutex_unlock (&dirMutex);
-
     return false;
 }
 

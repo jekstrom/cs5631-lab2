@@ -26,10 +26,9 @@ Block::Block(int length) {
         m_buffer[i] = 0;
 }
 
-
 Block::Block(int blockNumber, Disk* disk) throw (CannotReadException) {
     length = disk->blockSize() - sizeof (int);
-//    cout << blockNumber << ": disk->blockSize = " << disk->blockSize() << endl;
+    //    cout << blockNumber << ": disk->blockSize = " << disk->blockSize() << endl;
     m_buffer = new unsigned char[disk->blockSize()];
     this->blockNumber = blockNumber;
     if (!disk->ReadBlock(blockNumber, m_buffer))
@@ -37,7 +36,10 @@ Block::Block(int blockNumber, Disk* disk) throw (CannotReadException) {
 }
 
 Block::~Block() {
-    delete[] m_buffer;
+    if (m_buffer != NULL) {
+        //delete[] m_buffer;
+    }
+    m_buffer = NULL;
 }
 
 void Block::clearBuffer() {
@@ -63,22 +65,21 @@ int Block::getBlockNumber() {
 }
 
 void Block::setPointer(int pointer, int location) {
-    if (location < (length/4 - 1) && location > -1) {
+    if (location < (length / 4 - 1) && location > -1) {
         char* p = (char*) &pointer;
         int bufferIndex = location * sizeof (int);
         for (int i = 0; i < sizeof (int); i++) {
             m_buffer[bufferIndex] = p[i];
             bufferIndex++;
         }
-    }
-    else
+    } else
         printf("ERROR: Block::setPointer location out of bounds.\n");
 }
 
 int Block::getPointer(int location) {
-    char integer[sizeof(int)] = {0};
-    int bufferIndex = location * sizeof(int);
-    for (int i = 0; i < sizeof(int); i++) {
+    char integer[sizeof (int) ] = {0};
+    int bufferIndex = location * sizeof (int);
+    for (int i = 0; i < sizeof (int); i++) {
         integer[i] = m_buffer[bufferIndex];
         bufferIndex++;
     }

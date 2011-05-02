@@ -512,18 +512,18 @@ public:
             else {
                 // if file was open for writing, unlock
                 if (oft.getFilePtr(fd)->isOpenForWrite()) {
-                    cout << "Before unlock" << endl;
+                    //cout << "Before unlock" << endl;
                     pthread_mutex_unlock(gftPtr->getMutex(oft.getFilePtr(fd)->getFcbNumber()));
-                    cout << "After unlock" << endl;
+                    //cout << "After unlock" << endl;
                 }
 
                 //remove file from open file table corresponding to given fd
-                cout << "GFT remove" << endl;
+                //cout << "GFT remove" << endl;
                 gftPtr->removeReference(oft.getFilePtr(fd)->getFcbNumber());
-                cout << "OFT remove" << endl;
+                //cout << "OFT remove" << endl;
                 oft.removeEntry(fd);
-                fdList.remove(fd);
-                cout << "Removed" << endl;
+                fdList.remove(fd); 
+                //cout << "Removed" << endl;
             }
 
             msg.AddInt32(RESULT, result);

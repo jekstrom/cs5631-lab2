@@ -603,6 +603,48 @@ int main(int argc, char** argv) {
                 String filename = f.c_str();
                 String mode("write");
                 
+                //write 100 bytes
+                    char buf[100];
+                    for (int x = 0; x < 100; x++) {
+                        int j = x % 10;
+                        switch (j) {
+                            case 0:
+                                buf[x] = '0';
+                                break;
+                            case 1:
+                                buf[x] = '1';
+                                break;
+                            case 2:
+                                buf[x] = '2';
+                                break;
+                            case 3:
+                                buf[x] = '3';
+                                break;
+                            case 4:
+                                buf[x] = '4';
+                                break;
+                            case 5:
+                                buf[x] = '5';
+                                break;
+                            case 6:
+                                buf[x] = '6';
+                                break;
+                            case 7:
+                                buf[x] = '7';
+                                break;
+                            case 8:
+                                buf[x] = '8';
+                                break;
+                            case 9:
+                                buf[x] = '9';
+                                break;
+                            default:
+                                buf[x] = ' ';
+                                break;
+                        }
+                        
+                    }
+                
                 for (int i = 0; i < 1000; i++) {
                     mode = "write";
                     fd = con.openFile(filename, mode);
@@ -610,24 +652,18 @@ int main(int argc, char** argv) {
                         cout << "OpenFile: fd = " << fd << endl;
                         fileOpen = true;
                     } else
-                        cout << "Error: OpenFile failed." << endl;
-
-                    //write 5000 bytes
-                    int buf[5000];
-                    for (int x = 0; x < 5000; x++) {
-                        buf[x] = x % 256;
-                    }
+                        cout << "Error: OpenFile failed." << endl;                    
                     
                     usleep(1000);
-                    con.writeFile(fd, 5000, buf);
+                    con.writeFile(fd, 100, buf);
                     
                     con.closeFile(fd);
 
                     mode = "read";
-                    con.openFile(filename, mode);
-                    char buf2[5000];
+                    fd = con.openFile(filename, mode);
+                    char buf2[100];
 
-                    con.readFile(fd, 5000, buf2);
+                    con.readFile(fd, 100, buf2);
 
                     cout << "Read " << buf2 << "from file" << endl;
                     
