@@ -598,9 +598,14 @@ int main(int argc, char** argv) {
                     cout << "Read " << bytesRead << " bytes: " << outputBuffer << endl;
                 }
             } else if (lineStr == "test2") {
-                //create 1000 files open for writing
-                string f = "file";
+                //need to lock until two or more clients connect
+                string f;
+                cout << "Filename: ";
+                cin >> f;
+                cin.ignore(); //ignore the \n
+
                 String filename = f.c_str();
+                //create 1000 files open for writing
                 String mode("write");
                 
                 //write 100 bytes
