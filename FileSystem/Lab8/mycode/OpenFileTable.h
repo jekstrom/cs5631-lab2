@@ -90,7 +90,7 @@ public:
             if(it->fileDescriptor == fd)
             {
                 it->filePtr->close();
-                table.erase(it);
+                table.remove(*it);
                 break;
             }
         }
@@ -102,6 +102,9 @@ private:
     {
         int fileDescriptor;
         File* filePtr;
+        bool operator==(const tableEntry& other) {
+            return this->fileDescriptor == other.fileDescriptor;
+        }
     };
 
     int fileCount;

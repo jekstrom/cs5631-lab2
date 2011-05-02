@@ -1,0 +1,122 @@
+Disk.Format: SUCCESS: Formatted disk with 100 blocks, each of size = 512 bytes.
+Socket created successfully.
+Server bound to port 4040.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: Write
+Buffer after find data: 
+FD: 0
+File found in table.
+Buffer we are writing: 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 0
+File not found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: Write
+Buffer after find data: 
+FD: 2
+File found in table.
+Buffer we are writing: 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 2
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 2
+File not found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 2
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: Write
+Buffer after find data: 
+FD: 4
+File found in table.
+Buffer we are writing: 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 4
+Before unlock
+After unlock
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 4
+File not found in table.
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 4
+Result = 0
+Received request: OpenFile
+Filename: file, mode: Write
+Before lock...
+...After lock
+Result = 0
+Received request: Write
+Buffer after find data: 
+FD: 6
+File found in table.
+Buffer we are writing: 
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 6
+Before unlock
+After unlock
+GFT remove
+OFT remove

@@ -105,8 +105,8 @@ bool File::close() {
 bool File::deleteFile() {
     // remove file from directory
     directoryPtr->removeFile(name);
-
-    // return blocks, update free list
+    
+    // return blocks, update free list 
     freeList = FreeList(diskPtr, false);
     freeList.addBlock(&fcb);
     freeList.returnBlocks(&fileBlocks);

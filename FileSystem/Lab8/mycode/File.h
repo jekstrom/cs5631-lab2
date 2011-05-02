@@ -29,7 +29,7 @@ public:
 //    /**
 //     * Destructor for the File class.
 //     */
-//    ~File();
+//   ~File()
 
     /**
      * Accessor for the file name

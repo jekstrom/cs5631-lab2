@@ -56,10 +56,8 @@ private:
      * @return -1 in case of error, 0 otherwise
      */
     int sendMsg(Message *msg) {
-        cout << "InSendMsg " << msg->GetFirstFieldNameString(B_ANY_TYPE) << endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-        cout << "after flatten " << msg->GetFirstFieldNameString(B_ANY_TYPE) << endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
@@ -70,9 +68,6 @@ private:
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-        cout << "After send " << endl;
-
-
         return 0;
     }
 
@@ -104,36 +99,29 @@ private:
      * @return -1 in case of error, 0 otherwise
      */
     int sendRecv(Message *msg) {
-        //        cout << "IN SEND RCV" <<endl;
-        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() << endl;
         uint8 buffer[msg->FlattenedSize()];
         msg->Flatten(buffer);
-        //        cout << "here" <<endl;
         int size = sizeof (buffer);
         if (0 > send(sid, (const char*) &size, sizeof (int), 0)) {
             cout << "Error: could not send message size. errno = " << errno << endl;
             return -1;
         }
-        //        cout << "here2" <<endl;
         if (0 > send(sid, (const char*) buffer, size, 0)) {
             cout << "Error: could not send message. errno = " << errno << endl;
             return -1;
         }
-        //        cout << "here3" <<endl;
         int size2 = 0;
         if (0 > recv(sid, (char*) &size2, sizeof (int), 0)) {
             cout << "Error: could not receive response size. errno = " << errno << endl;
             return -1;
         }
-        //        cout << "here4" <<endl;
         uint8 buffer2[size2];
         if (0 > recv(sid, (char*) buffer2, size2, 0)) {
             cout << "Error: could not receive response. errno = " << errno << endl;
             return -1;
         }
-        //        cout << "here5" <<endl;
         msg->Unflatten(buffer2, size2);
-        //        cout << "Message in sendRecv: " << msg->GetFirstFieldNameString(B_ANY_TYPE)->Cstr() <<endl;
+        
         return 0;
     }
 
@@ -323,6 +311,7 @@ public:
 
         const String READ("Read");
 
+        
         Message msg;
         msg.AddString(METHOD, READ);
         msg.AddInt32(FD, fd);
@@ -632,12 +621,12 @@ public:
             File *file = oft.getFilePtr(fd);
 
             if (file != NULL) {
-                pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
+                //pthread_mutex_lock(gftPtr->getMutex(file->getFcbNumber()));
 
                 cout << "File found in table." << endl;
                 char buf[bytesToRead];
                 int bytesRead = file->read(buf, bytesToRead);
-                pthread_mutex_unlock(gftPtr->getMutex(file->getFcbNumber()));
+                //pthread_mutex_unlock(gftPtr->getMutex(file->getFcbNumber()));
                 cout << "Read " << bytesRead << " bytes from ";
                 cout << file->getName() << ": " << buf << endl;
 

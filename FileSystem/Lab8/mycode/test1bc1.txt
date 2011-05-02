@@ -1,0 +1,44 @@
+Socket created successfully.
+Connected to 127.0.0.1 on port 4040
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Filename: Open mode ('read' or 'write'): Message in openFile: MethodName
+Received message "0".
+OpenFile: fd = 0
+Filename 2: Open mode ('read' or 'write'): Message in openFile: MethodName
+Received message "1".
+OpenFile: fd = 1
+File descriptor of file to write to: Enter data to write to file: Wrote 10 bytes to file.
+Received message "0".
+File closed successfully.
+File descriptor of file to write to: Enter data to write to file: Wrote 10 bytes to file.
+There is no file currently open.
+Filename to read from: Message in openFile: MethodName
+Received message "2".
+OpenFile: fd = 2
+Read 10 bytes: 0123456789
+Received message "0".
+File closed successfully.
+Filename to read from: Message in openFile: MethodName
+Received message "3".
+OpenFile: fd = 3
+Read 10 bytes: 1011121314
+
+CS5631 Lab 8 Client
+0) Exit Program
+1) Open a file
+2) Close a file
+3) List directory
+4) Delete file
+5) Check if file exists
+6) Write to file
+7) Read from file
+Enter Command: Error: could not send message. errno = 32

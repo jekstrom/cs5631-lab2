@@ -104,7 +104,6 @@ public:
             if(it->fcb == fcbNum)
                 return &(it->fileMutex);
 
-
         // file wasn't in table
         return NULL;
     }
