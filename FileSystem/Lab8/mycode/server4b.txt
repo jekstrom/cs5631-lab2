@@ -1,0 +1,79 @@
+Socket created successfully.
+Server bound to port 4141.
+Server listening for up to 3 connections.
+Client number 1 connected.
+Client number 2 connected.
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file1, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 50 bytes from file1: 12345678901234567890123456789012345678901234567890m«
+Message sent to client
+Result = 0
+Received request: Read
+FD: 0
+File found in table.
+Read 50 bytes from file1: 12345678901234567890123456789012345678901234567890m«
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: CloseFile
+File descriptor: 0
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: OpenFile
+Filename: file2, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: OpenFile
+Filename: file2, mode: Read
+Before lock...
+...After lock
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 50 bytes from file2: 09876543210987654321098765432109876543210987654321m«
+Message sent to client
+Result = 0
+Received request: Read
+FD: 1
+File found in table.
+Read 50 bytes from file2: 09876543210987654321098765432109876543210987654321m«
+Message sent to client
+Result = 0
+Received request: CloseFile
+File descriptor: 1
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: CloseFile
+File descriptor: 1
+GFT remove
+OFT remove
+Removed
+Result = 0
+Received request: quit
+Result = 1
+Client number 2 disconnected.
+Received request: quit
+Result = 1
+Client number 1 disconnected.
